@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Calendar from "../../components/Calendar/Calendar"
 
 import { FilterButton } from "../../components/Button/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card } from "../../components/Cards/Cards"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 
@@ -21,12 +21,16 @@ import { userDecodeToken } from "../../utils/Auth"
 
 export const PatientConsultation = ({ navigation }) => {
 
+
+    const [token, setToken] = useState({});
+
     async function profileLoad(){
 
     const token = await userDecodeToken();
 
     if (token) {
         console.log(token)
+        setToken(token)
     }
 
     }
@@ -89,6 +93,10 @@ export const PatientConsultation = ({ navigation }) => {
 
     // RETURN
 
+    useEffect(() =>{
+        profileLoad()
+      }, [])
+
     return (
 
         <Container>
@@ -103,7 +111,7 @@ export const PatientConsultation = ({ navigation }) => {
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
 
-                        <NameTitle textTitle={"Richard Kosta"} />
+                        <NameTitle textTitle={token.name} />
                     </BoxDataHome>
 
                 </BoxHome>

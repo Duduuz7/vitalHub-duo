@@ -5,11 +5,11 @@ import { jwtDecode } from "jwt-decode";
 import { encode, decode } from "base-64"
 
 if (!global.atob) {
-    global.atob = encode
+    global.atob = decode
 }
 
 if (!global.btoa) {
-    global.btoa = decode
+    global.btoa = encode
 }
 
 export const userDecodeToken = async () => {
@@ -25,7 +25,11 @@ export const userDecodeToken = async () => {
 
     return {
         name : decoded.name,
-        role : decoded.role
+        role : decoded.role,
+        email : decoded.email
     }
 
+}
+export const userLogoutToken = async () => {
+    const token = await AsyncStorage.removeItem("token")
 }

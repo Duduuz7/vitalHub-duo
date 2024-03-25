@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Calendar from "../../components/Calendar/Calendar"
 
 import { FilterButton } from "../../components/Button/Button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card } from "../../components/Cards/Cards"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 import { AppointmentModal } from "../../components/AppointmentModal/AppointmentModal"
@@ -16,12 +16,15 @@ import { AppointmentModal } from "../../components/AppointmentModal/AppointmentM
 
 export const DoctorConsultation = ({ navigation }) => {
 
+    const [token, setToken] = useState({});
+
     async function profileLoad(){
 
         const token = await userDecodeToken();
     
         if (token) {
             console.log(token)
+            setToken(token)
         }
     }
 
@@ -31,6 +34,10 @@ export const DoctorConsultation = ({ navigation }) => {
         realizadas: false,
         canceladas: false,
     });
+
+    useEffect(() =>{
+        profileLoad()
+      }, [])
 
     const image = require("../../assets/ImageCard.png");
 
@@ -103,7 +110,7 @@ export const DoctorConsultation = ({ navigation }) => {
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
 
-                        <NameTitle textTitle={"Dr. Claudio"} />
+                        <NameTitle textTitle={token.name} />
                     </BoxDataHome>
 
                 </BoxHome>

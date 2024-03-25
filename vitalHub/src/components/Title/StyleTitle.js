@@ -26,6 +26,7 @@ export const TitleName = styled.Text`
     align-self: flex-start;
     font-size: 16px;
     color: #FBFBFB;
+    width: 220px;
 `
 
 export const TitleWelcome = styled.Text`
