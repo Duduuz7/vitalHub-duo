@@ -8,7 +8,10 @@ import { LinkAccount } from "../../components/Link/Link";
 import { ButtonGoogle, ButtonNormal } from "../../components/Button/Button";
 import { StatusBar } from "react-native";
 import { useState } from "react";
+
 import api from "../../services/Services";
+
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
 export const Login = ({ navigation }) => {
 
@@ -20,10 +23,18 @@ export const Login = ({ navigation }) => {
     await api.post('/Login', {
       email : email,
       senha : senha
-    }).then( response => {
+    }).then( async response => {
+
       console.log( response.data.token )
+
+      await AsyncStorage.setItem("token", JSON.stringify( response.data ))
+
+      navigation.replace("Main")
+
     }).catch( error => {
+
       console.log(error)
+
     })
 
     // navigation.replace("Main")

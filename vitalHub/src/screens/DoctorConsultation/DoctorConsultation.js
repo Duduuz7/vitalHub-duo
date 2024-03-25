@@ -16,6 +16,15 @@ import { AppointmentModal } from "../../components/AppointmentModal/AppointmentM
 
 export const DoctorConsultation = ({ navigation }) => {
 
+    async function profileLoad(){
+
+        const token = await userDecodeToken();
+    
+        if (token) {
+            console.log(token)
+        }
+    }
+
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
         agendadas: true,

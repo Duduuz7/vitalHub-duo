@@ -16,6 +16,15 @@ const bottomTab = createBottomTabNavigator();
 
 export const Main = () => {
 
+  async function profileLoad() {
+
+    const token = await userDecodeToken();
+
+    if (token) {
+      console.log(token)
+    }
+  }
+
   return (
 
     <bottomTab.Navigator
@@ -39,7 +48,7 @@ export const Main = () => {
                 {focused && <TextBar>Agenda</TextBar>}
               </BarContent>
             );
-          } 
+          }
 
           {
             return (
@@ -57,7 +66,7 @@ export const Main = () => {
       })}
     >
 
-    {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
+      {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
 
     ? */}
 
@@ -68,9 +77,9 @@ export const Main = () => {
 
       {/* : */}
 
-      <bottomTab.Screen 
-      name="PatientProfile" 
-      component={PatientProfile} 
+      <bottomTab.Screen
+        name="PatientProfile"
+        component={PatientProfile}
       />
 
     </bottomTab.Navigator>
@@ -102,7 +111,7 @@ export const DoctorMain = () => {
                 {focused && <TextBar>Agenda</TextBar>}
               </BarContent>
             );
-          } 
+          }
 
           {
             return (
@@ -120,7 +129,7 @@ export const DoctorMain = () => {
       })}
     >
 
-    {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
+      {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
 
     ? */}
 
@@ -131,9 +140,9 @@ export const DoctorMain = () => {
 
       {/* : */}
 
-      <bottomTab.Screen 
-      name="PatientProfile" 
-      component={PatientProfile} 
+      <bottomTab.Screen
+        name="PatientProfile"
+        component={PatientProfile}
       />
 
     </bottomTab.Navigator>

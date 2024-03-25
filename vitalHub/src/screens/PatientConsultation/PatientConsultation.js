@@ -15,10 +15,21 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { Stethoscope } from "../../components/Stethoscope/StyleSthetoscope"
 import { ModalStethoscope } from "../../components/Stethoscope/ModalStethoscope"
 import { PatientAppointmentModal } from "../../components/PatientAppointmentModal/PatientAppointmentModal"
+import { userDecodeToken } from "../../utils/Auth"
+
 
 
 export const PatientConsultation = ({ navigation }) => {
 
+    async function profileLoad(){
+
+    const token = await userDecodeToken();
+
+    if (token) {
+        console.log(token)
+    }
+
+    }
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
         agendadas: true,
