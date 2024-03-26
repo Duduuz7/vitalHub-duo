@@ -10,42 +10,59 @@ import { ButtonText } from "../../components/ButtonText/StyleButtonText"
 
 import api from "../../services/Services"
 import { BlockedSmallButton, ButtonLarge } from "../../components/Button/Button"
+import { userDecodeToken, userLogoutToken } from "../../utils/Auth"
 
-export const PatientProfile = () => {
+export const PatientProfile = ({ navigation }) => {
 
     const [cep, setCep] = useState('');
     const [logradouro, setLogradouro] = useState('');
     const [cidade, setCidade] = useState('');
 
+    const [token, setToken] = useState({});
+
+
+    async function profileLoad() {
+
+        const token = await userDecodeToken();
+
+        if (token) {
+            console.log(token)
+            setToken(token)
+        }
+    }
+
     useEffect(() => {
 
-        const getCep = async () => {
-            if (cep !== "" && cep.length === 8) {
-                try {
+        // const getCep = async () => {
+        //     if (cep !== "" && cep.length === 8) {
+        //         try {
 
-                    const response = await api.get(`${cep}/json/`);
+        //             const response = await api.get(`${cep}/json/`);
 
-                    if (response.data) {
+        //             if (response.data) {
 
-                        setLogradouro(response.data.logradouro);
-                        setCidade(response.data.localidade);
+        //                 setLogradouro(response.data.logradouro);
+        //                 setCidade(response.data.localidade);
 
-                    } else {
+        //             } else {
 
-                        alert("Verifique o CEP digitado !!!");
+        //                 alert("Verifique o CEP digitado !!!");
 
-                    }
-                } catch (error) {
+        //             }
+        //         } catch (error) {
 
-                    console.log("Ocorreu um erro ao buscar o CEP", error);
+        //             console.log("Ocorreu um erro ao buscar o CEP", error);
 
-                }
-            }
-        };
+        //         }
+        //     }
+        // };
 
-        getCep();
+        // getCep();
 
-    }, [cep]);
+        profileLoad()
+
+
+    }, []);
 
     return (
 
@@ -55,9 +72,9 @@ export const PatientProfile = () => {
 
                 <ImagemPerfilPaciente source={require('../../assets/ney.webp')} />
 
-                <TitleProfile>Neymar Jr</TitleProfile>
+                <TitleProfile>{token.name}</TitleProfile>
 
-                <DescriptionPassword description={"neymar.jr@gmail.com"} />
+                <DescriptionPassword description={token.email} />
 
                 <InputBox
                     placeholderTextColor={"#A1A1A1"}
@@ -109,9 +126,12 @@ export const PatientProfile = () => {
 
                 <ButtonLarge text={"Salvar"} />
 
-                <ButtonLarge text={"Editar"}/>
+                <ButtonLarge text={"Editar"} />
 
-                <BlockedSmallButton text={"Sair do app"}/>
+                <BlockedSmallButton
+                    onPress={() => {userLogoutToken(); navigation.replace("Login")}}
+                    text={"Sair do app"} 
+                    />
 
             </Container>
 

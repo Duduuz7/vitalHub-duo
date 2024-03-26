@@ -11,10 +11,24 @@ import { PatientProfile } from "../../screens/PatientProfile/PatientProfile";
 import { PatientConsultation } from "../../screens/PatientConsultation/PatientConsultation";
 
 import { DoctorConsultation } from "../../screens/DoctorConsultation/DoctorConsultation";
+import { useEffect } from "react";
 
 const bottomTab = createBottomTabNavigator();
 
 export const Main = () => {
+
+  async function profileLoad() {
+
+    const token = await userDecodeToken();
+
+    if (token) {
+      console.log(token)
+    }
+  }
+  
+  useEffect(() =>{
+    profileLoad()
+  }, [])
 
   return (
 
@@ -39,7 +53,7 @@ export const Main = () => {
                 {focused && <TextBar>Agenda</TextBar>}
               </BarContent>
             );
-          } 
+          }
 
           {
             return (
@@ -57,7 +71,7 @@ export const Main = () => {
       })}
     >
 
-    {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
+      {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
 
     ? */}
 
@@ -68,9 +82,9 @@ export const Main = () => {
 
       {/* : */}
 
-      <bottomTab.Screen 
-      name="PatientProfile" 
-      component={PatientProfile} 
+      <bottomTab.Screen
+        name="PatientProfile"
+        component={PatientProfile}
       />
 
     </bottomTab.Navigator>
@@ -102,7 +116,7 @@ export const DoctorMain = () => {
                 {focused && <TextBar>Agenda</TextBar>}
               </BarContent>
             );
-          } 
+          }
 
           {
             return (
@@ -120,7 +134,7 @@ export const DoctorMain = () => {
       })}
     >
 
-    {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
+      {/* Depois fazer ternário para levar para home doutor ou ImagemPerfilPaciente
 
     ? */}
 
@@ -131,9 +145,9 @@ export const DoctorMain = () => {
 
       {/* : */}
 
-      <bottomTab.Screen 
-      name="PatientProfile" 
-      component={PatientProfile} 
+      <bottomTab.Screen
+        name="PatientProfile"
+        component={PatientProfile}
       />
 
     </bottomTab.Navigator>
