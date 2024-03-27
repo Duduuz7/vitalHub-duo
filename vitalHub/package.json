@@ -23,10 +23,7 @@
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/native-stack": "^6.9.17",
     "axios": "^1.6.8",
-<<<<<<< HEAD
-=======
     "base-64": "^1.0.0",
->>>>>>> eduardo
     "expo": "~50.0.13",
     "expo-camera": "^14.1.1",
     "expo-image-picker": "^14.7.1",
