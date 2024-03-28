@@ -10,52 +10,25 @@ import {
 import { TitleSelect } from "../../components/Title/StyleTitle";
 import { CancelLessMargin } from "../../components/Descriptions/StyledDescriptions";
 import { CardCancelLess } from "../../components/Descriptions/Descriptions";
+import { useEffect, useState } from "react";
+import api from "../../services/Services";
 
 export const SelectCLinic = ({ navigation }) => {
-  const dataItens = [
-    {
-      id: "fsdfsfsdasdf",
-      localization: "São Paulo, SP",
-      openTime: "Seg-Sex",
-      rate: "4,8",
-      name: "Clínica Natureh",
-    },
-    {
-      id: "fsdfsfsdaf",
-      localization: "São Paulo, SP",
-      openTime: "Seg-Sex",
-      rate: "4,5",
-      name: "Diamond Pró-Mulher",
-    },
-    {
-      id: "fasdsdfsfsdf",
-      localization: "Taboão, SP",
-      openTime: "Seg-Sab",
-      rate: "4,2",
-      name: "Clínica Villa Lobos",
-    },
-    {
-      id: "fsdffsfsdf",
-      localization: "Taboão, SP",
-      openTime: "Seg-Sab",
-      rate: "4,0",
-      name: "SP Oncologia Clínica",
-    },
-    {
-      id: "fsdfsfassdf",
-      localization: "São Paulo, SP",
-      openTime: "Seg-Sab",
-      rate: "3,9",
-      name: "Clínica Tolstói",
-    },
-    {
-      id: "fsdfsacafsdf",
-      localization: "São Paulo, SP",
-      openTime: "Seg-Sab",
-      rate: "3,9",
-      name: "Clínica Vila Alpina",
-    },
-  ];
+  const [clinicas, setClinicas] = useState([]);
+
+  async function ListarClinicas() {
+    await api.get("/Clinica/ListarTodas").then(async (response) => {
+      const dados = response.data;
+      // console.log(dados);
+
+      setClinicas(dados);
+      console.log(clinicas);
+    });
+  }
+
+  useEffect(() => {
+    ListarClinicas();
+  }, []);
 
   return (
     <Container>
@@ -68,13 +41,14 @@ export const SelectCLinic = ({ navigation }) => {
       <TitleSelect>Selecionar clínica</TitleSelect>
 
       <FlatContainerSelect
-        data={dataItens}
+        data={clinicas}
         renderItem={({ item }) => (
           <CardSelectClinic
-            openTime={item.openTime}
-            name={item.name}
-            rate={item.rate}
-            localization={item.localization}
+            // openTime={item.openTime}
+            name={item.nomeFantasia}
+            // rate={item.rate}
+            localization={`${item.endereco.logradouro}, ${item.endereco.numero}, ${item.endereco.cidade}
+            `}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -92,7 +66,6 @@ export const SelectCLinic = ({ navigation }) => {
         onPressCancel={() => navigation.replace("Main")}
         text={"Cancelar"}
       />
-      
     </Container>
   );
 };

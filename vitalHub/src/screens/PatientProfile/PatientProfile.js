@@ -70,7 +70,7 @@ export const PatientProfile = ({ navigation }) => {
 
             <Container>
 
-                <ImagemPerfilPaciente source={require('../../assets/ney.webp')} />
+                <ImagemPerfilPaciente source={require('../../assets/LimaCorinthians.png')} />
 
                 <TitleProfile>{token.name}</TitleProfile>
 
