@@ -17,23 +17,54 @@ import { ModalStethoscope } from "../../components/Stethoscope/ModalStethoscope"
 import { PatientAppointmentModal } from "../../components/PatientAppointmentModal/PatientAppointmentModal"
 import { userDecodeToken } from "../../utils/Auth"
 
+import api from "../../services/Services";
+
 
 
 export const PatientConsultation = ({ navigation }) => {
 
+    // Criar o state para receber a lista de consultas (Array)
+    const [consulta, setConsulta] = useState([]); // vazio no inicio
 
-    const [token, setToken] = useState({});
+    const [token, setToken] = useState([]);
+
+    //Criar a função para obter a lista de consultas da api e setar no state
+
+    async function GetConsultas() {
+        const token = JSON.parse(await AsyncStorage.getItem("token").token)
+        console.log('token para api');
+        console.log(token);
+        if (token) {
+
+            //Chamando o metodo da api
+            await api.get('/Consultas', {
+                headers: { Authorization: `Bearer ${token}` }
+            }).then(async (response) => {
+
+                const consultas = response.data
+
+                setConsulta(consultas)
+
+                console.log(consulta);
+
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+
+    }
 
     async function profileLoad(){
 
-    const token = await userDecodeToken();
+        const token = await userDecodeToken();
+    
+        if (token) {
+            console.log(token)
+            setToken(token)
+        }
+    
+        }
 
-    if (token) {
-        console.log(token)
-        setToken(token)
-    }
-
-    }
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
         agendadas: true,
@@ -93,9 +124,10 @@ export const PatientConsultation = ({ navigation }) => {
 
     // RETURN
 
-    useEffect(() =>{
+    useEffect(() => {
+        GetConsultas()
         profileLoad()
-      }, [])
+    }, [])
 
     return (
 
@@ -136,9 +168,9 @@ export const PatientConsultation = ({ navigation }) => {
             </ButtonHomeContainer>
 
             <FlatContainer
-                data={data}
+                data={consulta}
                 renderItem={({ item }) =>
-                    <Card navigation={navigation} hour={item.hour} name={item.name} age={item.age} routine={item.routine} url={image} status={item.status} onPressCancel={() => setShowModalCancel(true)} onPressAppointment={() => { navigation.navigate("ViewPrescription") }} onPressAppointmentCard={() => setShowModal(item.status === 'a' ? true : false)} />}
+                    <Card navigation={navigation} hour={item.hour} name={item.paciente.idNavigation.nome} age={item.age} routine={item.prioridade.prioridade} url={image} status={item.situacao.situacao} onPressCancel={() => setShowModalCancel(true)} onPressAppointment={() => { navigation.navigate("ViewPrescription") }} onPressAppointmentCard={() => setShowModal(item.status === 'a' ? true : false)} />}
 
                 keyExtractor={item => item.id}
 
