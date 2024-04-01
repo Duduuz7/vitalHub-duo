@@ -45,7 +45,7 @@ export const Card = ({
   navigation,
 }) => {
   const Check = () => {
-    if (status === "a") {
+    if (status === "Agendada") {
       return (
         <BoxDateCancel>
           <ConsultDate>
@@ -57,7 +57,7 @@ export const Card = ({
           <CardCancel onPressCancel={onPressCancel} text={"Cancelar"} />
         </BoxDateCancel>
       );
-    } else if (status === "r") {
+    } else if (status === "Realizada") {
       return (
         <BoxDateCancel>
           <ConsultDateGray>
@@ -72,7 +72,7 @@ export const Card = ({
           />
         </BoxDateCancel>
       );
-    } else if (status === "c") {
+    } else if (status === "Cancelada") {
       return (
         <BoxDateCancel>
           <ConsultDateGray>

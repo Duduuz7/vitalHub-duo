@@ -1,4 +1,4 @@
-import { ScrollView, StatusBar } from 'react-native'
+import { StatusBar } from 'react-native'
 import { ButtonNormal } from '../../components/Button/Button'
 import { NormalButton } from '../../components/Button/StyleButton'
 import { ButtonText } from '../../components/ButtonText/StyleButtonText'
@@ -13,7 +13,6 @@ import { LogoCreateAccount } from '../../components/Images/StyleImages'
 export const CreateAccount = ({ navigation }) => {
 
     return (
-        <ScrollView>
 
         <Container>
 
@@ -68,8 +67,6 @@ export const CreateAccount = ({ navigation }) => {
             <Cancel onPress={() => { navigation.navigate("Login") }} />
 
         </Container>
-        </ScrollView>
-
     )
 
 }

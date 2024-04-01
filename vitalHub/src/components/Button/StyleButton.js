@@ -2,8 +2,8 @@ import styled, { css } from "styled-components";
 
 export const Button = styled.TouchableOpacity`
     width: 90%;
-    height: 44px;
-    border-radius: 5px;
+    height: 60px;
+    border-radius: 8px;
     background-color: #496BBA;
     align-items: center;
     justify-content: center;

@@ -102,7 +102,7 @@ export const CancelButtonRecords = styled(CancelButton)`
 export const AgeTextCard = styled(DescripritionForgot)`
   color: #8c8a97;
   font-size: 14px;
-  height: 18px;
+  height: 20px;
 `;
 
 export const DoctorArea = styled(DescripritionForgot)`
@@ -121,7 +121,7 @@ export const LocalizationText = styled(DoctorArea)`
 
 export const RoutineTextCard = styled(AgeTextCard)`
   margin-top: 6px;
-  height: 20px;
+  height: 22px;
   color: #8c8a97;
 `;
 
