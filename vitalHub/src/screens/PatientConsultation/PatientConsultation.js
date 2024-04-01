@@ -15,7 +15,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { Stethoscope } from "../../components/Stethoscope/StyleSthetoscope"
 import { ModalStethoscope } from "../../components/Stethoscope/ModalStethoscope"
 import { PatientAppointmentModal } from "../../components/PatientAppointmentModal/PatientAppointmentModal"
-import { userDecodeToken } from "../../utils/Auth"
+import { tokenClean, userDecodeToken } from "../../utils/Auth"
 
 import api from "../../services/Services";
 
@@ -24,95 +24,98 @@ import api from "../../services/Services";
 export const PatientConsultation = ({ navigation }) => {
 
     // Criar o state para receber a lista de consultas (Array)
-    const [consulta, setConsulta] = useState([]); // vazio no inicio
+    const [consultaLista, setConsultaLista] = useState([]) // vazio no inicio
 
     const [token, setToken] = useState([]);
 
     //Criar a função para obter a lista de consultas da api e setar no state
 
     async function GetConsultas() {
-        const token = JSON.parse(await AsyncStorage.getItem("token").token)
-        console.log('token para api');
-        console.log(token);
-        if (token) {
+        try {
 
-            //Chamando o metodo da api
-            await api.get('/Consultas', {
-                headers: { Authorization: `Bearer ${token}` }
-            }).then(async (response) => {
+            const token = await tokenClean();
 
-                const consultas = response.data
+            if (token) {
 
-                setConsulta(consultas)
+                const response = await api.get('/Consultas', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
 
-                console.log(consulta);
+                setConsultaLista(response.data);
 
-            }).catch(error => {
-                console.log(error)
-            })
+                // console.log(response.data);
+
+            } else {
+                console.log("Token não encontrado.");
+            }
+        } catch (error) {
+            console.log(error);
         }
-
     }
 
-    async function profileLoad(){
+
+    async function profileLoad() {
 
         const token = await userDecodeToken();
-    
+
         if (token) {
             console.log(token)
             setToken(token)
         }
-    
-        }
+
+    }
 
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
-        agendadas: true,
-        realizadas: false,
-        canceladas: false,
+        agendadas: "Agendada",
+        realizadas: "Realizada",
+        canceladas: "Cancelada",
     });
+
 
     const image = require("../../assets/CardDoctorImage.png");
 
     // CARD MOCADOS
 
-    const dataItens = [
-        {
-            id: 1,
-            hour: '14:00',
-            image: image,
-            name: 'Dr Claudio',
-            age: '22 anos',
-            routine: 'Urgência',
-            status: "a"
-        },
-        {
-            id: 1,
-            hour: '14:00',
-            image: image,
-            name: 'Dr josé',
-            age: '23 anos',
-            routine: 'Urgência',
-            status: "r"
-        }
-    ]
+    // const dataItens = [
+    //     {
+    //         id: 1,
+    //         hour: '14:00',
+    //         image: image,
+    //         name: 'Dr Claudio',
+    //         age: '22 anos',
+    //         routine: 'Urgência',
+    //         status: "a"
+    //     },
+    //     {
+    //         id: 1,
+    //         hour: '14:00',
+    //         image: image,
+    //         name: 'Dr josé',
+    //         age: '23 anos',
+    //         routine: 'Urgência',
+    //         status: "r"
+    //     }
+    // ]
 
     //FILTRO PARA CARD
 
-    const Check = (data) => {
-        if (data.status === "a" && selected.agendadas) {
+    const Check = (consultaLista) => {
+        if (consultaLista.situacao.situacao === "Agendada" && selected.agendadas) {
             return true;
         }
-        if (data.status === "r" && selected.realizadas) {
+        if (consultaLista.situacao.situacao === "Realizada" && selected.realizadas) {
             return true;
         }
-        if (data.status === "c" && selected.canceladas) {
+        if (consultaLista.situacao.situacao === "Cancelada" && selected.canceladas) {
             return true;
         }
         return false;
     }
 
-    const data = dataItens.filter(Check);
+    const data = consultaLista.filter(Check);
 
     // STATES PARA OS MODAIS
 
@@ -125,8 +128,9 @@ export const PatientConsultation = ({ navigation }) => {
     // RETURN
 
     useEffect(() => {
-        GetConsultas()
         profileLoad()
+        setSelected("Agendada")
+        GetConsultas()
     }, [])
 
     return (
@@ -159,26 +163,41 @@ export const PatientConsultation = ({ navigation }) => {
 
             <ButtonHomeContainer>
 
-                <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} />
+                <FilterButton onPress={() => { setSelected("Agendada") }} selected={selected.agendadas} text={'Agendadas'} />
+                {/* <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} /> */}
 
-                <FilterButton onPress={() => { setSelected({ realizadas: true }) }} selected={selected.realizadas} text={'Realizadas'} />
+                <FilterButton onPress={() => { setSelected("Realizada") }} selected={selected.realizadas} text={'Realizadas'} />
 
-                <FilterButton onPress={() => { setSelected({ canceladas: true }) }} selected={selected.canceladas} text={'Canceladas'} />
+                <FilterButton onPress={() => { setSelected("Cancelada") }} selected={selected.canceladas} text={'Canceladas'} />
 
             </ButtonHomeContainer>
 
             <FlatContainer
-                data={consulta}
+                data={consultaLista}
                 renderItem={({ item }) =>
-                    <Card navigation={navigation} hour={item.hour} name={item.paciente.idNavigation.nome} age={item.age} routine={item.prioridade.prioridade} url={image} status={item.situacao.situacao} onPressCancel={() => setShowModalCancel(true)} onPressAppointment={() => { navigation.navigate("ViewPrescription") }} onPressAppointmentCard={() => setShowModal(item.status === 'a' ? true : false)} />}
+                    // item.situacao == selected
+                    item.situacao.situacao == selected && 
+                        <Card 
+                        navigation={navigation} 
+                        hour={"14:00"} 
+                        name={item.medicoClinica.medico.idNavigation.nome} 
+                        age={item.medicoClinica.medico.especialidade.especialidade1} 
+                        routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'} 
+                        url={image} 
+                        status={item.situacao.situacao} 
+                        onPressCancel={() => setShowModalCancel(true)} 
+                        onPressAppointment={() => { navigation.navigate("ViewPrescription") }} 
+                        onPressAppointmentCard={() => setShowModal(item.status === 'a' ? true : false)} />}
+                    
+                    keyExtractor={item => item.id}
+    
+                    showsVerticalScrollIndicator={false}
+    
+                />
 
-                keyExtractor={item => item.id}
+                    
 
-                showsVerticalScrollIndicator={false}
-
-            />
-
-            <Stethoscope onPress={() => setShowModalStethoscope(true)}>
+            <Stethoscope onPress={() => {setShowModalStethoscope(true)}}>
 
                 <FontAwesome6
                     name="stethoscope"
@@ -211,3 +230,5 @@ export const PatientConsultation = ({ navigation }) => {
 
     )
 }
+
+

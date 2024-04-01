@@ -33,3 +33,12 @@ export const userDecodeToken = async () => {
 export const userLogoutToken = async () => {
     const token = await AsyncStorage.removeItem("token")
 }
+
+export const tokenClean = async () => {
+    const token = JSON.parse(await AsyncStorage.getItem("token")).token
+
+    if (token === null) {
+        return null;
+    }
+    return token;
+}
