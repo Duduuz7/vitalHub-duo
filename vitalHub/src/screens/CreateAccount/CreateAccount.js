@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native'
+import { ScrollView, StatusBar } from 'react-native'
 import { ButtonNormal } from '../../components/Button/Button'
 import { NormalButton } from '../../components/Button/StyleButton'
 import { ButtonText } from '../../components/ButtonText/StyleButtonText'
@@ -13,6 +13,7 @@ import { LogoCreateAccount } from '../../components/Images/StyleImages'
 export const CreateAccount = ({ navigation }) => {
 
     return (
+        <ScrollView>
 
         <Container>
 
@@ -25,16 +26,39 @@ export const CreateAccount = ({ navigation }) => {
             <DescriptionPassword description={"Insira seu endereço de e-mail e senha para realizar seu cadastro."} />
 
             <Input
-                placeholder={"Usuário ou E-mail"}
+                placeholder={"Nome"}
+                placeholderTextColor={'#49B3BA'}
+            />
+             <Input
+                placeholder={"CPF"}
+                placeholderTextColor={'#49B3BA'}
+            />
+            <Input
+                placeholder={"RG"}
+                placeholderTextColor={'#49B3BA'}
+            />
+            <Input
+                placeholder={"Data de Nascimento"}
+                placeholderTextColor={'#49B3BA'}
+            />
+            <Input
+                placeholder={"CEP"}
+                placeholderTextColor={'#49B3BA'}
+            />
+            <Input
+                placeholder={"Endereço"}
+                placeholderTextColor={'#49B3BA'}
+            />
+            <Input
+                placeholder={"Cidade"}
+                placeholderTextColor={'#49B3BA'}
+            />
+            <Input
+                placeholder={"Email"}
                 placeholderTextColor={'#49B3BA'}
             />
             <Input
                 placeholder={"Senha"}
-                placeholderTextColor={'#49B3BA'}
-                secureTextEntry={true}
-            />
-            <Input
-                placeholder={"Confirmar senha"}
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
             />
@@ -44,6 +68,8 @@ export const CreateAccount = ({ navigation }) => {
             <Cancel onPress={() => { navigation.navigate("Login") }} />
 
         </Container>
+        </ScrollView>
+
     )
 
 }
