@@ -18,6 +18,7 @@ import { PatientAppointmentModal } from "../../components/PatientAppointmentModa
 import { tokenClean, userDecodeToken } from "../../utils/Auth"
 
 import api from "../../services/Services";
+import moment from "moment"
 
 
 
@@ -26,34 +27,54 @@ export const PatientConsultation = ({ navigation }) => {
     // Criar o state para receber a lista de consultas (Array)
     const [consultaLista, setConsultaLista] = useState([]) // vazio no inicio
 
+    const [dataConsulta, setDataConsulta] = useState('') // vazio no inicio
+
     const [token, setToken] = useState([]);
 
     //Criar a função para obter a lista de consultas da api e setar no state
 
-    async function GetConsultas() {
-        try {
 
-            const token = await tokenClean();
 
-            if (token) {
 
-                const response = await api.get('/Consultas', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+    async function ListarConsultas(){
+        
+        console.log(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
+        await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
-                setConsultaLista(response.data);
+            setConsultaLista(response.data)
+            console.log(consultaLista);
 
-                // console.log(response.data);
-
-            } else {
-                console.log("Token não encontrado.");
-            }
-        } catch (error) {
+        }).catch( error => {
             console.log(error);
-        }
+        })
+
     }
+
+
+    // async function GetConsultas() {
+    //     try {
+
+    //         const token = await tokenClean();
+
+    //         if (token) {
+
+    //             const response = await api.get('/Consultas', {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             });
+
+    //             setConsultaLista(response.data);
+
+    //             // console.log(response.data);
+
+    //         } else {
+    //             console.log("Token não encontrado.");
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
 
     async function profileLoad() {
@@ -63,6 +84,8 @@ export const PatientConsultation = ({ navigation }) => {
         if (token) {
             console.log(token)
             setToken(token)
+
+            setDataConsulta( moment().format('YYYY-MM-DD') );
         }
 
     }
@@ -130,8 +153,15 @@ export const PatientConsultation = ({ navigation }) => {
     useEffect(() => {
         profileLoad()
         setSelected("Agendada")
-        GetConsultas()
+        // GetConsultas()
     }, [])
+
+    useEffect(() => {
+        if( dataConsulta != '' ){
+            ListarConsultas()
+        }
+        console.log(dataConsulta);
+    }, [dataConsulta])
 
     return (
 
@@ -159,16 +189,16 @@ export const PatientConsultation = ({ navigation }) => {
 
             </Header>
 
-            <Calendar />
+            <Calendar setDataConsulta={setDataConsulta}/>
 
             <ButtonHomeContainer>
 
-                <FilterButton onPress={() => { setSelected("Agendada") }} selected={selected.agendadas} text={'Agendadas'} />
+                <FilterButton onPress={() => { setSelected("Agendada") }} selected={selected === 'Agendada' ? true : false} text={'Agendadas'} />
                 {/* <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} /> */}
 
-                <FilterButton onPress={() => { setSelected("Realizada") }} selected={selected.realizadas} text={'Realizadas'} />
+                <FilterButton onPress={() => { setSelected("Realizada") }} selected={selected === 'Realizada' ? true : false} text={'Realizadas'} />
 
-                <FilterButton onPress={() => { setSelected("Cancelada") }} selected={selected.canceladas} text={'Canceladas'} />
+                <FilterButton onPress={() => { setSelected("Cancelada") }} selected={selected === 'Cancelada' ? true : false} text={'Canceladas'} />
 
             </ButtonHomeContainer>
 
@@ -179,15 +209,16 @@ export const PatientConsultation = ({ navigation }) => {
                     item.situacao.situacao == selected && 
                         <Card 
                         navigation={navigation} 
+                        dataConsulta={item.dataConsulta}
                         hour={"14:00"} 
                         name={item.medicoClinica.medico.idNavigation.nome} 
-                        age={item.medicoClinica.medico.especialidade.especialidade1} 
+                        age={`CRM: ${item.medicoClinica.medico.crm}`} 
                         routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'} 
                         url={image} 
                         status={item.situacao.situacao} 
                         onPressCancel={() => setShowModalCancel(true)} 
                         onPressAppointment={() => { navigation.navigate("ViewPrescription") }} 
-                        onPressAppointmentCard={() => setShowModal(item.status === 'a' ? true : false)} />}
+                        onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} />}
                     
                     keyExtractor={item => item.id}
     

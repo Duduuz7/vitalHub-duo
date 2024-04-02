@@ -52,7 +52,8 @@ export const ImageCard = styled.Image`
 `
 
 export const PointCard = styled.Image`
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    margin-left: 8px;
 `
 
 export const MapImage = styled.Image`

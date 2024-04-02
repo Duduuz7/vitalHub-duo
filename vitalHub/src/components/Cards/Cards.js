@@ -43,6 +43,7 @@ export const Card = ({
   onPressAppointment,
   onPressAppointmentCard,
   navigation,
+  dataConsulta
 }) => {
   const Check = () => {
     if (status === "Agendada") {

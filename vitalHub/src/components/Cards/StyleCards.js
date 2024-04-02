@@ -20,7 +20,7 @@ export const CardContainerClinic = styled(CardContainer)`
 `;
 
 export const AgeCard = styled.SafeAreaView`
-  margin-left: 9%;
+  margin-left: 13%;
   margin-bottom: 0px;
   flex-direction: row;
   width: 100px;

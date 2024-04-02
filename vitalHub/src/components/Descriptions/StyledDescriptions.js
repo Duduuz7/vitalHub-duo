@@ -100,6 +100,7 @@ export const CancelButtonRecords = styled(CancelButton)`
 `;
 
 export const AgeTextCard = styled(DescripritionForgot)`
+  margin-top: 4px;
   color: #8c8a97;
   font-size: 14px;
   height: 20px;
