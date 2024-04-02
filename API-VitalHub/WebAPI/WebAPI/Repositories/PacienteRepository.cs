@@ -84,5 +84,6 @@ namespace WebAPI.Repositories
             ctx.Usuarios.Add(user);
             ctx.SaveChanges();
         }
+     
     }
 }
