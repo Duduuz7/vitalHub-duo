@@ -31,9 +31,20 @@ export const PatientConsultation = ({ navigation }) => {
 
     const [token, setToken] = useState([]);
 
+    const [consultaSelecionada, setConsultaSelecionada] = useState([])
+
     //Criar a função para obter a lista de consultas da api e setar no state
 
-
+    function MostrarModal( modal, consulta) {
+        setConsultaSelecionada(consulta)
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+        }else if (modal == 'localization') {
+            setShowModal(selected === 'Agendada' ? true : false)
+        }else{
+            console.log("asa");
+        }
+    }
 
 
     async function ListarConsultas(){
@@ -216,9 +227,16 @@ export const PatientConsultation = ({ navigation }) => {
                         routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'} 
                         url={image} 
                         status={item.situacao.situacao} 
-                        onPressCancel={() => setShowModalCancel(true)} 
-                        onPressAppointment={() => { navigation.navigate("ViewPrescription") }} 
-                        onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} />}
+                        
+                        // onPressCancel={() => setShowModalCancel(true)} 
+                        // onPressAppointment={() => { navigation.navigate("ViewPrescription") }} 
+                        // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
+
+                        onPressCancel={() => {MostrarModal('cancelar', item)}}
+                        onPressAppointmentCard={() => {MostrarModal('localization', item)}}
+                        />}
+
+                        
                     
                     keyExtractor={item => item.id}
     
@@ -227,7 +245,6 @@ export const PatientConsultation = ({ navigation }) => {
                 />
 
                     
-
             <Stethoscope onPress={() => {setShowModalStethoscope(true)}}>
 
                 <FontAwesome6
@@ -250,6 +267,7 @@ export const PatientConsultation = ({ navigation }) => {
             />
 
             <PatientAppointmentModal
+                consulta={consultaSelecionada}
                 navigation={navigation}
                 visible={showModal}
                 setShowModal={setShowModal}

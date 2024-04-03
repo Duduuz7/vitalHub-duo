@@ -26,6 +26,22 @@ export const DoctorConsultation = ({ navigation }) => {
 
     const [token, setToken] = useState({});
 
+    const [consultaSelecionada, setConsultaSelecionada] = useState([])
+
+
+    const dataAtual = new Date();
+
+
+    function MostrarModal( modal, consulta) {
+        setConsultaSelecionada(consulta)
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+        }else if (modal == 'prontuario') {
+            setShowModalAppointment((selected === 'Agendada' ? true : false))
+        }else{
+            console.log("asa");
+        }
+    }
 
 
 
@@ -209,13 +225,16 @@ export const DoctorConsultation = ({ navigation }) => {
                         dataConsulta={item.dataConsulta}
                         hour={"14:00"}
                         name={item.paciente.idNavigation.nome}
-                        age={dataConsulta}
+                        age={item.paciente.dataNascimento}
                         routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'}
                         url={image}
                         status={item.situacao.situacao}
-                        onPressCancel={() => setShowModalCancel(true)}
-                        onPressAppointment={() => { navigation.navigate("ViewPrescription") }}
-                        // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)}
+                        // onPressCancel={() => setShowModalCancel(true)}
+                        // onPressAppointment={() => { navigation.navigate("ViewPrescription") }}
+                        // onPressAppointmentCard={() => setShowModalAppointment(item.situacao.situacao === 'Agendada' ? true : false)}
+
+                        onPressCancel={() => {MostrarModal('cancelar', item)}}
+                        onPressAppointmentCard={() => {MostrarModal('prontuario', item)}}
                         />}
 
                 keyExtractor={item => item.id}
@@ -230,6 +249,7 @@ export const DoctorConsultation = ({ navigation }) => {
             />
 
             <AppointmentModal
+                consulta={consultaSelecionada}
                 navigation={navigation}
                 visible={showModalAppointment}
                 setShowModalAppointment={setShowModalAppointment}

@@ -23,7 +23,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import { mapsKey } from '../../utils/MapsKey';
 
 
-export default function Maps() {
+export default function Maps({latitude, longitude}) {
 
   const colorScheme = useColorScheme();
 

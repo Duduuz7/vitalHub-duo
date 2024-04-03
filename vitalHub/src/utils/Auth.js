@@ -24,10 +24,10 @@ export const userDecodeToken = async () => {
     const decoded = jwtDecode(token);
 
     return {
-        idUsuario : decoded.jti,
-        name : decoded.name,
-        role : decoded.role,
-        email : decoded.email
+        idUsuario: decoded.jti,
+        name: decoded.name,
+        role: decoded.role,
+        email: decoded.email
     }
 
 }

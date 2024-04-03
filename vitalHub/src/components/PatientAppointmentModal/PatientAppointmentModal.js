@@ -15,11 +15,28 @@ import { TitleModal, TitleModalRecord } from "../Title/StyleTitle";
 import { BoxAgeEmailModal } from "./StylePatientAppointmentModal";
 
 export const PatientAppointmentModal = ({
+  consulta,
   navigation,
   visible,
+  doctorData = {
+    doctorName: '',
+    doctorArea: '',
+    doctorCRM: '',
+    latitude: '', 
+    longitude: ''
+},
   setShowModal = null,
   ...rest
 }) => {
+
+
+  function handlePress( rota ) {
+
+    navigation.replace(rota, {clinicaId : consulta.medicoClinica.clinicaId})
+    
+  }
+
+
   return (
     <Modal {...rest} visible={visible} transparent={true} animationType="fade">
       <PatientModal>
@@ -28,16 +45,17 @@ export const PatientAppointmentModal = ({
             source={require("../../assets/CardRecordPatient(doctorImage).png")}
           />
 
-          <TitleModalRecord>Dr Claudio</TitleModalRecord>
+          <TitleModalRecord>{doctorData.doctorName}</TitleModalRecord>
 
           <BoxAgeEmailModal>
-            <DescriptionModalRecord>Clínico Geral</DescriptionModalRecord>
-            <DescriptionModalRecord>CRM-15286</DescriptionModalRecord>
+            <DescriptionModalRecord>{doctorData.doctorArea}</DescriptionModalRecord>
+            <DescriptionModalRecord>{`CRM-${doctorData.doctorCRM}`}</DescriptionModalRecord>
           </BoxAgeEmailModal>
 
           <ButtonLargeConfirmModal
             onPress={() => {
-              navigation.navigate("ConsultLocalization");
+              // navigation.navigate("ConsultLocalization", { latitude: doctorData.latitude , longitude: doctorData.longitude } ),
+              handlePress("ConsultLocalization")
               setShowModal(false);
             }}
             text={"Ver Local da Consulta"}
