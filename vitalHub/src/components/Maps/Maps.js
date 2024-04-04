@@ -28,10 +28,14 @@ export default function Maps({latitude, longitude}) {
   const colorScheme = useColorScheme();
 
   const mapReference = useRef(null);
+
   const [initialPosition, setInitialPosition] = useState(null);
+
   const [finalPosition, setFinalPosition] = useState({
-    latitude: -23.629205,
-    longitude: -46.471853
+    latitude: latitude,
+    longitude: longitude,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005
   })
 
   async function CapturarLocalizacao() {
@@ -64,6 +68,8 @@ export default function Maps({latitude, longitude}) {
   useEffect(() => {
 
     CapturarLocalizacao()
+    
+    // console.log(latitude, longitude);
 
     // //Capturar local em tempo real
     // watchPositionAsync({
@@ -108,22 +114,20 @@ export default function Maps({latitude, longitude}) {
             >
 
               <Marker
-                coordinate={{
-                  latitude: -23.615018,
-                  longitude: -46.570744
+                coordinate={{ 
+                   latitude: -23.615018,
+                   longitude: -46.570744
                 }}
-                title='Exemplo de  outro local'
-                description='Qualquer lugar no meu mapa'
+                title='Sua localização'
+                description='Origem'
                 pinColor='#77CACF'
               />
 
               <MapViewDirections
                 origin={initialPosition.coords}
-                destination={{
-                  latitude: -23.629205,
-                  longitude: -46.471853,
-                  latitudeDelta: 0.001,
-                  longitudeDelta: 0.001
+                destination={{  
+                  latitude: finalPosition.latitude,
+                   longitude: finalPosition.longitude
                 }}
                 apikey={mapsKey}
                 strokeWidth={5}
@@ -131,12 +135,12 @@ export default function Maps({latitude, longitude}) {
               />
 
               <Marker
-                coordinate={{
-                  latitude: finalPosition.latitude,
-                  longitude: finalPosition.longitude
+                coordinate={{ 
+                   latitude: finalPosition.latitude,
+                   longitude: finalPosition.longitude
                 }}
-                title='Exemplo de  outro local'
-                description='Qualquer lugar no meu mapa'
+                title='Clínica onde será seu atendimento'
+                description='Destino'
                 pinColor='hotpink'
               />
 

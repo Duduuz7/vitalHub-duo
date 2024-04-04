@@ -20,8 +20,15 @@ export const ConsultLocalization = ({ navigation, route }) => {
 
     if (clinica == null) {
       BuscarClinica()
+      
     }
   }, [clinica])
+
+  useEffect(() => {
+
+    console.log(route)
+
+  }, [route.params])
 
 
 
@@ -29,6 +36,7 @@ export const ConsultLocalization = ({ navigation, route }) => {
     await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaId}`)
       .then(response => {
         setClinica(response.data);
+        console.log("adsa", response.data);
       }).catch(error => {
         console.log(error);
       })
@@ -41,12 +49,12 @@ export const ConsultLocalization = ({ navigation, route }) => {
           <>
 
             <Maps
-              latitude={clinica.latitude} longitude={clinica.longitude}
+              latitude={clinica.endereco.latitude} longitude={clinica.endereco.longitude}
             />
 
             <TitleLocalization>{clinica.nomeFantasia}</TitleLocalization>
 
-            <AgeTextCard>asda</AgeTextCard>
+            <AgeTextCard>{clinica.endereco.cidade}</AgeTextCard>
 
             <InputBox
               placeholderTextColor={"#33303E"}
@@ -66,13 +74,15 @@ export const ConsultLocalization = ({ navigation, route }) => {
                 keyboardType="numeric"
                 editable={true}
                 fieldWidth={40}
+                fieldValue={`${clinica.endereco.numero}`}
               />
               <InputBox
                 placeholderTextColor={"#33303E"}
-                textLabel={"Bairro"}
-                placeholder={"Ex. Vila Ema"}
+                textLabel={"Cidade"}
+                placeholder={"Ex. São Paulo"}
                 editable={true}
                 fieldWidth={40}
+                fieldValue={clinica.endereco.cidade}
               />
             </ContainerCepCidade>
 

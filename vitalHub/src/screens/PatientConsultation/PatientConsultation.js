@@ -31,12 +31,15 @@ export const PatientConsultation = ({ navigation }) => {
 
     const [token, setToken] = useState([]);
 
-    const [consultaSelecionada, setConsultaSelecionada] = useState([])
+    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
     //Criar a função para obter a lista de consultas da api e setar no state
 
     function MostrarModal( modal, consulta) {
         setConsultaSelecionada(consulta)
+
+        console.log(consulta);
+
         if (modal == 'cancelar') {
             setShowModalCancel(true)
         }else if (modal == 'localization') {
@@ -268,6 +271,7 @@ export const PatientConsultation = ({ navigation }) => {
 
             <PatientAppointmentModal
                 consulta={consultaSelecionada}
+
                 navigation={navigation}
                 visible={showModal}
                 setShowModal={setShowModal}
