@@ -28,65 +28,80 @@ export const PatientProfile = ({ navigation }) => {
   const [cidade, setCidade] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
-
   const [token, setToken] = useState({});
+  const [editable, setEditable] = useState(false);
+
+  //Função para o nome do paciente
 
   async function profileLoad() {
-    const token = await userDecodeToken();
-
-    if (token) {
-      console.log(token);
-      setToken(token);
-
-      GetPaciente();
+    const token1 = await userDecodeToken();
+    if (token1) {
+      // console.log(token);
+      setToken(token1);
     }
   }
 
+  //Função para chamar os dados do paciente no banco de dados
+
   async function GetPaciente() {
     try {
-      console.log(token);
-      console.log(`/Pacientes/BuscarPorId?id=${token.idUsuario}`);
-      const response = await api.get(
-        `/Pacientes/BuscarPorId?id=${token.idUsuario}`
-      );
+      const token1 = await userDecodeToken();
+      if (token1 && token1.idUsuario) {
+        const response = await api.get(
+          `/Pacientes/BuscarPorId?id=${token1.idUsuario}`
+        );
+        const pacienteData = response.data;
 
-      const pacienteData = response.data;
-
-      setLogradouro(pacienteData.logradouro);
-      setCep(pacienteData.cep);
-      setCidade(pacienteData.cidade);
-      setDataNascimento(pacienteData.dataNascimento);
-      setCpf(pacienteData.cpf);
+        setLogradouro(pacienteData.endereco.logradouro);
+        setCep(pacienteData.endereco.cep);
+        setCidade(pacienteData.endereco.cidade);
+        setDataNascimento(pacienteData.dataNascimento);
+        setCpf(pacienteData.cpf);
+      } else {
+        console.error("Token is not valid or idUsuario is not present.");
+      }
     } catch (error) {
       console.error("Erro ao buscar dados do paciente:", error);
     }
   }
 
   //Função para atualizar os dados do Paciente
-  //   async function handleUpdatePatient() {
-  //     const data = {
-  //       logradouro,
-  //       cep,
-  //       cidade,
-  //       dataNascimento,
-  //       cpf,
-  //     };
+  async function updatePaciente() {
+    try {
+      const token1 = await userDecodeToken();
+      if (token1 && token1.idUsuario) {
+        const response = await api.put(`/Pacientes`, {
+          id: token1.idUsuario,
+          endereco: {
+            logradouro: logradouro,
+            cep: cep,
+            cidade: cidade,
+          },
+          dataNascimento: dataNascimento,
+          cpf: cpf,
+        });
 
-  //     try {
-  //       await api.put(`Pacientes/AtualizaDados/${token.id}`, data);
+        console.log(
+          "Dados do paciente atualizados com sucesso:",
+          response.data
+        );
 
-  //       alert("Os dados foram alterados com sucesso!");
-  //     } catch (err) {
-  //       alert("Ocorreu um erro na alteração dos dados.");
-  //       } finally {
-  //         history.push("/meus-dados");
-  //       }
-  //   }
+        setEditable(false);
+
+        // Você pode fazer algo após a atualização, como exibir uma mensagem de sucesso
+      } else {
+        console.error("Token is not valid or idUsuario is not present.");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar dados do paciente:", error);
+      // Aqui você pode lidar com o erro de atualização, exibindo uma mensagem de erro, por exemplo
+    }
+  }
 
   useEffect(() => {
     profileLoad();
     GetPaciente();
-    // handleUpdatePatient();
+    updatePaciente();
   }, []);
 
   return (
@@ -105,7 +120,8 @@ export const PatientProfile = ({ navigation }) => {
           textLabel={"Data de nascimento:"}
           placeholder={"Ex. 04/05/1999"}
           keyboardType="numeric"
-          editable={true}
+          editable={editable}
+          fieldValue={dataNascimento}
           fieldWidth={90}
         />
         <InputBox
@@ -114,14 +130,15 @@ export const PatientProfile = ({ navigation }) => {
           placeholder={"CPF..."}
           keyboardType="numeric"
           maxLength={11}
-          editable={true}
+          editable={editable}
+          fieldValue={cpf}
           fieldWidth={90}
         />
         <InputBox
           placeholderTextColor={"#A1A1A1"}
           textLabel={"Endereço"}
           placeholder={"Endereço..."}
-          editable={false}
+          editable={editable}
           fieldValue={logradouro}
           fieldWidth={90}
         />
@@ -134,7 +151,7 @@ export const PatientProfile = ({ navigation }) => {
             maxLength={8}
             onChangeText={(text) => setCep(text)}
             keyboardType="numeric"
-            editable={true}
+            editable={editable}
             fieldWidth={40}
             fieldValue={cep}
           />
@@ -142,15 +159,20 @@ export const PatientProfile = ({ navigation }) => {
             placeholderTextColor={"#A1A1A1"}
             textLabel={"Cidade"}
             placeholder={"Cidade..."}
-            editable={false}
+            editable={editable}
             fieldWidth={40}
             fieldValue={cidade}
           />
         </ContainerCepCidade>
 
-        <ButtonLarge text={"Salvar"} />
+        <ButtonLarge onPress={updatePaciente} text={"Salvar"} />
 
-        <ButtonLarge text={"Editar"} />
+        <ButtonLarge
+          onPress={() => {
+            setEditable(true);
+          }}
+          text={"Editar"}
+        />
 
         <BlockedSmallButton
           onPress={() => {

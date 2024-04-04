@@ -97,12 +97,22 @@ namespace WebAPI.Controllers
             return Ok(pacienteRepository.BuscarPorData(data,id));
         }
 
-        [HttpPut("AtualizarDados")]
-        public IActionResult AtualizarPerfil(PacienteViewModel paciente)
+        [Authorize]
+        [HttpPut]
+        public IActionResult AtualizarPerfil(Guid id, PacienteViewModel paciente)
         {
-            Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+            try
+            {
 
-            return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
+
+                Paciente pacienteBuscado = pacienteRepository.AtualizarPerfil(id, paciente);
+
+                return Ok(pacienteBuscado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
         }
 
     }
