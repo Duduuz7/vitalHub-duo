@@ -26,11 +26,7 @@ export const DoctorConsultation = ({ navigation }) => {
 
     const [token, setToken] = useState({});
 
-    const [consultaSelecionada, setConsultaSelecionada] = useState([])
-
-
-    const dataAtual = new Date();
-
+    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
     function MostrarModal( modal, consulta) {
         setConsultaSelecionada(consulta)
@@ -225,7 +221,10 @@ export const DoctorConsultation = ({ navigation }) => {
                         dataConsulta={item.dataConsulta}
                         hour={"14:00"}
                         name={item.paciente.idNavigation.nome}
-                        age={item.paciente.dataNascimento}
+                        age={`${
+                            moment().year() -
+                            moment(item.paciente.dataNascimento).format("YYYY")
+                          } anos      .`}
                         routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'}
                         url={image}
                         status={item.situacao.situacao}

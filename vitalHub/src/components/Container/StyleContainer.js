@@ -105,8 +105,11 @@ export const BoxCard = styled.SafeAreaView`
 `;
 export const BoxTextCard = styled.SafeAreaView`
   flex-direction: column;
+  padding-right: 10px;
   width: 100%;
   height: 100%;
+  margin-left: 0px;
+
 `;
 export const BoxTextDoctorCard = styled(BoxTextCard)`
   margin-left: 10px;

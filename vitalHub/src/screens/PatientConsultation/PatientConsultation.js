@@ -139,20 +139,20 @@ export const PatientConsultation = ({ navigation }) => {
 
     //FILTRO PARA CARD
 
-    const Check = (consultaLista) => {
-        if (consultaLista.situacao.situacao === "Agendada" && selected.agendadas) {
-            return true;
-        }
-        if (consultaLista.situacao.situacao === "Realizada" && selected.realizadas) {
-            return true;
-        }
-        if (consultaLista.situacao.situacao === "Cancelada" && selected.canceladas) {
-            return true;
-        }
-        return false;
-    }
+    // const Check = (consultaLista) => {
+    //     if (consultaLista.situacao.situacao === "Agendada" && selected.agendadas) {
+    //         return true;
+    //     }
+    //     if (consultaLista.situacao.situacao === "Realizada" && selected.realizadas) {
+    //         return true;
+    //     }
+    //     if (consultaLista.situacao.situacao === "Cancelada" && selected.canceladas) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
-    const data = consultaLista.filter(Check);
+    // const data = consultaLista.filter(Check);
 
     // STATES PARA OS MODAIS
 
@@ -226,7 +226,7 @@ export const PatientConsultation = ({ navigation }) => {
                         dataConsulta={item.dataConsulta}
                         hour={"14:00"} 
                         name={item.medicoClinica.medico.idNavigation.nome} 
-                        age={`CRM: ${item.medicoClinica.medico.crm}`} 
+                        age={`CRM: ${item.medicoClinica.medico.crm}  .  `} 
                         routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'} 
                         url={image} 
                         status={item.situacao.situacao} 
