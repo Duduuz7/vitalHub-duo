@@ -6,43 +6,55 @@ import { DescriptionModalRecord } from "../Descriptions/StyledDescriptions"
 import { ImageModalRecord } from "../Images/StyleImages"
 import { TitleModal, TitleModalRecord } from "../Title/StyleTitle"
 import { BoxAgeEmailModal } from "./StyleAppointmentModal"
+import moment from "moment"
 
 
 export const AppointmentModal = ({
+    consulta = null,
     navigation,
     visible,
     setShowModalAppointment = null,
     ...rest
 }) => {
     return (
+
         <Modal
             {...rest}
             visible={visible}
             transparent={true}
             animationType="fade">
-                
-            <PatientModal>
 
-                <ModalContent>
+            {
+                consulta != null && (
+                    <PatientModal>
 
-                    <ImageModalRecord source={require('../../assets/ImageModalRecord.png')} />
+                        <ModalContent>
 
-                    <TitleModalRecord>Niccole Sarga</TitleModalRecord>
+                            <ImageModalRecord source={require('../../assets/ImageModalRecord.png')} />
 
-                    <BoxAgeEmailModal>
+                            <TitleModalRecord>{consulta.paciente.idNavigation.nome}</TitleModalRecord>
 
-                        <DescriptionModalRecord>22 anos</DescriptionModalRecord>
-                        <DescriptionModalRecord>niccole.sarga@gmail.com</DescriptionModalRecord>
+                            <BoxAgeEmailModal>
 
-                    </BoxAgeEmailModal>
+                                <DescriptionModalRecord>
+                                    {`${moment().year() - moment(consulta.paciente.dataNascimento).format("YYYY")} anos`}
+                                </DescriptionModalRecord>
+                                <DescriptionModalRecord>{consulta.paciente.idNavigation.email}</DescriptionModalRecord>
 
-                    <ButtonLargeSelect onPress={() => {navigation.navigate("MedicalRecords")}} text={"Inserir Prontuário"} />
+                            </BoxAgeEmailModal>
 
-                    <CardCancelLess onPressCancel={() => setShowModalAppointment(false)} text={"Cancelar"} />
+                            <ButtonLargeSelect
+                                onPress={() => { navigation.replace("MedicalRecords",  { route: consulta})}}
+                                text={"Inserir Prontuário"}
+                            />
 
-                </ModalContent>
+                            <CardCancelLess onPressCancel={() => setShowModalAppointment(false)} text={"Cancelar"} />
 
-            </PatientModal>
+                        </ModalContent>
+
+                    </PatientModal>
+                )
+            }
 
         </Modal>
     )

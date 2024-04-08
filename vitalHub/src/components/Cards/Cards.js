@@ -23,6 +23,7 @@ import { ImageCard, PointCard } from "../Images/StyleImages";
 import { NameCard, NameCardClinic, NameCardSelect } from "../Title/StyleTitle";
 import {
   AgeCard,
+  AgeCardDoc,
   BoxRate,
   CardContainer,
   CardContainerClinic,
@@ -43,6 +44,7 @@ export const Card = ({
   onPressAppointment,
   onPressAppointmentCard,
   navigation,
+  dataConsulta
 }) => {
   const Check = () => {
     if (status === "Agendada") {
@@ -122,6 +124,7 @@ export const Card = ({
     </CardContainer>
   );
 };
+
 
 export const CardSelectDoctor = ({ url, name, doctorArea }) => {
   return (

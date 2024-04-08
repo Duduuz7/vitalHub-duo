@@ -100,9 +100,16 @@ export const CancelButtonRecords = styled(CancelButton)`
 `;
 
 export const AgeTextCard = styled(DescripritionForgot)`
+  margin-top: 4px;
+  margin-right: 0px;
+  margin-left: -12px;
+  justify-self: flex-start;
+  text-align: start;
+  padding-right: 0px;
   color: #8c8a97;
   font-size: 14px;
   height: 20px;
+  width: 100px;
 `;
 
 export const DoctorArea = styled(DescripritionForgot)`
@@ -123,6 +130,7 @@ export const RoutineTextCard = styled(AgeTextCard)`
   margin-top: 6px;
   height: 22px;
   color: #8c8a97;
+  margin-right: 1px
 `;
 
 export const HourText = styled.Text`

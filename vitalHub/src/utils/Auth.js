@@ -22,15 +22,17 @@ export const userDecodeToken = async () => {
   //Decodifica o token recebido
   const decoded = jwtDecode(token);
 
-  return {
-    idUsuario: decoded.jti,
-    name: decoded.name,
-    role: decoded.role,
-    email: decoded.email,
-    token: token,
-  };
-  
-};
+    //Decodifica o token recebido
+    const decoded = jwtDecode(token);
+
+    return {
+        idUsuario: decoded.jti,
+        name: decoded.name,
+        role: decoded.role,
+        email: decoded.email
+    }
+
+}
 export const userLogoutToken = async () => {
   const token = await AsyncStorage.removeItem("token");
 };
