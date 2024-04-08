@@ -12,10 +12,11 @@ import { ImportImages, Line, TitleImage } from "./Style"
 import * as MediaLibrary from "expo-media-library"
 import { ActivityIndicator } from "react-native"
 import api from "../../services/Services"
+import moment from "moment"
 
 // import { useRoute } from '@react-navigation/native';
 
-export const ViewPrescription = ({ navigation, route }) => {
+export const ViewPrescriptionDoc = ({ navigation, route }) => {
 
     // const { photoUri } = route.params;
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
@@ -63,11 +64,13 @@ export const ViewPrescription = ({ navigation, route }) => {
 
                         <ViewImage source={require("../../assets/ney.webp")} />
 
-                        <TitleProfile>{consultaSelecionada.medicoClinica.medico.idNavigation.nome}</TitleProfile>
+                        <TitleProfile>{consultaSelecionada.paciente.idNavigation.nome}</TitleProfile>
 
                         <BoxDescription>
-                            <DescriptionDoc description={consultaSelecionada.medicoClinica.medico.especialidade.especialidade1} />
-                            <DescriptionDoc description={`CRM-${consultaSelecionada.medicoClinica.medico.crm}`} />
+                            <DescriptionDoc description={
+                                  `${moment().year() - moment(consultaSelecionada.paciente.dataNascimento).format("YYYY")} anos`
+                                } />
+                            <DescriptionDoc description={consultaSelecionada.paciente.idNavigation.email} />
                         </BoxDescription>
 
                         <HighInputBoxGrey
@@ -102,7 +105,7 @@ export const ViewPrescription = ({ navigation, route }) => {
 
                             fieldValue={consultaSelecionada.receita.medicamento}
                         />
-
+{/* 
                         <BoxViewImageImport>
 
                             <Label textLabel={"Exames médicos"} />
@@ -118,17 +121,17 @@ export const ViewPrescription = ({ navigation, route }) => {
                             <CardCancel onPressCancel={() => { navigation.replace("Main") }} text={"Cancelar"} />
                         </BoxBtn>
 
-                        <Line />
+                        <Line /> */}
 
-                        <HighInputBoxGrey
+                        {/* <HighInputBoxGrey
                             // fieldHeight={350}
                             placeholderTextColor={"#A1A1A1"}
                             placeholder={"Resultado do exame"}
                             editable={true}
                             fieldWidth={90}
-                        />
+                        /> */}
 
-                        <CardBackLess onPressCancel={() => { navigation.navigate("PatientConsultation") }} text={"Voltar"} />
+                        <CardBackLess onPressCancel={() => { navigation.navigate("DoctorConsultation") }} text={"Voltar"} />
 
                     </Container>
 

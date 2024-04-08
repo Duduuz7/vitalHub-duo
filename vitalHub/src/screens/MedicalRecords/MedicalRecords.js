@@ -7,26 +7,26 @@ import { ImagemPerfilPaciente } from "../../components/Images/StyleImages"
 import { TitleProfile } from "../../components/Title/StyleTitle"
 import { useEffect, useState } from "react"
 import moment from "moment"
+import { ActivityIndicator } from "react-native"
 
 
 
 export const MedicalRecords = ({ navigation, route }) => {
 
-    const [consulta, setConsulta] = useState([])
+    const [consulta, setConsulta] = useState(null)
+
+    const [editable, setEditable] = useState(false)
 
     useEffect(() => {
-        setConsulta(route.params)
-    }, [route.params])
-
-    useEffect(() => {
-        console.log(route);
-    }, [route.params])
+        if (route.params) {
+            setConsulta(route.params.consulta)
+        }
+    }, [route])
 
     return (
         <ScrollContainer>
 
-            {
-                consulta != null && (
+                {consulta != null ? (
 
                     <>
 
@@ -36,17 +36,17 @@ export const MedicalRecords = ({ navigation, route }) => {
 
 
                             <TitleProfile>
-                                {consulta.route.paciente.idNavigation.nome}
+                                {consulta.paciente.idNavigation.nome}
                             </TitleProfile>
 
                             <BoxAgeEmail>
 
                                 <DescriptionPassword
                                     description={
-                                        `${moment().year() - moment(consulta.route.paciente.dataNascimento).format("YYYY")} anos`
+                                        `${moment().year() - moment(consulta.paciente.dataNascimento).format("YYYY")} anos`
                                     }
                                 />
-                                <DescriptionPassword description={consulta.route.paciente.idNavigation.email} />
+                                <DescriptionPassword description={consulta.paciente.idNavigation.email} />
 
                             </BoxAgeEmail>
 
@@ -56,16 +56,16 @@ export const MedicalRecords = ({ navigation, route }) => {
                                 fieldHeight={350}
                                 placeholderTextColor={"#34898F"}
                                 textLabel={"Descrição da consulta"}
-                                placeholder={"Descrição"}
-                                editable={true}
+                                placeholder={consulta.descricao}
+                                editable={editable}
                                 fieldWidth={90}
                             />
 
                             <LargeInputTextBox
                                 placeholderTextColor={"#34898F"}
                                 textLabel={"Diagnóstico do paciente"}
-                                placeholder={"Diagnóstico"}
-                                editable={true}
+                                placeholder={consulta.diagnostico}
+                                editable={editable}
                                 fieldWidth={90}
                             />
 
@@ -74,13 +74,13 @@ export const MedicalRecords = ({ navigation, route }) => {
                                 placeholderTextColor={"#34898F"}
                                 textLabel={"Prescrição médica"}
                                 placeholder={"Prescriçao médica"}
-                                editable={true}
+                                editable={editable}
                                 fieldWidth={90}
                             />
 
-                            <ButtonNormal text={"Salvar"} />
+                            <ButtonNormal onPress={() => {setEditable(false)}} text={"Salvar"} />
 
-                            <BlockedButton text={"Editar"} />
+                            <BlockedButton onPress={() => {setEditable(true ? false : true)}} text={"Editar"} />
 
                             <RecordsCancelButton onPress={() => {
                                 navigation.replace("DoctorMain");
@@ -91,8 +91,11 @@ export const MedicalRecords = ({ navigation, route }) => {
                         </Container>
 
                     </>
+                    
+                    ) : (
+                        <ActivityIndicator style={{marginTop: '100%'}} />
+                    )}
 
-                )}
         </ScrollContainer>
 
     )

@@ -225,15 +225,15 @@ export const DoctorConsultation = ({ navigation }) => {
                             moment().year() -
                             moment(item.paciente.dataNascimento).format("YYYY")
                           } anos      .`}
-                        routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'}
+                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
                         url={image}
                         status={item.situacao.situacao}
                         // onPressCancel={() => setShowModalCancel(true)}
-                        // onPressAppointment={() => { navigation.navigate("ViewPrescription") }}
+                        onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", {consulta: item})}} 
                         // onPressAppointmentCard={() => setShowModalAppointment(item.situacao.situacao === 'Agendada' ? true : false)}
 
                         onPressCancel={() => {MostrarModal('cancelar', item)}}
-                        onPressAppointmentCard={() => {MostrarModal('prontuario', item)}}
+                        onPressAppointmentCard={() => {MostrarModal('prontuario',item)}}
                         />}
 
                 keyExtractor={item => item.id}

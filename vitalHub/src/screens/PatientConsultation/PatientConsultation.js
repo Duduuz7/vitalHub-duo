@@ -45,7 +45,7 @@ export const PatientConsultation = ({ navigation }) => {
         }else if (modal == 'localization') {
             setShowModal(selected === 'Agendada' ? true : false)
         }else{
-            console.log("asa");
+            seth
         }
     }
 
@@ -227,12 +227,12 @@ export const PatientConsultation = ({ navigation }) => {
                         hour={"14:00"} 
                         name={item.medicoClinica.medico.idNavigation.nome} 
                         age={`CRM: ${item.medicoClinica.medico.crm}  .  `} 
-                        routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'} 
+                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"} 
                         url={image} 
                         status={item.situacao.situacao} 
                         
                         // onPressCancel={() => setShowModalCancel(true)} 
-                        // onPressAppointment={() => { navigation.navigate("ViewPrescription") }} 
+                         onPressAppointment={() => { navigation.navigate("ViewPrescription", {consulta: item})}} 
                         // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
 
                         onPressCancel={() => {MostrarModal('cancelar', item)}}

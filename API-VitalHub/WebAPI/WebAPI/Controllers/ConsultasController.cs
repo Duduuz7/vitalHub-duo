@@ -29,6 +29,12 @@ namespace WebAPI.Controllers
             return Ok(consultas);
         }
 
+        [HttpGet("BuscaPorId")]
+        public IActionResult BuscarConsultasId(Guid id)
+        {
+            return Ok(consultaRepository.BuscarPorId(id));
+        }
+
         [Authorize(Roles ="Medico")]
         [HttpGet("ConsultasMedico")]
         public IActionResult BuscarConsultasMedico()

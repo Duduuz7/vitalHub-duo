@@ -7,6 +7,7 @@ import { ImageModalRecord } from "../Images/StyleImages"
 import { TitleModal, TitleModalRecord } from "../Title/StyleTitle"
 import { BoxAgeEmailModal } from "./StyleAppointmentModal"
 import moment from "moment"
+import { useEffect } from "react"
 
 
 export const AppointmentModal = ({
@@ -16,6 +17,7 @@ export const AppointmentModal = ({
     setShowModalAppointment = null,
     ...rest
 }) => {
+    
     return (
 
         <Modal
@@ -44,7 +46,7 @@ export const AppointmentModal = ({
                             </BoxAgeEmailModal>
 
                             <ButtonLargeSelect
-                                onPress={() => { navigation.replace("MedicalRecords",  { route: consulta})}}
+                                onPress={() => { navigation.replace("MedicalRecords",  { consulta : consulta })}}
                                 text={"Inserir Prontuário"}
                             />
 
