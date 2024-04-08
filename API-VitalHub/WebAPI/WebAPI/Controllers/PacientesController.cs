@@ -96,5 +96,24 @@ namespace WebAPI.Controllers
         {
             return Ok(pacienteRepository.BuscarPorData(data,id));
         }
+
+        [Authorize]
+        [HttpPut("AtualizarDados")]
+        public IActionResult AtualizarPerfil(Guid id, PacienteViewModel paciente)
+        {
+            try
+            {
+
+
+                Paciente pacienteBuscado = pacienteRepository.AtualizarPerfil(id, paciente);
+
+                return Ok(pacienteBuscado);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
+
     }
 }

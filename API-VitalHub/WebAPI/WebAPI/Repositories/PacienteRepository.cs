@@ -20,8 +20,8 @@ namespace WebAPI.Repositories
 
             Paciente pacienteBuscado = ctx.Pacientes.FirstOrDefault(x => x.Id == Id)!;
 
-            if (paciente.Foto != null)
-                pacienteBuscado!.IdNavigation.Foto = paciente.Foto;
+            //if (paciente.Foto != null)
+            //    pacienteBuscado!.IdNavigation.Foto = paciente.Foto;
 
             if (paciente.DataNascimento != null)
                 pacienteBuscado!.DataNascimento = paciente.DataNascimento;
@@ -85,5 +85,6 @@ namespace WebAPI.Repositories
             ctx.Usuarios.Add(user);
             ctx.SaveChanges();
         }
+     
     }
 }

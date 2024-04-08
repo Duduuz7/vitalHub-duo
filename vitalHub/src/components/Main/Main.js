@@ -12,6 +12,7 @@ import { PatientConsultation } from "../../screens/PatientConsultation/PatientCo
 
 import { DoctorConsultation } from "../../screens/DoctorConsultation/DoctorConsultation";
 import { useEffect } from "react";
+import { userDecodeToken } from "../../utils/Auth";
 
 const bottomTab = createBottomTabNavigator();
 
