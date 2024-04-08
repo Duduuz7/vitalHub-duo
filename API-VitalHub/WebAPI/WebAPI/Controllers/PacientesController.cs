@@ -98,7 +98,7 @@ namespace WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut]
+        [HttpPut("AtualizarDados")]
         public IActionResult AtualizarPerfil(Guid id, PacienteViewModel paciente)
         {
             try
