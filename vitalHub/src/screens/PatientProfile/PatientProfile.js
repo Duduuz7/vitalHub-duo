@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Alert } from "react-native";
 import {
   Container,
   ContainerCepCidade,
@@ -31,81 +32,64 @@ export const PatientProfile = ({ navigation }) => {
   const [token, setToken] = useState({});
   const [editable, setEditable] = useState(false);
   const [pacienteData, setPacienteData] = useState("");
-  const [response, setResponse] = useState("")
- 
-  //Função para o nome do paciente
+  const [userId, setUserId] = useState();
 
   async function profileLoad() {
-    const token1 = await userDecodeToken();
-    if (token1) {
-      // console.log(token);
-      setToken(token1);
+    const token = await userDecodeToken();
+    setToken(token);
+    if (token) {
+      getPaciente(token.idUsuario);
+
+      setUserId(token.idUsuario);
     }
   }
 
-  //Função para chamar os dados do paciente no banco de dados
-  
-  async function GetPaciente() {
+  async function getPaciente(user) {
     try {
-      const token1 = await userDecodeToken();
-      if (token1 && token1.idUsuario) {
-        const response = await api.get(
-          `/Pacientes/BuscarPorId?id=${token1.idUsuario}`
-          );
-          setPacienteData = response.data;
+      console.log(`/Pacientes/BuscarPorId?id=${user}`);
+      const promise = await api.get(`/Pacientes/BuscarPorId?id=${user}`);
 
-        setLogradouro(pacienteData.endereco.logradouro);
-        setCep(pacienteData.endereco.cep);
-        setCidade(pacienteData.endereco.cidade);
-        setDataNascimento(pacienteData.dataNascimento);
-        setCpf(pacienteData.cpf);
-      } else {
-        console.error("Token is not valid or idUsuario is not present.");
-      }
+      setPacienteData(promise.data);
+      console.log(promise.data);
+
+      setLogradouro(promise.data.endereco.logradouro);
+      setCep(promise.data.endereco.cep);
+      setCidade(promise.data.endereco.cidade);
+      setDataNascimento(promise.data.dataNascimento);
+      setCpf(promise.data.cpf);
     } catch (error) {
-      console.error("Erro ao buscar dados do paciente:", error);
+      console.error("Error NESTE paciente AQUI :", error);
     }
   }
 
   async function updatePaciente() {
     try {
-      const token1 = await userDecodeToken();
-      if (token1 && token1.idUsuario) {
-        await api.put(
-          `/Pacientes/AtualizarDados?id=${token1.idUsuario}`,
-          {
-            endereco: {
-              logradouro: logradouro,
-              cep: cep,
-              cidade: cidade,
-            },
-            dataNascimento: dataNascimento,
-            cpf: cpf,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + token1.token, //vai ser trocado pelo token de autenticação
-            },
-          }
-        );
-        console.log("Dados do paciente atualizados com sucesso:");
-
-        // setEditable(false);
-      } else {
-        console.error("Token is not valid or idUsuario is not present.");
-      }
+      console.log({
+        cpf: cpf,
+        dataNascimento: dataNascimento,
+        cep: cep,
+        logradouro: logradouro,
+        cidade: cidade,
+      });
+      console.log(`/Pacientes/AtualizarDados?id=${userId}`);
+      await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
+        cpf: cpf,
+        dataNascimento: dataNascimento,
+        cep: cep,
+        logradouro: logradouro,
+        cidade: cidade,
+      });
+      Alert.alert("Success", "Data successfully updated!");
+      setEditable(false);
     } catch (error) {
-      console.error("Erro ao atualizar dados do paciente:", error);
+      console.error("Erro ao atualizar paciente:", error);
+      Alert.alert("Erro", "Falha ao atualizar os dados.");
     }
   }
 
   useEffect(() => {
     profileLoad();
-    GetPaciente();
-    // console.log(editable);
-  }); // Executa a função quando o valor de editable mudar
-
-  setPacienteData(response.data)
+  }, []);
 
   return (
     <ScrollContainer>
@@ -113,18 +97,15 @@ export const PatientProfile = ({ navigation }) => {
         <ImagemPerfilPaciente
           source={require("../../assets/LimaCorinthians.png")}
         />
-
         <TitleProfile>{token.name}</TitleProfile>
-
         <DescriptionPassword description={token.email} />
-
         <InputBox
           placeholderTextColor={"#A1A1A1"}
           textLabel={"Data de nascimento:"}
           placeholder={pacienteData.dataNascimento}
           keyboardType="numeric"
           editable={editable}
-          onChangeText={(text) => setData(text)}
+          onChangeText={(text) => setDataNascimento(text)}
           fieldWidth={90}
         />
         <InputBox
@@ -140,17 +121,18 @@ export const PatientProfile = ({ navigation }) => {
         <InputBox
           placeholderTextColor={"#A1A1A1"}
           textLabel={"Endereço"}
-          placeholder={pacienteData.endereco.logradouro}
+          placeholder={
+            !editable ? logradouro : pacienteData?.endereco?.logradouro
+          }
           editable={editable}
           onChangeText={(text) => setLogradouro(text)}
           fieldWidth={90}
         />
-
         <ContainerCepCidade>
           <InputBox
             placeholderTextColor={"#A1A1A1"}
             textLabel={"CEP"}
-            placeholder={pacienteData.endereco.cep}
+            placeholder={!editable ? cep : pacienteData?.endereco?.cep}
             maxLength={8}
             onChangeText={(text) => setCep(text)}
             keyboardType="numeric"
@@ -163,25 +145,21 @@ export const PatientProfile = ({ navigation }) => {
             editable={editable}
             onChangeText={(text) => setCidade(text)}
             fieldWidth={40}
-            placeholder={pacienteData.endereco.cidade}
+            placeholder={!editable ? cidade : pacienteData?.endereco?.cidade}
           />
         </ContainerCepCidade>
-
         <ButtonLarge
           onPress={() => {
             updatePaciente();
-            setEditable(false);
           }}
           text={"Salvar"}
         />
-
         <ButtonLarge
           onPress={() => {
             setEditable(true);
           }}
           text={"Editar"}
         />
-
         <BlockedSmallButton
           onPress={() => {
             userLogoutToken();
@@ -193,3 +171,5 @@ export const PatientProfile = ({ navigation }) => {
     </ScrollContainer>
   );
 };
+
+export default PatientProfile;

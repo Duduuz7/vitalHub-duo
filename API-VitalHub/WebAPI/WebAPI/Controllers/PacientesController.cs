@@ -91,29 +91,21 @@ namespace WebAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("AtualizarPerfil")]
+        public IActionResult AtualizarPerfil(Guid idUsuario, PacienteViewModel paciente)
+        {
+            // Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+
+            return Ok(pacienteRepository.AtualizarPerfil(idUsuario, paciente));
+        }
+
+
         [HttpGet("BuscarPorData")]
         public IActionResult BuscarPorData(DateTime data, Guid id)
         {
-            return Ok(pacienteRepository.BuscarPorData(data,id));
-        }
-
-        [Authorize]
-        [HttpPut("AtualizarDados")]
-        public IActionResult AtualizarPerfil(Guid id, PacienteViewModel paciente)
-        {
-            try
-            {
-
-
-                Paciente pacienteBuscado = pacienteRepository.AtualizarPerfil(id, paciente);
-
-                return Ok(pacienteBuscado);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
-            }
+            return Ok(pacienteRepository.BuscarPorData(data, id));
         }
 
     }
+
 }

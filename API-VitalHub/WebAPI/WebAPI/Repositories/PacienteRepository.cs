@@ -19,9 +19,12 @@ namespace WebAPI.Repositories
             //endereco logradouro numero cep
 
             Paciente pacienteBuscado = ctx.Pacientes.FirstOrDefault(x => x.Id == Id)!;
+            Usuario usuarioBuscado = ctx.Usuarios.FirstOrDefault(x => x.Id == Id)!;
+            Endereco endereco = ctx.Enderecos.FirstOrDefault(x => x.Id == pacienteBuscado.EnderecoId)!;
 
-            //if (paciente.Foto != null)
-            //    pacienteBuscado!.IdNavigation.Foto = paciente.Foto;
+
+            if (paciente.Foto != null)
+                usuarioBuscado.Foto = paciente.Foto;
 
             if (paciente.DataNascimento != null)
                 pacienteBuscado!.DataNascimento = paciente.DataNascimento;
@@ -30,18 +33,22 @@ namespace WebAPI.Repositories
                 pacienteBuscado!.Cpf = paciente.Cpf;
 
             if (paciente.Logradouro != null)
-                pacienteBuscado!.Endereco!.Logradouro = paciente.Logradouro;
+                endereco.Logradouro = paciente.Logradouro;
 
             if (paciente.Numero != null)
-                pacienteBuscado!.Endereco!.Numero = paciente.Numero;
+                endereco.Numero = paciente.Numero;
 
             if (paciente.Cep != null)
-                pacienteBuscado!.Endereco!.Cep = paciente.Cep;
+                endereco.Cep = paciente.Cep;
+
+            if (paciente.Rg != null)
+                pacienteBuscado!.Rg = paciente.Rg;
 
             ctx.Pacientes.Update(pacienteBuscado!);
+            ctx.Enderecos.Update(endereco);
             ctx.SaveChanges();
 
-            return pacienteBuscado!;
+            return pacienteBuscado;
         }
 
         public List<Consulta> BuscarAgendadas(Guid Id)
@@ -56,14 +63,12 @@ namespace WebAPI.Repositories
 
         public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid idPaciente)
         {
-           return ctx.Consultas
-                .Include(x => x.Situacao)
-                .Include(x => x.Prioridade)
-                .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
-                .Include(x => x.MedicoClinica!.Medico!.Especialidade)
-                //Diferenca dem dias entre a Data da Consulta e a dataConsulta é igual a 0
-                .Where(x  => x.PacienteId == idPaciente && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
-                .ToList();
+            return ctx.Consultas
+                 .Include(x => x.Situacao)
+                 .Include(x => x.Prioridade)
+                 .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
+                 .Where(x => x.PacienteId == idPaciente && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
+                 .ToList();
         }
 
         public Paciente BuscarPorId(Guid Id)
@@ -85,6 +90,5 @@ namespace WebAPI.Repositories
             ctx.Usuarios.Add(user);
             ctx.SaveChanges();
         }
-     
     }
 }
