@@ -28,28 +28,38 @@ export const DoctorConsultation = ({ navigation }) => {
 
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
-    function MostrarModal( modal, consulta) {
+
+    //state para cancelar consulta
+    const [consultaCancel, setConsultaCancel] = useState({
+        id: '',
+        //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
+        situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
+    })
+
+
+
+    function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
         if (modal == 'cancelar') {
             setShowModalCancel(true)
-        }else if (modal == 'prontuario') {
+        } else if (modal == 'prontuario') {
             setShowModalAppointment((selected === 'Agendada' ? true : false))
-        }else{
+        } else {
             console.log("asa");
         }
     }
 
 
 
-    async function ListarConsultas(){
-        
+    async function ListarConsultas() {
+
         // console.log(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
         await api.get(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)
             console.log(response.data);
 
-        }).catch( error => {
+        }).catch(error => {
             console.log(error);
         })
 
@@ -63,36 +73,9 @@ export const DoctorConsultation = ({ navigation }) => {
             console.log(token)
             setToken(token)
 
-            setDataConsulta( moment().format("YYYY-MM-DD") ) 
+            setDataConsulta(moment().format("YYYY-MM-DD"))
         }
     }
-
-    // async function GetConsultas() {
-    //     try {
-
-    //         const token = await tokenClean();
-
-    //         if (token) {
-
-    //             const response = await api.get('/Consultas', {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`
-    //                 }
-    //             });
-
-    //             setConsultaLista(response.data);
-
-    //             console.log("asdas", response.data);
-
-    //         } else {
-    //             console.log("Token não encontrado.");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
-
 
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
@@ -108,12 +91,16 @@ export const DoctorConsultation = ({ navigation }) => {
         profileLoad()
     }, [])
 
+
     useEffect(() => {
-        if( dataConsulta != '' ){
+        if (dataConsulta != '') {
             ListarConsultas()
         }
         console.log(dataConsulta);
-    }, [dataConsulta])
+    }, [dataConsulta, showModalCancel])
+
+
+
 
     const image = require("../../assets/ImageCard.png");
 
@@ -198,11 +185,11 @@ export const DoctorConsultation = ({ navigation }) => {
 
             </Header>
 
-            <Calendar setDataConsulta={setDataConsulta}/>
+            <Calendar setDataConsulta={setDataConsulta} />
 
             <ButtonHomeContainer>
 
-                <FilterButton onPress={() => { setSelected("Agendada")}} selected={selected === 'Agendada' ? true : false} text={'Agendadas'} />
+                <FilterButton onPress={() => { setSelected("Agendada") }} selected={selected === 'Agendada' ? true : false} text={'Agendadas'} />
                 {/* <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} /> */}
 
                 <FilterButton onPress={() => { setSelected("Realizada") }} selected={selected === 'Realizada' ? true : false} text={'Realizadas'} />
@@ -221,20 +208,19 @@ export const DoctorConsultation = ({ navigation }) => {
                         dataConsulta={item.dataConsulta}
                         hour={"14:00"}
                         name={item.paciente.idNavigation.nome}
-                        age={`${
-                            moment().year() -
+                        age={`${moment().year() -
                             moment(item.paciente.dataNascimento).format("YYYY")
-                          } anos      .`}
+                            } anos      .`}
                         routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
                         url={image}
                         status={item.situacao.situacao}
                         // onPressCancel={() => setShowModalCancel(true)}
-                        onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", {consulta: item})}} 
+                        onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", { consulta: item }) }}
                         // onPressAppointmentCard={() => setShowModalAppointment(item.situacao.situacao === 'Agendada' ? true : false)}
 
-                        onPressCancel={() => {MostrarModal('cancelar', item)}}
-                        onPressAppointmentCard={() => {MostrarModal('prontuario',item)}}
-                        />}
+                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
+                        onPressAppointmentCard={() => { MostrarModal('prontuario', item) }}
+                    />}
 
                 keyExtractor={item => item.id}
 
@@ -243,6 +229,7 @@ export const DoctorConsultation = ({ navigation }) => {
             />
 
             <CancellationModal
+                consultaCancel={consultaCancel}
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />

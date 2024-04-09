@@ -9,8 +9,13 @@ export const Button = styled.TouchableOpacity`
     justify-content: center;
     margin-top: 30px;
     border: 1px solid #496BBA;
-
 `
+
+export const ButtonModal = styled(Button)`
+    width: 100%;
+    margin-bottom: 8%;
+`
+
 export const NormalButton = styled.TouchableOpacity`
     margin-top: 32px;
     border-radius: 8px;

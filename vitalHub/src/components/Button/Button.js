@@ -78,6 +78,8 @@ export const BlockedButton = ({ onPress, text }) => {
   );
 };
 
+
+
 export const BlockedSmallButton = ({ onPress, text }) => {
   return (
     <SmallButtonBlocked onPress={onPress}>

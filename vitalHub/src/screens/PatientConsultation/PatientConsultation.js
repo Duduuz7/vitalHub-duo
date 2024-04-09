@@ -33,63 +33,44 @@ export const PatientConsultation = ({ navigation }) => {
 
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
+
+    //state para cancelar consulta
+    const [consultaCancel, setConsultaCancel] = useState({
+        id: '',
+        //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
+        situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
+    })
+
     //Criar a função para obter a lista de consultas da api e setar no state
 
-    function MostrarModal( modal, consulta) {
+    function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
 
         console.log(consulta);
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
-        }else if (modal == 'localization') {
+        } else if (modal == 'localization') {
             setShowModal(selected === 'Agendada' ? true : false)
-        }else{
-            seth
+        } else {
+            console.log('asdas');
         }
     }
 
 
-    async function ListarConsultas(){
-        
+    async function ListarConsultas() {
+
         console.log(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
         await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)
             console.log(consultaLista);
 
-        }).catch( error => {
+        }).catch(error => {
             console.log(error);
         })
 
     }
-
-
-    // async function GetConsultas() {
-    //     try {
-
-    //         const token = await tokenClean();
-
-    //         if (token) {
-
-    //             const response = await api.get('/Consultas', {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`
-    //                 }
-    //             });
-
-    //             setConsultaLista(response.data);
-
-    //             // console.log(response.data);
-
-    //         } else {
-    //             console.log("Token não encontrado.");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
 
     async function profileLoad() {
 
@@ -99,7 +80,7 @@ export const PatientConsultation = ({ navigation }) => {
             console.log(token)
             setToken(token)
 
-            setDataConsulta( moment().format('YYYY-MM-DD') );
+            setDataConsulta(moment().format('YYYY-MM-DD'));
         }
 
     }
@@ -157,7 +138,7 @@ export const PatientConsultation = ({ navigation }) => {
     // STATES PARA OS MODAIS
 
     const [showModalCancel, setShowModalCancel] = useState(false);
-    const [showModalAppointment, setShowModalAppointment] = useState(false);
+    // const [showModalAppointment, setShowModalAppointment] = useState(false);
     const [showModalStethoscope, setShowModalStethoscope] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
@@ -167,15 +148,17 @@ export const PatientConsultation = ({ navigation }) => {
     useEffect(() => {
         profileLoad()
         setSelected("Agendada")
+
         // GetConsultas()
     }, [])
 
     useEffect(() => {
-        if( dataConsulta != '' ){
+        if (dataConsulta != '') {
             ListarConsultas()
         }
-        console.log(dataConsulta);
-    }, [dataConsulta])
+        // console.log(dataConsulta);
+    }, [dataConsulta, showModalCancel])
+
 
     return (
 
@@ -203,7 +186,7 @@ export const PatientConsultation = ({ navigation }) => {
 
             </Header>
 
-            <Calendar setDataConsulta={setDataConsulta}/>
+            <Calendar setDataConsulta={setDataConsulta} />
 
             <ButtonHomeContainer>
 
@@ -220,35 +203,34 @@ export const PatientConsultation = ({ navigation }) => {
                 data={consultaLista}
                 renderItem={({ item }) =>
                     // item.situacao == selected
-                    item.situacao.situacao == selected && 
-                        <Card 
-                        navigation={navigation} 
+                    item.situacao.situacao == selected &&
+                    <Card
+                        navigation={navigation}
                         dataConsulta={item.dataConsulta}
-                        hour={"14:00"} 
-                        name={item.medicoClinica.medico.idNavigation.nome} 
-                        age={`CRM: ${item.medicoClinica.medico.crm}  .  `} 
-                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"} 
-                        url={image} 
-                        status={item.situacao.situacao} 
-                        
+                        hour={"14:00"}
+                        name={item.medicoClinica.medico.idNavigation.nome}
+                        age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
+                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                        url={image}
+                        status={item.situacao.situacao}
+
                         // onPressCancel={() => setShowModalCancel(true)} 
-                         onPressAppointment={() => { navigation.navigate("ViewPrescription", {consulta: item})}} 
+                        onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
                         // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
 
-                        onPressCancel={() => {MostrarModal('cancelar', item)}}
-                        onPressAppointmentCard={() => {MostrarModal('localization', item)}}
-                        />}
+                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
+                        onPressAppointmentCard={() => { MostrarModal('localization', item) }}
+                    />}
 
-                        
-                    
-                    keyExtractor={item => item.id}
-    
-                    showsVerticalScrollIndicator={false}
-    
-                />
 
-                    
-            <Stethoscope onPress={() => {setShowModalStethoscope(true)}}>
+                keyExtractor={item => item.id}
+
+                showsVerticalScrollIndicator={false}
+
+            />
+
+
+            <Stethoscope onPress={() => { setShowModalStethoscope(true) }}>
 
                 <FontAwesome6
                     name="stethoscope"
@@ -259,6 +241,7 @@ export const PatientConsultation = ({ navigation }) => {
             </Stethoscope>
 
             <CancellationModal
+                consultaCancel={consultaCancel}
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
