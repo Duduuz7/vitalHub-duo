@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using WebAPI.Domains;
 using WebAPI.Interfaces;
 using WebAPI.Repositories;
+using WebAPI.Utils.Mail;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
@@ -14,10 +15,12 @@ namespace WebAPI.Controllers
     public class PacientesController : ControllerBase
     {
         private IPacienteRepository pacienteRepository { get; set; }
+        private readonly EmailSendingService _emailSendingService;
 
-        public PacientesController()
+        public PacientesController(EmailSendingService emailSendingService)
         {
             pacienteRepository = new PacienteRepository();
+            _emailSendingService = emailSendingService;
         }
 
         [HttpGet("PerfilLogado")]
@@ -44,7 +47,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(PacienteViewModel pacienteModel)
+        public async Task<IActionResult> Post(PacienteViewModel pacienteModel)
         {
             Usuario user = new Usuario();
 
@@ -68,6 +71,8 @@ namespace WebAPI.Controllers
             user.Paciente.Endereco.Cidade = pacienteModel.Cidade;
 
             pacienteRepository.Cadastrar(user);
+
+            await _emailSendingService.SendWelcomeEmail(user.Email, user.Nome!);
 
             return Ok();
         }

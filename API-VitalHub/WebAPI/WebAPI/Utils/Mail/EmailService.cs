@@ -19,7 +19,7 @@ namespace WebAPI.Utils.Mail
 
 
         //Método para envio de e-mail
-        public async Task SendEmeailAsync(MailRequest mailRequest)
+        public async Task SendEmailAsync(MailRequest mailRequest)
         {
             try
             {

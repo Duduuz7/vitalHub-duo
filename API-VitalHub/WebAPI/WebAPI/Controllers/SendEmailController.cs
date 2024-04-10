@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
                 mailRequest.Body = GetHtmlContent(userName);
 
                 //Chama o método que enviará o e-mail
-                await emailService.SendEmeailAsync(mailRequest);
+                await emailService.SendEmailAsync(mailRequest);
 
                 return Ok("Email enviado com sucesso !!!");
             }
