@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { SendButton } from "../../components/Button/Button"
 import { ButtonSend } from "../../components/Button/StyleButton"
 import { BoxAgeEmail, BoxBtn, BoxDescription, BoxViewImageImport, Container, ScrollContainer, ViewImageImport } from "../../components/Container/StyleContainer"
@@ -10,88 +10,131 @@ import { TitleProfile } from "../../components/Title/StyleTitle"
 import { ImportImages, Line, TitleImage } from "./Style"
 
 import * as MediaLibrary from "expo-media-library"
+import { ActivityIndicator } from "react-native"
+import api from "../../services/Services"
 
 // import { useRoute } from '@react-navigation/native';
 
 export const ViewPrescription = ({ navigation, route }) => {
 
     // const { photoUri } = route.params;
+    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+
+
+    async function BuscarProntuario() {
+        await api.get(`/Consultas/BuscaPorId?id=${route.params.consulta.id}`)
+            .then(response => {
+
+                setConsultaSelecionada(response.data)
+
+                console.log(response.data);
+
+                console.log("IDDDD");
+
+                console.log(consultaSelecionada);
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
 
     useEffect(() => {
         // console.log(photoUri)
-        console.log("sada") 
+        console.log("sada")
         console.log(route.params)
+        console.log('SDJAKSD', consultaSelecionada);
     }, [route])
+
+    useEffect(() => {
+        if (consultaSelecionada == null) {
+            BuscarProntuario();
+        }
+    }, [consultaSelecionada])
 
     return (
         <>
             <ScrollContainer>
 
-                <Container>
+                {consultaSelecionada != null ? (
 
-                    <ViewImage source={require("../../assets/ney.webp")} />
+                    <Container>
 
-                    <TitleProfile>Dr. Ney</TitleProfile>
+                        <ViewImage source={require("../../assets/ney.webp")} />
 
-                    <BoxDescription>
-                        <DescriptionDoc description={"Cliníco geral"} />
-                        <DescriptionDoc description={"CRM-15286"} />
-                    </BoxDescription>
+                        <TitleProfile>{consultaSelecionada.medicoClinica.medico.idNavigation.nome}</TitleProfile>
 
-                    <HighInputBoxGrey
-                        fieldHeight={350}
-                        placeholderTextColor={"#A1A1A1"}
-                        textLabel={"Descrição da consulta"}
-                        placeholder={"Descrição"}
-                        editable={true}
-                        fieldWidth={90}
-                    />
+                        <BoxDescription>
+                            <DescriptionDoc description={consultaSelecionada.medicoClinica.medico.especialidade.especialidade1} />
+                            <DescriptionDoc description={`CRM-${consultaSelecionada.medicoClinica.medico.crm}`} />
+                        </BoxDescription>
 
-                    <InputBox
-                        placeholderTextColor={"#A1A1A1"}
-                        textLabel={"Diagnóstico do paciente"}
-                        placeholder={"Diagnóstico"}
-                        editable={true}
-                        fieldWidth={90}
-                    />
+                        <HighInputBoxGrey
+                            fieldHeight={350}
+                            placeholderTextColor={"#A1A1A1"}
+                            textLabel={"Descrição da consulta"}
+                            placeholder={"Descrição"}
+                            editable={true}
+                            fieldWidth={90}
+                            
 
-                    <HighInputBoxGrey
-                        // fieldHeight={350}
-                        placeholderTextColor={"#A1A1A1"}
-                        textLabel={"Prescrição médica"}
-                        placeholder={"Prescrição"}
-                        editable={true}
-                        fieldWidth={90}
-                    />
+                            fieldValue={consultaSelecionada.descricao}
+                        />
 
-                    <BoxViewImageImport>
+                        <InputBox
+                            placeholderTextColor={"#A1A1A1"}
+                            textLabel={"Diagnóstico do paciente"}
+                            placeholder={"Diagnóstico"}
+                            editable={true}
+                            fieldWidth={90}
 
-                        <Label textLabel={"Exames médicos"} />
+                            fieldValue={consultaSelecionada.diagnostico}
+                        />
 
-                        <ImportImages>
-                            {route.params ? <ImagePrescription source={{ uri : route.params.photoUri }} /> : <TitleImage>{"[ ! ] Nenhuma foto informada"}</TitleImage>}
-                        </ImportImages>
+                        <HighInputBoxGrey
+                            // fieldHeight={350}
+                            placeholderTextColor={"#A1A1A1"}
+                            textLabel={"Prescrição médica"}
+                            placeholder={"Prescrição"}
+                            editable={true}
+                            fieldWidth={90}
 
-                    </BoxViewImageImport>
+                            fieldValue={consultaSelecionada.receita.medicamento}
+                        />
 
-                    <BoxBtn>
-                        <SendButton onPress={() => { navigation.navigate("Camera") }} text={"Enviar"} />
-                        <CardCancel onPressCancel={() => {navigation.replace("Main") }} text={"Cancelar"} />
-                    </BoxBtn>
+                        <BoxViewImageImport>
 
-                    <Line />
+                            <Label textLabel={"Exames médicos"} />
 
-                    <HighInputBoxGrey
-                        // fieldHeight={350}
-                        placeholderTextColor={"#A1A1A1"}
-                        placeholder={"Resultado do exame"}
-                        editable={true}
-                        fieldWidth={90}
-                    />
+                            <ImportImages>
+                                {route.params.photoUri ? <ImagePrescription source={{ uri: route.params.photoUri }} /> : <TitleImage>{"[ ! ] Nenhuma foto informada"}</TitleImage>}
+                            </ImportImages>
 
-                    <CardBackLess onPressCancel={() => { navigation.navigate("PatientConsultation") }} text={"Voltar"} />
+                        </BoxViewImageImport>
 
-                </Container>
+                        <BoxBtn>
+                            <SendButton onPress={() => { navigation.navigate("Camera") }} text={"Enviar"} />
+                            <CardCancel onPressCancel={() => { navigation.replace("Main") }} text={"Cancelar"} />
+                        </BoxBtn>
+
+                        <Line />
+
+                        <HighInputBoxGrey
+                            // fieldHeight={350}
+                            placeholderTextColor={"#A1A1A1"}
+                            placeholder={"Resultado do exame"}
+                            editable={true}
+                            fieldWidth={90}
+                        />
+
+                        <CardBackLess onPressCancel={() => { navigation.navigate("PatientConsultation") }} text={"Voltar"} />
+
+                    </Container>
+
+                ) : (
+                    <ActivityIndicator style={{marginTop: '100%'}} />
+                )}
 
             </ScrollContainer>
         </>

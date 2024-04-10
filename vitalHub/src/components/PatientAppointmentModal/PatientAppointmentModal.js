@@ -13,42 +13,61 @@ import { DescriptionModalRecord } from "../Descriptions/StyledDescriptions";
 import { ImageModalRecord } from "../Images/StyleImages";
 import { TitleModal, TitleModalRecord } from "../Title/StyleTitle";
 import { BoxAgeEmailModal } from "./StylePatientAppointmentModal";
+import { useEffect } from "react";
 
 export const PatientAppointmentModal = ({
+  consulta = null,
   navigation,
   visible,
   setShowModal = null,
   ...rest
 }) => {
+
+
+  function handlePress(rota) {
+    console.log('consulta');
+    console.log(consulta);
+
+    navigation.replace(rota, { clinicaId: consulta.medicoClinica.clinicaId })
+
+  }
+
+
   return (
     <Modal {...rest} visible={visible} transparent={true} animationType="fade">
-      <PatientModal>
-        <ModalContent>
-          <ImageModalRecord
-            source={require("../../assets/CardRecordPatient(doctorImage).png")}
-          />
+      {
+        consulta != null && (
+          <PatientModal>
+            <ModalContent>
+              <ImageModalRecord
+                source={require("../../assets/CardRecordPatient(doctorImage).png")}
+              />
 
-          <TitleModalRecord>Dr Claudio</TitleModalRecord>
+              <TitleModalRecord>{consulta.medicoClinica.medico.idNavigation.nome}</TitleModalRecord>
 
-          <BoxAgeEmailModal>
-            <DescriptionModalRecord>Clínico Geral</DescriptionModalRecord>
-            <DescriptionModalRecord>CRM-15286</DescriptionModalRecord>
-          </BoxAgeEmailModal>
+               <BoxAgeEmailModal>
+            <DescriptionModalRecord>{consulta.medicoClinica.medico.especialidade.especialidade1}</DescriptionModalRecord>
+            <DescriptionModalRecord>{`CRM-${consulta.medicoClinica.medico.crm}`}</DescriptionModalRecord>
+          </BoxAgeEmailModal> 
 
-          <ButtonLargeConfirmModal
-            onPress={() => {
-              navigation.navigate("ConsultLocalization");
-              setShowModal(false);
-            }}
-            text={"Ver Local da Consulta"}
-          />
+              <ButtonLargeConfirmModal
+                onPress={() => {
+                  // navigation.navigate("ConsultLocalization", { latitude: doctorData.latitude , longitude: doctorData.longitude } ),
+                  handlePress("ConsultLocalization")
+                  setShowModal(false);
+                }}
+                text={"Ver Local da Consulta"}
+              />
 
-          <CardCancelLess
-            onPressCancel={() => setShowModal(false)}
-            text={"Cancelar"}
-          />
-        </ModalContent>
-      </PatientModal>
+              <CardCancelLess
+                onPressCancel={() => setShowModal(false)}
+                text={"Cancelar"}
+              />
+            </ModalContent>
+          </PatientModal>
+        )
+      }
+
     </Modal>
   );
 };

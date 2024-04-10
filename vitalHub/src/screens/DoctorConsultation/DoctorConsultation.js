@@ -11,84 +11,95 @@ import { useEffect, useState } from "react"
 import { Card } from "../../components/Cards/Cards"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 import { AppointmentModal } from "../../components/AppointmentModal/AppointmentModal"
+import { tokenClean, userDecodeToken } from "../../utils/Auth"
+import api from "../../services/Services"
+import moment from "moment"
 
 
 
 export const DoctorConsultation = ({ navigation }) => {
 
+    const [dataConsulta, setDataConsulta] = useState('') // vazio no inicio
+
+    // Criar o state para receber a lista de consultas (Array)
+    const [consultaLista, setConsultaLista] = useState([]) // vazio no inicio
+
     const [token, setToken] = useState({});
 
-    async function profileLoad(){
+    const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+
+
+    //state para cancelar consulta
+    const [consultaCancel, setConsultaCancel] = useState({
+        id: '',
+        //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
+        situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
+    })
+
+
+
+    function MostrarModal(modal, consulta) {
+        setConsultaSelecionada(consulta)
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+        } else if (modal == 'prontuario') {
+            setShowModalAppointment((selected === 'Agendada' ? true : false))
+        } else {
+            console.log("asa");
+        }
+    }
+
+
+
+    async function ListarConsultas() {
+
+        // console.log(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
+        await api.get(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
+
+            setConsultaLista(response.data)
+            console.log(response.data);
+
+        }).catch(error => {
+            console.log(error);
+        })
+
+    }
+
+    async function profileLoad() {
 
         const token = await userDecodeToken();
-    
+
         if (token) {
             console.log(token)
             setToken(token)
+
+            setDataConsulta(moment().format("YYYY-MM-DD"))
         }
     }
 
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
-        agendadas: true,
-        realizadas: false,
-        canceladas: false,
+        agendadas: "Agendada",
+        realizadas: "Realizada",
+        canceladas: "Cancelada",
     });
 
-    useEffect(() =>{
+    useEffect(() => {
+        setSelected("Agendada")
         profileLoad()
-      }, [])
+    }, [])
+
+
+    useEffect(() => {
+        if (dataConsulta != '') {
+            ListarConsultas()
+        }
+        console.log(dataConsulta);
+    }, [dataConsulta, showModalCancel])
+
 
     const image = require("../../assets/ImageCard.png");
 
-    // CARD MOCADOS
-
-    const dataItens = [
-        {
-            id: 1,
-            hour: '14:00',
-            image: image,
-            name: 'Niccole Sarga',
-            age: '22 anos',
-            routine: 'Rotina',
-            status: "r"
-        },
-        {
-            id: 2,
-            hour: '15:00',
-            image: image,
-            name: 'Richard Kosta',
-            age: '28 anos',
-            routine: 'Urgência',
-            status: "a"
-        },
-        {
-            id: 3,
-            hour: '17:00',
-            image: image,
-            name: 'Neymar Jr',
-            age: '28 anos',
-            routine: 'Rotina',
-            status: "c"
-        }
-    ]
-
-    //FILTRO PARA CARD
-
-    const Check = (data) => {
-        if (data.status === "a" && selected.agendadas) {
-            return true;
-        }
-        if (data.status === "r" && selected.realizadas) {
-            return true;
-        }
-        if (data.status === "c" && selected.canceladas) {
-            return true;
-        }
-        return false;
-    }
-
-    const data = dataItens.filter(Check);
 
     // STATES PARA OS MODAIS
 
@@ -98,10 +109,10 @@ export const DoctorConsultation = ({ navigation }) => {
     // RETURN
 
     return (
+        
         <Container>
-                <StatusBar translucent backgroundColor="transparent" />
+            <StatusBar translucent backgroundColor="transparent" />
             <Header>
-
 
                 <BoxHome>
 
@@ -115,29 +126,48 @@ export const DoctorConsultation = ({ navigation }) => {
 
                 </BoxHome>
 
-
                 <MoveIconBell>
                     <Ionicons name="notifications" size={25} color="white" />
                 </MoveIconBell>
 
             </Header>
 
-            <Calendar />
+            <Calendar setDataConsulta={setDataConsulta} />
 
             <ButtonHomeContainer>
 
-                <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} />
+                <FilterButton onPress={() => { setSelected("Agendada") }} selected={selected === 'Agendada' ? true : false} text={'Agendadas'} />
+                {/* <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} /> */}
 
-                <FilterButton onPress={() => { setSelected({ realizadas: true }) }} selected={selected.realizadas} text={'Realizadas'} />
+                <FilterButton onPress={() => { setSelected("Realizada") }} selected={selected === 'Realizada' ? true : false} text={'Realizadas'} />
 
-                <FilterButton onPress={() => { setSelected({ canceladas: true }) }} selected={selected.canceladas} text={'Canceladas'} />
+                <FilterButton onPress={() => { setSelected("Cancelada") }} selected={selected === 'Cancelada' ? true : false} text={'Canceladas'} />
 
             </ButtonHomeContainer>
 
             <FlatContainer
-                data={data}
+                data={consultaLista}
                 renderItem={({ item }) =>
-                    <Card navigation={navigation} hour={item.hour} name={item.name} age={item.age} routine={item.routine} url={image} status={item.status} onPressCancel={() => setShowModalCancel(true)} onPressAppointment={() => setShowModalAppointment(true)} />}
+                    // item.situacao == selected
+                    item.situacao.situacao == selected &&
+                    <Card
+                        navigation={navigation}
+                        dataConsulta={item.dataConsulta}
+                        hour={"14:00"}
+                        name={item.paciente.idNavigation.nome}
+                        age={`${moment().year() -
+                            moment(item.paciente.dataNascimento).format("YYYY")
+                            } anos      .`}
+                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                        url={image}
+                        status={item.situacao.situacao}
+                        // onPressCancel={() => setShowModalCancel(true)}
+                        onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", { consulta: item }) }}
+                        // onPressAppointmentCard={() => setShowModalAppointment(item.situacao.situacao === 'Agendada' ? true : false)}
+
+                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
+                        onPressAppointmentCard={() => { MostrarModal('prontuario', item) }}
+                    />}
 
                 keyExtractor={item => item.id}
 
@@ -146,25 +176,19 @@ export const DoctorConsultation = ({ navigation }) => {
             />
 
             <CancellationModal
+                consultaCancel={consultaCancel}
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
 
             <AppointmentModal
+                consulta={consultaSelecionada}
                 navigation={navigation}
                 visible={showModalAppointment}
                 setShowModalAppointment={setShowModalAppointment}
             />
 
-
-            {/* <Card url={require('../../assets/ImageCard.png')} name={"Niccole Sarge"} age={"22 anos"} routine={"Rotina"} hour={"14:00"}/>
-
-                <Card url={require('../../assets/ImageCardMale.png')} name={"Richard Kosta"} age={"28 anos"} routine={"Urgência"} hour={"15:00"}/>
-
-                <Card url={require('../../assets/ney.webp')} name={"Neymar Jr"} age={"33 anos"} routine={"Rotina"} hour={"17:00"}/> */}
-
         </Container>
-
 
     )
 }

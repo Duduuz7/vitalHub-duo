@@ -20,15 +20,20 @@ export const CardContainerClinic = styled(CardContainer)`
 `;
 
 export const AgeCard = styled.SafeAreaView`
-  margin-left: 9%;
   margin-bottom: 0px;
+  margin-left: 14px;
+  margin-right: 0px;
+  padding-left: 10px;
   flex-direction: row;
-  width: 100px;
+  width: 250px;
   height: 30px;
   border-radius: 5px;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  gap: 2px;
 `;
+
+
 export const BoxRate = styled.SafeAreaView`
   flex-direction: row;
   align-items: flex-end;

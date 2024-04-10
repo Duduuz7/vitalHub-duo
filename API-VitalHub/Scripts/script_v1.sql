@@ -1,7 +1,7 @@
-CREATE DATABASE [VitalHub_G1T]
+CREATE DATABASE [VitalHub]
 GO
 
-USE [VitalHub_G1T]
+USE [VitalHub]
 GO
 /****** Object:  Table [dbo].[Clinicas]    Script Date: 20/12/2023 13:55:13 ******/
 SET ANSI_NULLS ON
@@ -186,7 +186,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TiposUsuario](
 	[ID] [uniqueidentifier] NOT NULL,
-	[TipoUsuario] [varchar](255) NULL,
+	[TipoUsuario] [nchar](10) NULL,
  CONSTRAINT [PK_TiposUsuario] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC

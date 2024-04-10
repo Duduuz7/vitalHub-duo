@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace WebAPI.Domains;
@@ -17,6 +16,8 @@ public partial class Usuario
     public string? Senha { get; set; }
 
     public string? Foto { get; set; }
+
+    public int? CodRecupSenha { get; set; }
 
     public virtual Medico? Medico { get; set; }
 
