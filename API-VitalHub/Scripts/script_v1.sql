@@ -1,7 +1,7 @@
-CREATE DATABASE [VitalHub_G01T_V2]
+CREATE DATABASE [VitalHub]
 GO
 
-USE [VitalHub_G01T_V2]
+USE [VitalHub]
 GO
 /****** Object:  Table [dbo].[Clinicas]    Script Date: 20/12/2023 13:55:13 ******/
 SET ANSI_NULLS ON

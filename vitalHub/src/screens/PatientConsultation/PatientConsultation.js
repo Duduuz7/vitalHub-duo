@@ -21,7 +21,6 @@ import api from "../../services/Services";
 import moment from "moment"
 
 
-
 export const PatientConsultation = ({ navigation }) => {
 
     // Criar o state para receber a lista de consultas (Array)
@@ -34,12 +33,13 @@ export const PatientConsultation = ({ navigation }) => {
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
 
-    //state para cancelar consulta
+    //STATE PARA CANCELAR CONSULTA 
     const [consultaCancel, setConsultaCancel] = useState({
         id: '',
         //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
         situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
     })
+
 
     //Criar a função para obter a lista de consultas da api e setar no state
 
@@ -92,48 +92,7 @@ export const PatientConsultation = ({ navigation }) => {
         canceladas: "Cancelada",
     });
 
-
     const image = require("../../assets/CardDoctorImage.png");
-
-    // CARD MOCADOS
-
-    // const dataItens = [
-    //     {
-    //         id: 1,
-    //         hour: '14:00',
-    //         image: image,
-    //         name: 'Dr Claudio',
-    //         age: '22 anos',
-    //         routine: 'Urgência',
-    //         status: "a"
-    //     },
-    //     {
-    //         id: 1,
-    //         hour: '14:00',
-    //         image: image,
-    //         name: 'Dr josé',
-    //         age: '23 anos',
-    //         routine: 'Urgência',
-    //         status: "r"
-    //     }
-    // ]
-
-    //FILTRO PARA CARD
-
-    // const Check = (consultaLista) => {
-    //     if (consultaLista.situacao.situacao === "Agendada" && selected.agendadas) {
-    //         return true;
-    //     }
-    //     if (consultaLista.situacao.situacao === "Realizada" && selected.realizadas) {
-    //         return true;
-    //     }
-    //     if (consultaLista.situacao.situacao === "Cancelada" && selected.canceladas) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    // const data = consultaLista.filter(Check);
 
     // STATES PARA OS MODAIS
 
@@ -159,10 +118,10 @@ export const PatientConsultation = ({ navigation }) => {
         // console.log(dataConsulta);
     }, [dataConsulta, showModalCancel])
 
-
     return (
 
         <Container>
+
             <Header>
 
                 <StatusBar translucent backgroundColor="transparent" />
@@ -229,7 +188,6 @@ export const PatientConsultation = ({ navigation }) => {
 
             />
 
-
             <Stethoscope onPress={() => { setShowModalStethoscope(true) }}>
 
                 <FontAwesome6
@@ -260,11 +218,7 @@ export const PatientConsultation = ({ navigation }) => {
                 setShowModal={setShowModal}
             />
 
-            {/* <Main />  */}
-
         </Container>
 
     )
 }
-
-

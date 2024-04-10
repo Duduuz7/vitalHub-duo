@@ -85,8 +85,6 @@ export const DoctorConsultation = ({ navigation }) => {
     });
 
     useEffect(() => {
-        // GetConsultas()
-        // ListarConsultas()
         setSelected("Agendada")
         profileLoad()
     }, [])
@@ -100,58 +98,8 @@ export const DoctorConsultation = ({ navigation }) => {
     }, [dataConsulta, showModalCancel])
 
 
-
-
     const image = require("../../assets/ImageCard.png");
 
-    // CARD MOCADOS
-
-    // const dataItens = [
-    //     {
-    //         id: 1,
-    //         hour: '14:00',
-    //         image: image,
-    //         name: 'Niccole Sarga',
-    //         age: '22 anos',
-    //         routine: 'Rotina',
-    //         status: "r"
-    //     },
-    //     {
-    //         id: 2,
-    //         hour: '15:00',
-    //         image: image,
-    //         name: 'Richard Kosta',
-    //         age: '28 anos',
-    //         routine: 'Urgência',
-    //         status: "a"
-    //     },
-    //     {
-    //         id: 3,
-    //         hour: '17:00',
-    //         image: image,
-    //         name: 'Neymar Jr',
-    //         age: '28 anos',
-    //         routine: 'Rotina',
-    //         status: "c"
-    //     }
-    // ]
-
-    // //FILTRO PARA CARD
-
-    // const Check = (data) => {
-    //     if (data.status === "a" && selected.agendadas) {
-    //         return true;
-    //     }
-    //     if (data.status === "r" && selected.realizadas) {
-    //         return true;
-    //     }
-    //     if (data.status === "c" && selected.canceladas) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    // const data = consultaLista.filter(Check);
 
     // STATES PARA OS MODAIS
 
@@ -161,10 +109,10 @@ export const DoctorConsultation = ({ navigation }) => {
     // RETURN
 
     return (
+        
         <Container>
             <StatusBar translucent backgroundColor="transparent" />
             <Header>
-
 
                 <BoxHome>
 
@@ -177,7 +125,6 @@ export const DoctorConsultation = ({ navigation }) => {
                     </BoxDataHome>
 
                 </BoxHome>
-
 
                 <MoveIconBell>
                     <Ionicons name="notifications" size={25} color="white" />
@@ -241,15 +188,7 @@ export const DoctorConsultation = ({ navigation }) => {
                 setShowModalAppointment={setShowModalAppointment}
             />
 
-
-            {/* <Card url={require('../../assets/ImageCard.png')} name={"Niccole Sarge"} age={"22 anos"} routine={"Rotina"} hour={"14:00"}/>
-
-                <Card url={require('../../assets/ImageCardMale.png')} name={"Richard Kosta"} age={"28 anos"} routine={"Urgência"} hour={"15:00"}/>
-
-                <Card url={require('../../assets/ney.webp')} name={"Neymar Jr"} age={"33 anos"} routine={"Rotina"} hour={"17:00"}/> */}
-
         </Container>
-
 
     )
 }

@@ -28,7 +28,5 @@ namespace WebAPI.ViewModels
 
         public string? Foto { get; set; }
 
-
-
     }
 }
