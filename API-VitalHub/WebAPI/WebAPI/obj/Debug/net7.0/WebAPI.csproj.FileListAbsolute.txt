@@ -89,3 +89,6 @@ C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\obj\Debug\n
 C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
+C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Azure.Storage.Blobs.dll
+C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Azure.Storage.Common.dll
+C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\System.IO.Hashing.dll
