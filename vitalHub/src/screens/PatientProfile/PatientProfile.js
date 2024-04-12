@@ -45,21 +45,22 @@ export const PatientProfile = ({ navigation }) => {
   }
 
   async function getPaciente(user) {
-    try {
-      console.log(`/Pacientes/BuscarPorId?id=${user}`);
-      const promise = await api.get(`/Pacientes/BuscarPorId?id=${user}`);
+    // console.log(`/Pacientes/BuscarPorId?id=${user}`);
+    await api
+      .get(`/Pacientes/BuscarPorId?id=${user}`)
+      .then((response) => {
+        setPacienteData(response.data);
+        console.log("saasss", response.data);
 
-      setPacienteData(promise.data);
-      console.log(promise.data);
-
-      setLogradouro(promise.data.endereco.logradouro);
-      setCep(promise.data.endereco.cep);
-      setCidade(promise.data.endereco.cidade);
-      setDataNascimento(promise.data.dataNascimento);
-      setCpf(promise.data.cpf);
-    } catch (error) {
-      console.error("Error NESTE paciente AQUI :", error);
-    }
+        setLogradouro(response.data.endereco.logradouro);
+        setCep(response.data.endereco.cep);
+        setCidade(response.data.endereco.cidade);
+        setDataNascimento(response.data.dataNascimento);
+        setCpf(response.data.cpf);
+      })
+      .catch((error) => {
+        console.error("Error NESTE AQUI :", error);
+      });
   }
 
   async function updatePaciente() {
@@ -73,11 +74,19 @@ export const PatientProfile = ({ navigation }) => {
       });
       console.log(`/Pacientes/AtualizarDados?id=${userId}`);
       await api.put(`/Pacientes/AtualizarPerfil?id=${userId}`, {
+        rg: "string",
         cpf: cpf,
         dataNascimento: dataNascimento,
+        numero: 0,
         cep: cep,
         logradouro: logradouro,
         cidade: cidade,
+        nome: "string",
+        email: "string",
+        senha: "string",
+        idTipoUsuario: "F5856CC9-9922-433E-8297-C1A788D92D9F",
+        foto: "string"
+        
       });
       Alert.alert("Success", "Data successfully updated!");
       setEditable(false);
