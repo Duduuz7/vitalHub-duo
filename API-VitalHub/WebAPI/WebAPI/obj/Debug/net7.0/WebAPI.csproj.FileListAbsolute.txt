@@ -92,3 +92,6 @@ C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\obj\Debug\n
 C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Azure.Storage.Blobs.dll
 C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Azure.Storage.Common.dll
 C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\System.IO.Hashing.dll
+C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Microsoft.Azure.CognitiveServices.Vision.ComputerVision.dll
+C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.dll
+C:\Users\48114302801\Desktop\vitalHub-duo\API-VitalHub\WebAPI\WebAPI\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.Azure.dll
