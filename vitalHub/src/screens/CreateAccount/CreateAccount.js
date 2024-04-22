@@ -14,18 +14,31 @@ import api from '../../services/Services'
 
 
 export const CreateAccount = ({ navigation }) => {
+
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [nome, setNome] = useState('');
 
     const handleCadastro = async () => {
         try {
-            const response = await api.post('/Pacientes' , {
-                email: email,
-                senha: senha,
-                nome: nome,
-                idTipoUsuario: 'F5856CC9-9922-433E-8297-C1A788D92D9F'
-            });
+
+            const form = new FormData()
+
+            form.append("nome", `${nome}`);
+            form.append("email", `${email}`);
+            form.append("senha", `${senha}`);
+            form.append("idTipoUsuario", `9850203C-3FEF-4824-A75C-D446187B7A5D`);
+
+            const response = await api.post('/Pacientes', form, {
+
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+
+            }
+
+            );
 
             if (response.data.success) {
                 throw new Error('Yeah');
@@ -34,6 +47,7 @@ export const CreateAccount = ({ navigation }) => {
             //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
 
             navigation.replace("Login");
+
         } catch (error) {
             if (error.response) {
                 console.error('Erro ao cadastrar:', error.response.data);
@@ -76,7 +90,7 @@ export const CreateAccount = ({ navigation }) => {
                 onChangeText={text => setSenha(text)}
                 value={senha}
             />
-             {/* <Input
+            {/* <Input
                 placeholder={"Confirmar Senha"}
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
@@ -84,7 +98,7 @@ export const CreateAccount = ({ navigation }) => {
                 value={password}
             /> */}
 
-            <ButtonNormal text={"Cadastrar"} onPress={() => handleCadastro()}/>
+            <ButtonNormal text={"Cadastrar"} onPress={() => handleCadastro()} />
 
             <Cancel onPress={() => { navigation.navigate("Login") }} />
 

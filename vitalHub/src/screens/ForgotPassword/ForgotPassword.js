@@ -5,9 +5,22 @@ import { DescriptionPassword } from "../../components/Descriptions/Descriptions"
 import { Input } from "../../components/Input/Input"
 import { Logo, Seta } from "../../components/Images/StyleImages"
 import { Title } from "../../components/Title/StyleTitle"
+import { useState } from "react"
+import api from "../../services/Services"
 
 
 export const ForgotPassword = ({ navigation }) => {
+
+    const [email, setEmail] = useState('edufeli2005@gmail.com');
+
+    async function sendEmail() {
+        try {
+            await api.post(`/RecuperarSenha?email=${email}`);
+    
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
 
@@ -22,11 +35,13 @@ export const ForgotPassword = ({ navigation }) => {
             <DescriptionPassword description={"Digite abaixo seu email cadastrado que enviaremos um link para recuperação de senha"} />
 
             <Input
-                placeholder={"Usuário ou E-mail"}
+                placeholder={"E-mail"}
+                fieldValue={email}
+                onChangeText={x => {setEmail(x)}}
                 placeholderTextColor={'#49B3BA'}
             />
 
-            <ButtonNormal text={"Continuar"} onPress={() => navigation.navigate("CheckEmail")} />
+            <ButtonNormal text={"Continuar"} onPress={() => {sendEmail(), navigation.navigate('CheckEmail', {emailRecuperacao : email})}} />
 
 
         </Container>

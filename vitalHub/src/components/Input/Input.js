@@ -3,6 +3,7 @@ import { InputHigh, InputHighGrey, InputNumeric, InputProfile, InputText, InputT
 import RNPickerSelect from 'react-native-picker-select';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { useRef } from "react";
 
 
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -109,6 +110,8 @@ const style = StyleSheet.create({
 
 
 export function NumericInput({
+    ref,
+    caretHidden = true,
     placeholder,
     fieldValue,
     onChangeText,
@@ -119,11 +122,13 @@ export function NumericInput({
 }) {
     return (
         <InputNumeric
+            ref={ref}
+            caretHidden={caretHidden}
             editable={editable}
             placeholder={placeholder}
             keyboardType={keyboardType}
             placeholderTextColor={placeholderTextColor}
-            maxLength={maxLength}
+            maxLength={1}
             value={fieldValue}
             onChangeText={onChangeText}
         />
