@@ -17,6 +17,11 @@ import moment from "moment"
 
 
 
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+
+
+
+
 export const DoctorConsultation = ({ navigation }) => {
 
     const [dataConsulta, setDataConsulta] = useState('') // vazio no inicio

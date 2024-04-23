@@ -15,9 +15,28 @@ import {
 import { userDecodeToken, userLogoutToken } from "../../utils/Auth";
 import api from "../../services/Services";
 import moment from "moment/moment";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
+
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+import { ButtonCamera, ImageView } from "./Style";
+
+
+import * as MediaLibrary from 'expo-media-library';
+
+import * as ImagePicker from 'expo-image-picker'
+
+
+async function requestGaleria() {
+
+  await MediaLibrary.requestPermissionsAsync();
+
+  await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+}
 
 export const PatientProfile = ({ navigation }) => {
+
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
   const [cidade, setCidade] = useState("");
@@ -26,6 +45,11 @@ export const PatientProfile = ({ navigation }) => {
   const [editable, setEditable] = useState(false);
   const [token, setToken] = useState({});
   const [pacienteData, setPacienteData] = useState({});
+
+
+  useEffect(() => {
+    requestGaleria()
+  }, [])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,9 +137,17 @@ export const PatientProfile = ({ navigation }) => {
   return (
     <ScrollContainer>
       <Container>
-        <ImagemPerfilPaciente
-          source={require("../../assets/LimaCorinthians.png")}
-        />
+
+        <ImageView>
+          <ImagemPerfilPaciente
+            source={require("../../assets/LimaCorinthians.png")}
+          />
+
+          <ButtonCamera onPress={() => { navigation.navigate("PatientCamera") }}>
+            <MaterialCommunityIcons name="camera-plus" size={20} color={"#fbfbfb"} />
+          </ButtonCamera>
+        </ImageView>
+
         <TitleProfile>{token.name}</TitleProfile>
         <DescriptionPassword description={token.email} />
 

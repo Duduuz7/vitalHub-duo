@@ -5,6 +5,7 @@ import { Navegacao } from "./src/screens/Navegacao/Navegacao";
 import { Login } from "./src/screens/Login/Login";
 import { ForgotPassword } from "./src/screens/ForgotPassword/ForgotPassword";
 
+
 import {
   useFonts,
   MontserratAlternates_500Medium,
@@ -26,14 +27,16 @@ import { SelectCLinic } from "./src/screens/SelectClinic/SelectClinic";
 import { PatientConsultation } from "./src/screens/PatientConsultation/PatientConsultation";
 import { SelectDate } from "./src/screens/SelectDate/SelectDate";
 import { ConsultLocalization } from "./src/screens/ConsultLocalization/ConsultLocalization";
-import { ViewPrescription} from "./src/screens/ViewPrescription/ViewPrescription";
+import { ViewPrescription } from "./src/screens/ViewPrescription/ViewPrescription";
 import Splash from "./src/screens/Splash/Splash";
 import { DoctorMain, Main } from "./src/components/Main/Main";
 import Camera from "./src/components/Camera/Camera";
 import { ViewPrescriptionDoc } from "./src/screens/ViewPrescription/ViewPrescriptionDoc";
+import DoctorProfile from "./src/screens/DoctorProfile/DoctorProfile";
+import PatientCam from "./src/components/Camera/PatientCamera";
+import DoctorCam from "./src/components/Camera/DoctorCamera";
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
 
@@ -68,7 +71,7 @@ export default function App() {
           headerShown: false,
         }}
       >
-        
+
         <Stack.Screen
           name="Splash"
           component={Splash}
@@ -130,6 +133,12 @@ export default function App() {
         />
 
         <Stack.Screen
+          name="DoctorProfile"
+          component={DoctorProfile}
+          options={{ title: "DoctorProfile" }}
+        />
+
+        <Stack.Screen
           name="MedicalRecords"
           component={MedicalRecords}
           options={{ title: "MedicalRecords" }}
@@ -174,7 +183,7 @@ export default function App() {
           component={ViewPrescription}
           options={{ title: "ViewPrescription" }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="ViewPrescriptionDoc"
           component={ViewPrescriptionDoc}
           options={{ title: "ViewPrescriptionDoc" }}
@@ -183,6 +192,16 @@ export default function App() {
           name="Camera"
           component={Camera}
           options={{ title: "Camera" }}
+        />
+        <Stack.Screen
+          name="PatientCamera"
+          component={PatientCam}
+          options={{ title: "PatientCamera" }}
+        />
+        <Stack.Screen
+          name="DoctorCamera"
+          component={DoctorCam}
+          options={{ title: "DoctorCamera" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

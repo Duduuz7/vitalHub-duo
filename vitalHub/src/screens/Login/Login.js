@@ -19,7 +19,7 @@ import { Button } from "../../components/Button/StyleButton";
 export const Login = ({ navigation }) => {
   
   const [email, setEmail] = useState("edufeli2005@gmail.com");
-  const [senha, setSenha] = useState("123456");
+  const [senha, setSenha] = useState("1234567");
   const [loading, setLoading] = useState(false);
 
   async function Login() {

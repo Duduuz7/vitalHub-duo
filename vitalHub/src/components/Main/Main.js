@@ -13,6 +13,7 @@ import { PatientConsultation } from "../../screens/PatientConsultation/PatientCo
 import { DoctorConsultation } from "../../screens/DoctorConsultation/DoctorConsultation";
 import { useEffect } from "react";
 import { userDecodeToken } from "../../utils/Auth";
+import DoctorProfile from "../../screens/DoctorProfile/DoctorProfile";
 
 const bottomTab = createBottomTabNavigator();
 
@@ -147,8 +148,8 @@ export const DoctorMain = () => {
       {/* : */}
 
       <bottomTab.Screen
-        name="PatientProfile"
-        component={PatientProfile}
+        name="DoctorProfile"
+        component={DoctorProfile}
       />
 
     </bottomTab.Navigator>

@@ -11,25 +11,23 @@ import api from "../../services/Services"
 
 export const CheckEmail = ({ navigation, route }) => {
 
-    // const { email } = route.params.emailRecuperacao;
-    const [codigo, setCodigo] = useState('');
     const [code, setCode] = useState('');
 
-    const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
+    // const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
 
-    function focusNextInput( index ){
-        //Verificar se o index é menor do que a quantidade de campos
+    // function focusNextInput( index ){
+    //     //Verificar se o index é menor do que a quantidade de campos
 
-        if (index < inputs.length - 1) {
-            inputs[index + 1].current.focus()
-        }
-    }
+    //     if (index < inputs.length - 1) {
+    //         inputs[index + 1].current.focus()
+    //     }
+    // }
 
-    function focusPrevInput( index ){
-        if (index > 0) {
-            inputs[index - 1].current.focus()
-        }
-    }
+    // function focusPrevInput( index ){
+    //     if (index > 0) {
+    //         inputs[index - 1].current.focus()
+    //     }
+    // }
 
 
     async function validateRecoveryCode() {
@@ -45,7 +43,14 @@ export const CheckEmail = ({ navigation, route }) => {
     }
 
 
-
+    async function resendCode() {
+        try {
+            await api.post(`/RecuperarSenha?email=${route.params.emailRecuperacao}`);
+    
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
 
@@ -64,9 +69,6 @@ export const CheckEmail = ({ navigation, route }) => {
             />
 
             {/* <BoxNumeric>
-
-
-
                 {
                     [0, 1, 2, 3].map((index) => (
                         <NumericInput
@@ -109,9 +111,9 @@ export const CheckEmail = ({ navigation, route }) => {
 
             {/* <ButtonNormal text={"Confirmar"} onPress={() => {validateRecoveryCode(), navigation.navigate("RedefinePassword", email) }} /> */}
 
-            <ButtonNormal text={"Confirmar"} onPress={() => { validateRecoveryCode() }} />
+            <ButtonNormal text={"Confirmar"} onPress={() =>  validateRecoveryCode() } />
 
-            <CodeResend text={"Reenviar Código"} />
+            <CodeResend onPress={() => resendCode()} text={"Reenviar Código"} />
 
         </Container>
 

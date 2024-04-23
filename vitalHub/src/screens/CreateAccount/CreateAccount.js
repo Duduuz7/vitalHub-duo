@@ -23,31 +23,38 @@ export const CreateAccount = ({ navigation }) => {
     const handleCadastro = async () => {
         try {
 
-            const form = new FormData()
+            if (senha === confirmarSenha) {
 
-            form.append("nome", `${nome}`);
-            form.append("email", `${email}`);
-            form.append("senha", `${senha}`);
-            form.append("idTipoUsuario", `9850203C-3FEF-4824-A75C-D446187B7A5D`);
+                const form = new FormData()
 
-            const response = await api.post('/Pacientes', form, {
-
-                headers: {
-                    "Content-Type": "multipart/form-data"
+                form.append("nome", `${nome}`);
+                form.append("email", `${email}`);
+                form.append("senha", `${senha}`);
+                form.append("idTipoUsuario", `9850203C-3FEF-4824-A75C-D446187B7A5D`);
+    
+                const response = await api.post('/Pacientes', form, {
+    
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+    
                 }
+    
+                );
+    
+                if (response.data.success) {
+                    throw new Error('Yeah');
+                }
+    
+                //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
+    
+                navigation.replace("Login");
 
+            } else {
+
+                alert("As senhas não coincidem");
+                
             }
-
-            );
-
-            if (response.data.success) {
-                throw new Error('Yeah');
-            }
-
-            //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
-
-            navigation.replace("Login");
-
         } catch (error) {
             if (error.response) {
                 console.error('Erro ao cadastrar:', error.response.data);
@@ -90,13 +97,13 @@ export const CreateAccount = ({ navigation }) => {
                 onChangeText={text => setSenha(text)}
                 value={senha}
             />
-            {/* <Input
+             <Input
                 placeholder={"Confirmar Senha"}
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
-                onChangeText={text => setPassword(text)}
-                value={password}
-            /> */}
+                onChangeText={text => setConfirmarSenha(text)}
+                value={confirmarSenha}
+            />
 
             <ButtonNormal text={"Cadastrar"} onPress={() => handleCadastro()} />
 
