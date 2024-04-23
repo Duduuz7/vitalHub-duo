@@ -44,6 +44,9 @@ export const CheckEmail = ({ navigation, route }) => {
         }
     }
 
+
+
+
     return (
 
         <Container>
@@ -106,7 +109,7 @@ export const CheckEmail = ({ navigation, route }) => {
 
             {/* <ButtonNormal text={"Confirmar"} onPress={() => {validateRecoveryCode(), navigation.navigate("RedefinePassword", email) }} /> */}
 
-            <ButtonNormal text={"Continuar"} onPress={() => { validateRecoveryCode() }} />
+            <ButtonNormal text={"Confirmar"} onPress={() => { validateRecoveryCode() }} />
 
             <CodeResend text={"Reenviar Código"} />
 

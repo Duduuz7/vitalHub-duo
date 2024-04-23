@@ -17,7 +17,7 @@ import api from "../../services/Services";
 import moment from "moment/moment";
 import { Text } from "react-native";
 
-export const PatientProfile = ({ navigation }) => {
+export const DoctorProfile = ({ navigation }) => {
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
   const [cidade, setCidade] = useState("");
@@ -187,4 +187,4 @@ export const PatientProfile = ({ navigation }) => {
   );
 };
 
-export default PatientProfile;
+export default DoctorProfile;

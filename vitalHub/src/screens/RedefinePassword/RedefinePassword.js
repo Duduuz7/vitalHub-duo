@@ -17,13 +17,21 @@ export const RedefinePassword = ({ navigation, route }) => {
     const [novaSenha, setNovaSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
 
-    async function redefinePassword() {
+    async function changePassword() {
+
         if (novaSenha !== confirmarSenha) {
             alert('A senha e sua confirmação não são iguais !!!');
         }
 
-        await api.put(`$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+        await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+
             senhaNova: novaSenha
+
+        }).then(() => {
+            navigation.replace("Login")
+        }).catch(error => {
+            console.log(error);
+            console.log(`$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`)
         })
     }
 
@@ -45,7 +53,7 @@ export const RedefinePassword = ({ navigation, route }) => {
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
                 fieldValue={novaSenha}
-                onChangeText={x => {setNovaSenha(x)}}
+                onChangeText={x => setNovaSenha(x)}
             />
 
             <Input
@@ -53,11 +61,11 @@ export const RedefinePassword = ({ navigation, route }) => {
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
                 fieldValue={confirmarSenha}
-                onChangeText={x => {setConfirmarSenha(x)}}
+                onChangeText={x => setConfirmarSenha(x)}
             />
 
             <ButtonNormal
-                onPress={() => {redefinePassword(), navigation.navigate('Login')}}
+                onPress={() => changePassword()}
                 text={"Confirmar nova senha"}
             />
 

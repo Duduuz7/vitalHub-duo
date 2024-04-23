@@ -13,7 +13,7 @@ if (!global.btoa) {
 }
 
 export const userDecodeToken = async () => {
-  const token = JSON.parse(await AsyncStorage.getItem("token")).token;
+  const token = (await AsyncStorage.getItem("token"));
 
   if (token === null) {
     return null;
