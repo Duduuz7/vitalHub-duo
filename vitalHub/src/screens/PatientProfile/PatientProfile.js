@@ -88,7 +88,6 @@ export const PatientProfile = ({ navigation, route }) => {
   }, [route.params])
 
   useEffect(() => {
-
   }, [photo])
 
   //FUNCAO PARA ALTERAR A IMAGEM DE PERFIL
