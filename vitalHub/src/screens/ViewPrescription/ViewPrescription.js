@@ -19,10 +19,11 @@ export const ViewPrescription = ({ navigation, route }) => {
 
     // const { photoUri } = route.params;
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+    const [descricaoExame, setDescricaoExame] = useState(null)
 
 
     async function BuscarProntuario() {
-        await api.get(`/Consultas/BuscaPorId?id=${route.params.consulta.id}`)
+        await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
             .then(response => {
 
                 setConsultaSelecionada(response.data)
@@ -40,11 +41,45 @@ export const ViewPrescription = ({ navigation, route }) => {
     }
 
 
+
+    async function InserirExame(){
+
+        const formData = new FormData();
+
+        formData.append('ConsultaId', route.params.idConsulta);
+        formData.append('Imagem', {
+            uri: route.params.photoUri,
+            type: `image.${route.params.photoUri.split('.').pop()}`,
+            name: `image/${route.params.photoUri.split('.').pop()}`
+        })
+
+        await api.post(`/Exame/Cadastrar`, formData, {
+            headers : {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then( response => {
+
+            console.log("asdasdasdas");
+            console.log(response.data);
+            setDescricaoExame( response.data.descricao)
+            setDescricaoExame( descricaoExame + "\n" + response.data.descricao)
+            console.log(descricaoExame);
+
+        }).catch(error => {
+            console.log(error);
+        })
+
+
+
+    }
+
+
     useEffect(() => {
         // console.log(photoUri)
         console.log("sada")
         console.log(route.params)
         console.log('SDJAKSD', consultaSelecionada);
+        // console.log(`/Consultas/BuscaPorId?id=${route.params.consulta.id}`);
     }, [route])
 
     useEffect(() => {
@@ -52,6 +87,14 @@ export const ViewPrescription = ({ navigation, route }) => {
             BuscarProntuario();
         }
     }, [consultaSelecionada])
+
+
+
+    useEffect(() => {
+        if (route.params.photoUri) {
+            InserirExame();
+        }
+    }, [route.params.photoUri])
 
     return (
         <>
@@ -61,7 +104,7 @@ export const ViewPrescription = ({ navigation, route }) => {
 
                     <Container>
 
-                        <ViewImage source={require("../../assets/ney.webp")} />
+                        <ViewImage source={{ uri : consultaSelecionada.medicoClinica.medico.idNavigation.foto}} />
 
                         <TitleProfile>{consultaSelecionada.medicoClinica.medico.idNavigation.nome}</TitleProfile>
 
@@ -114,7 +157,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                         </BoxViewImageImport>
 
                         <BoxBtn>
-                            <SendButton onPress={() => { navigation.navigate("Camera") }} text={"Enviar"} />
+                            <SendButton onPress={() => { navigation.navigate("Camera", {id : route.params.consulta.id}) }} text={"Enviar"} />
                             <CardCancel onPressCancel={() => { navigation.replace("Main") }} text={"Cancelar"} />
                         </BoxBtn>
 
@@ -126,6 +169,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             placeholder={"Resultado do exame"}
                             editable={true}
                             fieldWidth={90}
+                            fieldValue={descricaoExame}
                         />
 
                         <CardBackLess onPressCancel={() => { navigation.navigate("PatientConsultation") }} text={"Voltar"} />

@@ -76,7 +76,7 @@ export const SelectDoctor = ({ navigation }) => {
           <CardSelectDoctor
             doctorArea={item.especialidade.especialidade1}
             name={item.idNavigation.nome}
-            url={image}
+            url={item.idNavigation.foto}
           />
         )}
         showsVerticalScrollIndicator={false}

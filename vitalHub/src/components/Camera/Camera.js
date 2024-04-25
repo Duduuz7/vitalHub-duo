@@ -17,7 +17,7 @@ import { ButtonLargeConfirmModal } from '../Button/Button';
 import { CardCancelLess } from '../Descriptions/Descriptions';
 
 
-export default function Cam({ navigation }) {
+export default function Cam({ navigation, route }) {
 
     const cameraRef = useRef(null)
 
@@ -42,6 +42,47 @@ export default function Cam({ navigation }) {
         })();
 
     }, [])
+
+
+
+
+
+
+    // useEffect(() => {
+    //     GetLatestPhoto()
+    // }, [])
+
+
+    // async function GetLatestPhoto() {
+
+    //     const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
+
+    //     console.log(assets)
+
+    //     if (assets.length > 0) {
+    //         setLastPhoto(assets[0].uri)
+    //     }
+
+    // }
+
+
+    // async function SelectImageGallery() {
+        
+    //     const result = await ImagePicker.launchImageLibraryAsync({
+    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    //         quality: 1
+    //     })
+
+    //     if (!result.canceled) {
+    //         setPhoto(result.assets[0].uri)
+
+    //         setOpenModal(true)
+    //     }
+
+    // }
+
+
+
 
 
 
@@ -80,7 +121,7 @@ export default function Cam({ navigation }) {
         //     });
 
         console.log(photo)
-        navigation.navigate("ViewPrescription", { photoUri: photo, clearPhoto: ClearPhoto });
+        navigation.navigate("ViewPrescription", { photoUri: photo, idConsulta: route.params.id });
 
     }
 
@@ -162,7 +203,7 @@ export default function Cam({ navigation }) {
                                     <FontAwesome name="trash" size={25} color={"#ff0000"} />
                                 </TouchableOpacity> */}
 
-                                        <ButtonLargeConfirmModal text={"Confirmar"} onPress={() => UploadPhoto()} />
+                                        <ButtonLargeConfirmModal text={"Confirmar"} onPress={() => UploadPhoto() } />
 
                                         <CardCancelLess onPressCancel={() => navigation.replace("Camera")} text={"Refazer"} />
 

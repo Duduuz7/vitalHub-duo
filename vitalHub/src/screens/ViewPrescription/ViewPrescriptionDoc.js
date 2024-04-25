@@ -62,7 +62,7 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
 
                     <Container>
 
-                        <ViewImage source={require("../../assets/ney.webp")} />
+                        <ViewImage source={{ uri : consultaSelecionada.paciente.idNavigation.foto}} />
 
                         <TitleProfile>{consultaSelecionada.paciente.idNavigation.nome}</TitleProfile>
 

@@ -25,6 +25,7 @@ export const PatientAppointmentModal = ({
 
 
   function handlePress(rota) {
+    
     console.log('consulta');
     console.log(consulta);
 
@@ -40,7 +41,7 @@ export const PatientAppointmentModal = ({
           <PatientModal>
             <ModalContent>
               <ImageModalRecord
-                source={require("../../assets/CardRecordPatient(doctorImage).png")}
+                source={{uri : consulta.medicoClinica.medico.idNavigation.foto}}
               />
 
               <TitleModalRecord>{consulta.medicoClinica.medico.idNavigation.nome}</TitleModalRecord>

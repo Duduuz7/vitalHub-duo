@@ -59,7 +59,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 
                 <>
 
-                    <ImagemPerfilPaciente source={require('../../assets/ney.webp')} />
+                    <ImagemPerfilPaciente source={{uri : consulta.paciente.idNavigation.foto}} />
 
                     <Container>
 

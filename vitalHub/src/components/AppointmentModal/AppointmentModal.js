@@ -32,7 +32,7 @@ export const AppointmentModal = ({
 
                         <ModalContent>
 
-                            <ImageModalRecord source={require('../../assets/ImageModalRecord.png')} />
+                            <ImageModalRecord source={{uri : consulta.paciente.idNavigation.foto}} />
 
                             <TitleModalRecord>{consulta.paciente.idNavigation.nome}</TitleModalRecord>
 

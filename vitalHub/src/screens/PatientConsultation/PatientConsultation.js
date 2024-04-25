@@ -32,6 +32,8 @@ export const PatientConsultation = ({ navigation, route }) => {
 
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
+    const [fotoPerfil, setFotoPerfil] = useState(null)
+
 
     //STATE PARA CANCELAR CONSULTA 
     const [consultaCancel, setConsultaCancel] = useState({
@@ -85,6 +87,22 @@ export const PatientConsultation = ({ navigation, route }) => {
 
     }
 
+    async function BuscarFotoDePerfil() {
+
+        const tokenB = await userDecodeToken();
+
+        await api.get(`/Usuario/BuscarPorId?&id=${tokenB.idUsuario}`).then(response => {
+
+            console.log(response.data.foto);
+            setFotoPerfil(response.data.foto)
+            console.log(fotoPerfil);
+
+        }).catch(error => {
+            console.log(error);
+        })
+
+    }
+
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
         agendadas: "Agendada",
@@ -92,7 +110,7 @@ export const PatientConsultation = ({ navigation, route }) => {
         canceladas: "Cancelada",
     });
 
-    const image = require("../../assets/CardDoctorImage.png");
+    // const image = require("../../assets/CardDoctorImage.png");
 
     // STATES PARA OS MODAIS
 
@@ -118,6 +136,10 @@ export const PatientConsultation = ({ navigation, route }) => {
         // console.log(dataConsulta);
     }, [dataConsulta, showModalCancel])
 
+    useEffect(() => {
+        BuscarFotoDePerfil()
+    })
+
     return (
 
         <Container>
@@ -128,7 +150,7 @@ export const PatientConsultation = ({ navigation, route }) => {
 
                 <BoxHome>
 
-                    <ImagemHome source={require('../../assets/PatientHomeImage.png')} />
+                    <ImagemHome source={{ uri : fotoPerfil}} />
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
@@ -170,7 +192,7 @@ export const PatientConsultation = ({ navigation, route }) => {
                         name={item.medicoClinica.medico.idNavigation.nome}
                         age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
                         routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
-                        url={image}
+                        url={item.medicoClinica.medico.idNavigation.foto}
                         status={item.situacao.situacao}
 
                         // onPressCancel={() => setShowModalCancel(true)} 
