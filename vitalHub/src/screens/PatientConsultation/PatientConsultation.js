@@ -21,7 +21,7 @@ import api from "../../services/Services";
 import moment from "moment"
 
 
-export const PatientConsultation = ({ navigation }) => {
+export const PatientConsultation = ({ navigation, route }) => {
 
     // Criar o state para receber a lista de consultas (Array)
     const [consultaLista, setConsultaLista] = useState([]) // vazio no inicio

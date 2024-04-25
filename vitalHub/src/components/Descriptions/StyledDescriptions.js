@@ -67,7 +67,7 @@ export const CancelButton = styled(ResendCode)`
 `;
 
 export const CancelLessMargin = styled(CancelButton)`
-  margin-left: 36%;
+  margin-left: 41%;
   margin-top: 2px;
   margin-bottom: 30px;
   align-self: center;

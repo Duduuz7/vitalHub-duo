@@ -19,9 +19,9 @@ import { Text } from "react-native";
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { ButtonCamera } from "./Style";
+import { ButtonCamera, ImageView } from "./Style";
 
-export const DoctorProfile = ({ navigation }) => {
+export const DoctorProfile = ({ navigation, route }) => {
     const [cep, setCep] = useState("");
     const [logradouro, setLogradouro] = useState("");
     const [cidade, setCidade] = useState("");
@@ -29,6 +29,11 @@ export const DoctorProfile = ({ navigation }) => {
     const [editable, setEditable] = useState(false);
     const [token, setToken] = useState({});
     const [medicoData, setMedicoData] = useState({});
+
+    const [photo, setPhoto] = useState(null)
+
+
+    //USEEFFECT PRINCIPAL
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +48,7 @@ export const DoctorProfile = ({ navigation }) => {
                     const { endereco, crm } = response.data;
                     setMedicoData(response.data);
                     setLogradouro(endereco.logradouro);
+                    setPhoto(response.data.idNavigation.foto)
                     setCidade(endereco.cidade);
                     setCrm(crm);
                     // Definir o estado `cep` com o CEP do paciente
@@ -59,6 +65,61 @@ export const DoctorProfile = ({ navigation }) => {
         fetchData();
 
     }, []);
+
+    //USEEFFECT FOTO DE PERFIL
+
+    useEffect(() => {
+
+        console.log(route);
+
+        if (route.params !== null) {
+            AlterarFotoPerfil()
+        }
+
+
+    }, [route.params])
+
+
+
+    useEffect(() => {
+
+    }, [photo])
+  
+    //FUNCAO PARA ALTERAR A IMAGEM DE PERFIL
+  
+    async function AlterarFotoPerfil() {
+  
+      const userToken = await userDecodeToken();
+  
+      console.log("asasasasasasas", route.params);
+      console.log(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`);
+  
+      const formData = new FormData();
+  
+      formData.append('Arquivo',{
+        uri : route.params.photoUri ,
+        name : `image.${ route.params.photoUri.split(".")[1] }`,
+        type : `image/${ route.params.photoUri.split(".")[1] }`
+      });
+  
+      
+      await api.put(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+  
+      }).then( response => {
+        console.log(response);
+        setPhoto(route.params.photoUri)
+      }).catch( error => {
+        console.log(error);
+      })
+    }
+
+
+
+
+
 
     const handleLogout = () => {
         userLogoutToken();
@@ -123,8 +184,11 @@ export const DoctorProfile = ({ navigation }) => {
             <Container>
 
                 <ImageView>
+
+                    
                     <ImagemPerfilPaciente
-                        source={require("../../assets/LimaCorinthians.png")}
+                        // source={require("../../assets/LimaCorinthians.png")}
+                        source={{uri: photo}}
                     />
 
                     <ButtonCamera onPress={() => { navigation.navigate("DoctorCamera") }}>

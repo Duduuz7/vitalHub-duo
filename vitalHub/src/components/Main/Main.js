@@ -17,7 +17,9 @@ import DoctorProfile from "../../screens/DoctorProfile/DoctorProfile";
 
 const bottomTab = createBottomTabNavigator();
 
-export const Main = () => {
+export const Main = ({ navigation, route }) => {
+
+  const routeParams = route.params
 
   async function profileLoad() {
 
@@ -27,8 +29,8 @@ export const Main = () => {
       console.log(token)
     }
   }
-  
-  useEffect(() =>{
+
+  useEffect(() => {
     profileLoad()
   }, [])
 
@@ -86,14 +88,17 @@ export const Main = () => {
 
       <bottomTab.Screen
         name="PatientProfile"
-        component={PatientProfile}
-      />
+      >
+
+        {(props) => <PatientProfile navigation={navigation} route={route} />}
+
+      </bottomTab.Screen>
 
     </bottomTab.Navigator>
   );
 };
 
-export const DoctorMain = () => {
+export const DoctorMain = ({ navigation, route }) => {
 
   return (
 
@@ -148,9 +153,12 @@ export const DoctorMain = () => {
       {/* : */}
 
       <bottomTab.Screen
-        name="DoctorProfile"
-        component={DoctorProfile}
-      />
+        name="DoctorProfile">
+        {(props) => <DoctorProfile
+          route={route}
+          navigation={navigation}
+        />}
+      </bottomTab.Screen>
 
     </bottomTab.Navigator>
   );

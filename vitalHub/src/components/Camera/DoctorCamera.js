@@ -15,6 +15,9 @@ import { Entypo } from '@expo/vector-icons';
 
 import { ButtonLargeConfirmModal } from '../Button/Button';
 import { CardCancelLess } from '../Descriptions/Descriptions';
+import { LastPhoto } from './Style';
+
+import * as ImagePicker from "expo-image-picker"
 
 
 export default function DoctorCam({ navigation }) {
@@ -30,6 +33,8 @@ export default function DoctorCam({ navigation }) {
     const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
 
     const [zoom, setZoom] = useState(0)
+
+    const [lastPhoto, setLastPhoto] = useState(null)
 
     useEffect(() => {
 
@@ -50,10 +55,33 @@ export default function DoctorCam({ navigation }) {
 
 
     async function GetLatestPhoto() {
-        const assets = await MediaLibrary.getAssetsAsync({sortBy : [[MediaLibrary.SortBy.creationTime, false]], first : 1})
+
+        const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
 
         console.log(assets)
+
+        if (assets.length > 0) {
+            setLastPhoto(assets[0].uri)
+        }
+
     }
+
+
+    async function SelectImageGallery() {
+        
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1
+        })
+
+        if (!result.canceled) {
+            setPhoto(result.assets[0].uri)
+
+            setOpenModal(true)
+        }
+
+    }
+
 
 
     async function CapturePhoto() {
@@ -76,22 +104,8 @@ export default function DoctorCam({ navigation }) {
 
     async function UploadPhoto() {
 
-        //   if (photo) {
-        //     await MediaLibrary.createAssetAsync(photo).then(() => {
-        //       console.log(photo);
-
-        //     //    Alert.alert('Sucesso', ('foto salva na galeria'));
-
-        //       navigation.navigate("ViewPrescription", { photoUri: photo.uri });
-        //     }).catch(error => {
-        //       // alert("erro ao processar" + error);
-        //       console.log(error)
-
-
-        //     });
-
         console.log(photo)
-        navigation.navigate("DoctorProfile", { photoUri: photo, clearPhoto: ClearPhoto });
+        navigation.navigate("DoctorMain", { photoUri: photo, screen: "DoctorProfile" });
 
     }
 
@@ -120,20 +134,39 @@ export default function DoctorCam({ navigation }) {
                         flashMode={flashMode}
                     >
 
+                    
+
                         <TouchableOpacity style={styles.btnClear} onPress={() => { navigation.replace("DoctorProfile") }} >
                             <FontAwesome name="close" size={23} color={"#fff"} />
                         </TouchableOpacity>
 
+                        <TouchableOpacity
+                            style={styles.btnFlip}
+                            onPress={() => setTipoCamera(tipoCamera == CameraType.front ? CameraType.back : CameraType.front)}
+                        >
+
+                            <Ionicons name="camera-reverse" size={32} color="white" />
+
+                        </TouchableOpacity>
+
                         <View style={styles.viewFlip}>
 
-                            <TouchableOpacity
-                                style={styles.btnFlip}
-                                onPress={() => setTipoCamera(tipoCamera == CameraType.front ? CameraType.back : CameraType.front)}
-                            >
+                            {
+                                lastPhoto !== null ?
 
-                                <Ionicons name="camera-reverse" size={32} color="white" />
+                                    <TouchableOpacity
+                                        style={styles.btnGallery}
+                                        onPress={() => SelectImageGallery()}
+                                    >
+                                        <LastPhoto source={{ uri: lastPhoto }} />
+                                    </TouchableOpacity>
 
-                            </TouchableOpacity>
+                                    :
+
+                                    null
+
+                            }
+
 
                             <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
                                 <Entypo name="circle" size={45} color="#404040" />
@@ -216,8 +249,17 @@ const styles = StyleSheet.create({
     },
     btnFlip: {
         padding: 20,
-        marginBottom: 15
+        // marginBottom: 10,
+        marginLeft: "80%",
+        marginTop: -68,
     },
+
+    btnGallery: {
+        padding: 20,
+        marginBottom: 10,
+        marginRight: -0,
+    },
+
     txtFlip: {
         fontSize: 20,
         color: "#fff",
@@ -251,8 +293,9 @@ const styles = StyleSheet.create({
     btnClear: {
         backgroundColor: 'transparent',
         padding: 20,
-        marginTop: 35,
         marginRight: '80%',
+        marginTop: 35,
+
         alignItems: "center",
         justifyContent: "center",
     },

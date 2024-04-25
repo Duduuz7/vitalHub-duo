@@ -22,20 +22,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ButtonCamera, ImageView } from "./Style";
 
 
-import * as MediaLibrary from 'expo-media-library';
-
-import * as ImagePicker from 'expo-image-picker'
 
 
-async function requestGaleria() {
 
-  await MediaLibrary.requestPermissionsAsync();
-
-  await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-}
-
-export const PatientProfile = ({ navigation }) => {
+export const PatientProfile = ({ navigation, route }) => {
 
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
@@ -47,9 +37,10 @@ export const PatientProfile = ({ navigation }) => {
   const [pacienteData, setPacienteData] = useState({});
 
 
-  useEffect(() => {
-    requestGaleria()
-  }, [])
+  const [photo, setPhoto] = useState(null)
+
+
+  //USEEFFECT PRINCIPAL
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,8 +51,10 @@ export const PatientProfile = ({ navigation }) => {
           const response = await api.get(
             `/Pacientes/BuscarPorId?id=${userToken.idUsuario}`
           );
-          const { endereco, dataNascimento, cpf } = response.data;
+          const { endereco, dataNascimento, cpf, foto } = response.data;
           setPacienteData(response.data);
+          console.log("Azulllll");
+          setPhoto(response.data.idNavigation.foto)
           setLogradouro(endereco.logradouro);
           setCidade(endereco.cidade);
           setDataNascimento(dataNascimento);
@@ -79,6 +72,56 @@ export const PatientProfile = ({ navigation }) => {
 
     fetchData();
   }, []);
+
+  //USEEFFECT FOTO DE PERFIL
+
+  useEffect(() => {
+
+    console.log(route);
+
+    if (route.params != null ) {
+      console.log(route.params);
+      AlterarFotoPerfil()
+    }
+
+
+  }, [route.params])
+
+  useEffect(() => {
+
+  }, [photo])
+
+  //FUNCAO PARA ALTERAR A IMAGEM DE PERFIL
+
+  async function AlterarFotoPerfil() {
+
+    const userToken = await userDecodeToken();
+
+    console.log("asasasasasasas", route.params);
+    console.log(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`);
+
+    const formData = new FormData();
+
+    formData.append('Arquivo',{
+      uri : route.params.photoUri ,
+      name : `image.${ route.params.photoUri.split(".")[1] }`,
+      type : `image/${ route.params.photoUri.split(".")[1] }`
+    });
+
+    
+    await api.put(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+
+    }).then( response => {
+      console.log(response);
+      setPhoto(route.params.photoUri)
+    }).catch( error => {
+      console.log(error);
+    })
+  }
+
 
   const handleLogout = () => {
     userLogoutToken();
@@ -139,8 +182,10 @@ export const PatientProfile = ({ navigation }) => {
       <Container>
 
         <ImageView>
+          
           <ImagemPerfilPaciente
-            source={require("../../assets/LimaCorinthians.png")}
+            // source={require("../../assets/LimaCorinthians.png")}
+            source={{uri: photo}}
           />
 
           <ButtonCamera onPress={() => { navigation.navigate("PatientCamera") }}>
