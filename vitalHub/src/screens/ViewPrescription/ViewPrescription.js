@@ -32,8 +32,6 @@ export const ViewPrescription = ({ navigation, route }) => {
 
                 console.log("IDDDD");
 
-                console.log(consultaSelecionada);
-
             })
             .catch(error => {
                 console.log(error);
@@ -42,7 +40,9 @@ export const ViewPrescription = ({ navigation, route }) => {
 
 
 
-    async function InserirExame(){
+    async function InserirExame() {
+
+        
 
         const formData = new FormData();
 
@@ -54,31 +54,32 @@ export const ViewPrescription = ({ navigation, route }) => {
         })
 
         await api.post(`/Exame/Cadastrar`, formData, {
-            headers : {
+            headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        }).then( response => {
+        }).then(response => {
 
             console.log("asdasdasdas");
             console.log(response.data);
-            setDescricaoExame( response.data.descricao)
-            setDescricaoExame( descricaoExame + "\n" + response.data.descricao)
+            setDescricaoExame(response.data.descricao)
+            setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
             console.log(descricaoExame);
 
         }).catch(error => {
             console.log(error);
         })
 
-
-
     }
-
 
     useEffect(() => {
         // console.log(photoUri)
         console.log("sada")
         console.log(route.params)
         console.log('SDJAKSD', consultaSelecionada);
+        if (consultaSelecionada == null) {
+            BuscarProntuario()
+        }
+
         // console.log(`/Consultas/BuscaPorId?id=${route.params.consulta.id}`);
     }, [route])
 
@@ -92,9 +93,10 @@ export const ViewPrescription = ({ navigation, route }) => {
 
     useEffect(() => {
         if (route.params.photoUri) {
+            console.log("asdasda", route.params);
             InserirExame();
         }
-    }, [route.params.photoUri])
+    }, [route])
 
     return (
         <>
@@ -104,7 +106,7 @@ export const ViewPrescription = ({ navigation, route }) => {
 
                     <Container>
 
-                        <ViewImage source={{ uri : consultaSelecionada.medicoClinica.medico.idNavigation.foto}} />
+                        <ViewImage source={{ uri: consultaSelecionada.medicoClinica.medico.idNavigation.foto }} />
 
                         <TitleProfile>{consultaSelecionada.medicoClinica.medico.idNavigation.nome}</TitleProfile>
 
@@ -120,7 +122,8 @@ export const ViewPrescription = ({ navigation, route }) => {
                             placeholder={"Descrição"}
                             editable={true}
                             fieldWidth={90}
-                            
+                            multiline={true}
+
 
                             fieldValue={consultaSelecionada.descricao}
                         />
@@ -142,6 +145,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             placeholder={"Prescrição"}
                             editable={true}
                             fieldWidth={90}
+                            multiline={true}
 
                             fieldValue={consultaSelecionada.receita.medicamento}
                         />
@@ -157,7 +161,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                         </BoxViewImageImport>
 
                         <BoxBtn>
-                            <SendButton onPress={() => { navigation.navigate("Camera", {id : route.params.consulta.id}) }} text={"Enviar"} />
+                            <SendButton onPress={() => { navigation.navigate("Camera", { id: route.params.consulta.id }) }} text={"Enviar"} />
                             <CardCancel onPressCancel={() => { navigation.replace("Main") }} text={"Cancelar"} />
                         </BoxBtn>
 
@@ -167,9 +171,10 @@ export const ViewPrescription = ({ navigation, route }) => {
                             // fieldHeight={350}
                             placeholderTextColor={"#A1A1A1"}
                             placeholder={"Resultado do exame"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
                             fieldValue={descricaoExame}
+                            multiline={true}
                         />
 
                         <CardBackLess onPressCancel={() => { navigation.navigate("PatientConsultation") }} text={"Voltar"} />
@@ -177,7 +182,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                     </Container>
 
                 ) : (
-                    <ActivityIndicator style={{marginTop: '100%'}} />
+                    <ActivityIndicator style={{ marginTop: '100%' }} />
                 )}
 
             </ScrollContainer>

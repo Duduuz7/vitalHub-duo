@@ -70,7 +70,7 @@ export const HighInputBox = ({
 }
 
 export const HighInputBoxGrey = ({
-    multiline = true,
+    multiline,
     fieldWidth = 100,
     fieldHeight = 90,
     editable = false,

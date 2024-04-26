@@ -119,6 +119,7 @@ builder.Services.AddScoped<IExameRepository, ExameRepository>();
 
 builder.Services.AddScoped<OcrService>();
 
+
 // CORS
 builder.Services.AddCors(options =>
 {
@@ -132,6 +133,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+//app.UseHttpsRedirection();
 
 //Habilite o middleware para atender ao documento JSON gerado e à interface do usuário do Swagger
 if (app.Environment.IsDevelopment())
