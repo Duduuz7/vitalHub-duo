@@ -67,10 +67,13 @@ export const CancelButton = styled(ResendCode)`
 `;
 
 export const CancelLessMargin = styled(CancelButton)`
+  margin-left: 40px;
   margin-top: 2px;
   margin-bottom: 30px;
   align-self: center;
   justify-self: center;
+  text-align: center;
+
 `;
 
 export const CancelLocal = styled(CancelButton)`

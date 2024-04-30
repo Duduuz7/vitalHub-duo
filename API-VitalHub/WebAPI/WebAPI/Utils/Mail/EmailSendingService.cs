@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace WebAPI.Utils.Mail
+﻿namespace WebAPI.Utils.Mail
 {
     public class EmailSendingService
     {
@@ -10,74 +8,66 @@ namespace WebAPI.Utils.Mail
             emailService = service;
         }
 
-        /// <summary>
-        /// Método para envio de email de boas vindas ao cadastrar um novo usuário
-        /// </summary>
-        /// <param name="email">Email para qual será enviado</param>
-        /// <param name="userName">Nome do usuário</param>
-        /// <returns></returns>
-        [HttpPost]
+        //Método para envio de e-mail de boas vindas
         public async Task SendWelcomeEmail(string email, string userName)
         {
             try
             {
-                //monta a requisição passando os dados do email
                 MailRequest request = new MailRequest
                 {
                     ToEmail = email,
-                    Subject = "Bem vindo ao VitalHub",
-                    Body = GetHtmlContentWelcome(userName)
+                    Subject = "Bem vindo ao VitalHub !!!",
+                    Body = GetHtmlContent(userName)
                 };
 
-                //chama o método para enviar a requisição e consequentemente o email
                 await emailService.SendEmailAsync(request);
+
             }
             catch (Exception)
             {
+
                 throw;
             }
         }
 
-        /// <summary>
-        /// Método para enviar um email de recuperação de senha
-        /// </summary>
-        /// <param name="email"></param>
-        /// <param name="codigo"></param>
-        /// <returns></returns>
-        [HttpPost]
         public async Task SendRecovery(string email, int codigo)
         {
             try
             {
-                //monta a requisição passando os dados do email
                 MailRequest request = new MailRequest
                 {
                     ToEmail = email,
-                    Subject = "Recuperar a sua senha VitalHub",
+                    Subject = "Recuperação de senha !",
                     Body = GetHtmlContentRecovery(codigo)
                 };
 
-                //chama o método para enviar a requisição e consequentemente o email
                 await emailService.SendEmailAsync(request);
             }
             catch (Exception)
             {
+
                 throw;
             }
         }
 
-
-        //Método para email de boas vindas
-        private string GetHtmlContentWelcome(string userName)
+        private string GetHtmlContentRecovery(int codigo)
         {
-            //caminho imagem original
-            string imagemVitalHub = "https://blobvitalhub.blob.core.windows.net/containervitalhub/logotipo.png";
+            string Response = @"
+<div style=""width:100%; background-color:rgba(96, 191, 197, 1); padding: 20px;"">
+    <div style=""max-width: 600px; margin: 0 auto; background-color:#FFFFFF; border-radius: 10px; padding: 20px;"">
+        <img src=""https://blobvitalhub.blob.core.windows.net/containervitalhub/logotipo.png"" alt="" Logotipo da Aplicação"" style="" display: block; margin: 0 auto; max-width: 200px;"" />
+        <h1 style=""color: #333333;text-align: center;"">Recuperação de senha</h1>
+        <p style=""color: #666666;font-size: 24px; text-align: center;"">Código de confirmação <strong>" + codigo + @"</strong></p>
+    </div>
+</div>";
 
-            //caminho imagem poggers
-            string imagemPoggers = "https://cdn.akamai.steamstatic.com/steam/apps/1039200/capsule_616x353.jpg?t=1710550215";
+            return Response;
+        }
 
+        private string GetHtmlContent(string userName)
+        {
             // Constrói o conteúdo HTML do e-mail, incluindo o nome do usuário
-            string Conteudo = @"
+            string Response = @"
 <div style=""width:100%; background-color:rgba(96, 191, 197, 1); padding: 20px;"">
     <div style=""max-width: 600px; margin: 0 auto; background-color:#FFFFFF; border-radius: 10px; padding: 20px;"">
         <img src=""https://blobvitalhub.blob.core.windows.net/containervitalhub/logotipo.png"" alt="" Logotipo da Aplicação"" style="" display: block; margin: 0 auto; max-width: 200px;"" />
@@ -92,27 +82,8 @@ namespace WebAPI.Utils.Mail
 </div>";
 
             // Retorna o conteúdo HTML do e-mail
-            return Conteudo;
-        }
-
-
-        //Método para email de recuperação de senha
-        private string GetHtmlContentRecovery(int codigo)
-        {
-            string Response = @"
-<div style=""width:100%; background-color:rgba(96, 191, 197, 1); padding: 20px;"">
-    <div style=""max-width: 600px; margin: 0 auto; background-color:#FFFFFF; border-radius: 10px; padding: 20px;"">
-        <img src=""https://blobvitalhub.blob.core.windows.net/containervitalhub/logotipo.png"" alt="" Logotipo da Aplicação"" style="" display: block; margin: 0 auto; max-width: 200px;"" />
-        <h1 style=""color: #333333;text-align: center;"">Recuperação de senha</h1>
-        <p style=""color: #666666;font-size: 24px; text-align: center;"">Código de confirmação <strong>" + codigo + @"</strong></p>
-    </div>
-</div>";
-
             return Response;
         }
+
     }
 }
-
-
-
-

@@ -13,11 +13,37 @@ import { CardCancelLess } from "../../components/Descriptions/Descriptions";
 import { useEffect, useState } from "react";
 import api from "../../services/Services";
 
-export const SelectCLinic = ({ navigation }) => {
+export const SelectCLinic = ({ navigation, route }) => {
+  
+
   const [clinicas, setClinicas] = useState([]);
 
+
+  const [selectClinica, setSelectClinica] = useState(null)
+
+  const [selected, setSelected] = useState(false)
+
+
+  function handleContinue() {
+    navigation.navigate("SelectDoctor", { 
+      agendamento : {
+      ...route.params.agendamento,
+
+      ...selectClinica
+    }})
+  }
+
+
+
   async function ListarClinicas() {
-    await api.get("/Clinica/ListarTodas").then(async (response) => {
+    await api.get(`/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`).then(async (response) => {
+
+      // if( response == '' ) {
+      //   alert("Não foi possível encontrar clínicas na sua região")
+
+      //   navigation.replace("Main")
+      // }
+
       const dados = response.data;
       // console.log(dados);
 
@@ -27,8 +53,14 @@ export const SelectCLinic = ({ navigation }) => {
   }
 
   useEffect(() => {
-    ListarClinicas();
+    console.log(route);
+  }, [route]);
+
+  useEffect(() => {
+    ListarClinicas()
   }, []);
+
+
 
   return (
     <Container>
@@ -49,6 +81,14 @@ export const SelectCLinic = ({ navigation }) => {
             // rate={item.rate}
             localization={`${item.endereco.logradouro}, ${item.endereco.numero}, ${item.endereco.cidade}
             `}
+            
+            onPress={() => {
+              setSelectClinica({
+                clinicaId: item.id,
+
+                clinicaLabel: item.nomeFantasia,
+              })
+            }}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -57,7 +97,7 @@ export const SelectCLinic = ({ navigation }) => {
 
       <ButtonLargeSelect
         onPress={() => {
-          navigation.navigate("SelectDoctor");
+          handleContinue()
         }}
         text={"Continuar"}
       />

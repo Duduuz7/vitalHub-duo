@@ -11,10 +11,13 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ExameController : ControllerBase
     {
+        //aqui vai a lógica da OCR
+
         private readonly IExameRepository _exameRepository;
+
         private readonly OcrService _ocrService;
 
-        public ExameController(IExameRepository exameRepository, OcrService ocrService) 
+        public ExameController(IExameRepository exameRepository, OcrService ocrService)
         {
             _exameRepository = exameRepository;
             _ocrService = ocrService;
@@ -27,7 +30,7 @@ namespace WebAPI.Controllers
             {
                 if (exameViewModel.Imagem == null || exameViewModel == null)
                 {
-                    return BadRequest("Nenhuma imagem fornecida");
+                    return BadRequest("Nenhuma imagem fornecida !!!");
                 }
 
                 using (var stream = exameViewModel.Imagem.OpenReadStream())
@@ -37,17 +40,18 @@ namespace WebAPI.Controllers
                     exameViewModel.Descricao = result;
 
                     Exame exame = new Exame();
+
                     exame.Descricao = exameViewModel.Descricao;
                     exame.ConsultaId = exameViewModel.ConsultaId;
-                    
-                    _exameRepository.Cadastrar(exame);
 
+                    _exameRepository.Cadastrar(exame);
+                    
                     return Ok(exame);
                 }
+
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }

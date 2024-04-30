@@ -105,7 +105,7 @@ export const Card = ({
   return (
     <CardContainer onPress={onPressAppointmentCard}>
       <BoxCard>
-        <ImageCard source={url} />
+        <ImageCard source={{uri : url}} />
 
         <BoxTextCard>
           <NameCard>{name}</NameCard>
@@ -126,10 +126,12 @@ export const Card = ({
 };
 
 
-export const CardSelectDoctor = ({ url, name, doctorArea }) => {
+export const CardSelectDoctor = ({ url, name, doctorArea, onPress }) => {
   return (
-    <CardContainer>
-      <ImageCard source={url} />
+    <CardContainer
+      onPress={onPress}
+    >
+      <ImageCard source={{ uri: url}} />
 
       <BoxCard>
         <BoxTextDoctorCard>
@@ -145,11 +147,12 @@ export const CardSelectDoctor = ({ url, name, doctorArea }) => {
 export const CardSelectClinic = ({
      name, 
      localization, 
+     onPress
     //  rate, 
     //  openTime
      }) => {
   return (
-    <CardContainerClinic>
+    <CardContainerClinic onPress={onPress}>
       <BoxCard>
         <BoxTextClinicCard>
           <NameCardClinic>{name}</NameCardClinic>

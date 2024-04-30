@@ -13,10 +13,13 @@ import { PatientConsultation } from "../../screens/PatientConsultation/PatientCo
 import { DoctorConsultation } from "../../screens/DoctorConsultation/DoctorConsultation";
 import { useEffect } from "react";
 import { userDecodeToken } from "../../utils/Auth";
+import DoctorProfile from "../../screens/DoctorProfile/DoctorProfile";
 
 const bottomTab = createBottomTabNavigator();
 
-export const Main = () => {
+export const Main = ({ navigation, route }) => {
+
+  const routeParams = route.params
 
   async function profileLoad() {
 
@@ -26,8 +29,8 @@ export const Main = () => {
       console.log(token)
     }
   }
-  
-  useEffect(() =>{
+
+  useEffect(() => {
     profileLoad()
   }, [])
 
@@ -85,14 +88,17 @@ export const Main = () => {
 
       <bottomTab.Screen
         name="PatientProfile"
-        component={PatientProfile}
-      />
+      >
+
+        {(props) => <PatientProfile navigation={navigation} route={route} />}
+
+      </bottomTab.Screen>
 
     </bottomTab.Navigator>
   );
 };
 
-export const DoctorMain = () => {
+export const DoctorMain = ({ navigation, route }) => {
 
   return (
 
@@ -147,9 +153,12 @@ export const DoctorMain = () => {
       {/* : */}
 
       <bottomTab.Screen
-        name="PatientProfile"
-        component={PatientProfile}
-      />
+        name="DoctorProfile">
+        {(props) => <DoctorProfile
+          route={route}
+          navigation={navigation}
+        />}
+      </bottomTab.Screen>
 
     </bottomTab.Navigator>
   );

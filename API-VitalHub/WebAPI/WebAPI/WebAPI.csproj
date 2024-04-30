@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\NovaPasta1\**" />
+    <Compile Remove="Utils\NovaPasta\**" />
+    <Content Remove="Utils\NovaPasta1\**" />
+    <Content Remove="Utils\NovaPasta\**" />
+    <EmbeddedResource Remove="Utils\NovaPasta1\**" />
+    <EmbeddedResource Remove="Utils\NovaPasta\**" />
+    <None Remove="Utils\NovaPasta1\**" />
+    <None Remove="Utils\NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MailKit" Version="4.4.0" />

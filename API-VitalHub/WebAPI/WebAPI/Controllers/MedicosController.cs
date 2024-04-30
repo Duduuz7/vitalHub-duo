@@ -92,7 +92,7 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
+           
         }
 
         [HttpGet("BuscarPorIdClinica")]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Security;
 using WebAPI.Utils.Mail;
 
 namespace WebAPI.Controllers
@@ -20,24 +19,27 @@ namespace WebAPI.Controllers
         {
             try
             {
-                //cria objeto para receber os dados do e-mail a ser enviado
+                //Cria objeto para receber os dados do e-mail a ser enviado
                 MailRequest mailRequest = new MailRequest();
 
+                //Define o endereço, assunto e o corpo do e-mail
                 mailRequest.ToEmail = email;
-                mailRequest.Subject = "Olá amores!!!!!!!!!!!";
+                mailRequest.Subject = "Olá, esse é um e-mail vindo da turma de DEV";
                 mailRequest.Body = GetHtmlContent(userName);
 
+                //Chama o método que enviará o e-mail
                 await emailService.SendEmailAsync(mailRequest);
 
-                return Ok("Email enviado com sucesso");
+                return Ok("Email enviado com sucesso !!!");
             }
             catch (Exception)
             {
-                return BadRequest("Falha ao enviar o email!");
+                return BadRequest("Falha ao enviar o email !!!");
             }
         }
-            private string GetHtmlContent(string userName)
-            {
+
+        private string GetHtmlContent(string userName)
+        {
             // Constrói o conteúdo HTML do e-mail, incluindo o nome do usuário
             string Response = @"
 <div style=""width:100%; background-color:rgba(96, 191, 197, 1); padding: 20px;"">
@@ -55,6 +57,7 @@ namespace WebAPI.Controllers
 
             // Retorna o conteúdo HTML do e-mail
             return Response;
-            }
+        }
+
     }
 }

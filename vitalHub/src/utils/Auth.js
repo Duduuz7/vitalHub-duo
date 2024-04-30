@@ -13,23 +13,24 @@ if (!global.btoa) {
 }
 
 export const userDecodeToken = async () => {
-  const token = JSON.parse(await AsyncStorage.getItem("token")).token;
+  const token = (await AsyncStorage.getItem("token"));
 
   if (token === null) {
     return null;
   }
 
-    //Decodifica o token recebido
-    const decoded = jwtDecode(token);
+  //Decodifica o token recebido
+  const decoded = jwtDecode(token);
 
-    return {
-        idUsuario: decoded.jti,
-        name: decoded.name,
-        role: decoded.role,
-        email: decoded.email
-    }
-
-}
+  return {
+    idUsuario: decoded.jti,
+    name: decoded.name,
+    role: decoded.role,
+    email: decoded.email,
+    token: token,
+  };
+  
+};
 export const userLogoutToken = async () => {
   const token = await AsyncStorage.removeItem("token");
 };

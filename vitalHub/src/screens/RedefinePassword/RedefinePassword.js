@@ -7,8 +7,33 @@ import { DescriptionPassword } from '../../components/Descriptions/Descriptions'
 import { Input } from '../../components/Input/Input'
 import { Close, Logo } from '../../components/Images/StyleImages'
 import { Title } from '../../components/Title/StyleTitle'
+import { useState } from 'react'
+import api from '../../services/Services'
 
-export const RedefinePassword = () => {
+export const RedefinePassword = ({ navigation, route }) => {
+
+    // const { email } = route.params.emailRecuperacao;
+
+    const [novaSenha, setNovaSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+
+    async function changePassword() {
+
+        if (novaSenha !== confirmarSenha) {
+            alert('A senha e sua confirmação não são iguais !!!');
+        }
+
+        await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+
+            senhaNova: novaSenha
+
+        }).then(() => {
+            navigation.replace("Login")
+        }).catch(error => {
+            console.log(error);
+            console.log(`$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`)
+        })
+    }
 
     return (
 
@@ -27,16 +52,23 @@ export const RedefinePassword = () => {
                 placeholder={"Nova Senha"}
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
+                fieldValue={novaSenha}
+                onChangeText={x => setNovaSenha(x)}
             />
 
             <Input
                 placeholder={"Confirmar nova senha"}
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
+                fieldValue={confirmarSenha}
+                onChangeText={x => setConfirmarSenha(x)}
             />
 
-            <ButtonNormal text={"Confirmar nova senha"}/>
-            
+            <ButtonNormal
+                onPress={() => changePassword()}
+                text={"Confirmar nova senha"}
+            />
+
         </Container>
 
     )

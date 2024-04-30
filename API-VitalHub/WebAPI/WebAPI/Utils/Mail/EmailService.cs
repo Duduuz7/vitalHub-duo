@@ -50,7 +50,7 @@ namespace WebAPI.Utils.Mail
                     smtp.Connect(emailSettings.Host,emailSettings.Port,SecureSocketOptions.StartTls);
 
                     //Autentica-se no servidor SMTP usando os dados de emailSettings
-                    smtp.Authenticate(emailSettings.Email,emailSettings.Password);
+                    smtp.Authenticate(emailSettings.Email, emailSettings.Password);
 
                     //Envia o e-mail
                     await smtp.SendAsync(email);

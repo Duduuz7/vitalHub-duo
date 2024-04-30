@@ -55,8 +55,10 @@ namespace WebAPI.Controllers
         //Se o código for igual, resete o código anterior no banco e devolva um status code 
         //informando se o código é válido
 
+
+        //Utilizar post quando for dados que vao ser alterados no sistema, como código
         [HttpPost("ValidateRecoveryCode")]
-        public async Task<IActionResult> ValidateRecoveryCode(string email, int code)
+        public async Task<IActionResult> ValidateRecoveryCode(string email, int codigo)
         {
             try
             {
@@ -68,12 +70,12 @@ namespace WebAPI.Controllers
                     return NotFound("E-mail inválido!");
                 }
 
-                if (user.CodRecupSenha != code)
+                if (user.CodRecupSenha != codigo)
                 {
                     return BadRequest("Código de recuperação é inválido !!!");
                 }
 
-                //Após validar, apaga o código anterior
+                //Após validar, reseta o código anterior no banco
                 user.CodRecupSenha = null;
 
                 await _context.SaveChangesAsync();

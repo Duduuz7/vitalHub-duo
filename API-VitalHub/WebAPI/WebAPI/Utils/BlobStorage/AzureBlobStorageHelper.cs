@@ -6,10 +6,10 @@ namespace WebAPI.Utils.BlobStorage
     {
         public static async Task<string> UploadImageBlobAsync(IFormFile arquivo, string stringConexao, string nomeContainer)
         {
-            try
-            {
+			try
+			{
                 //Verifica se existe um arquivo 
-                if (arquivo != null)
+                if (arquivo != null )
                 {
                     //Gera um nome único + extensao do arquivo, ex abaixo:
                     // ajdfpioeuiu6437829eifjr472389iu4uyre98u3jfgr984320542085                   .jpeg//.png    etc
@@ -40,11 +40,11 @@ namespace WebAPI.Utils.BlobStorage
                     return "https://blobvitalhubeduardo.blob.core.windows.net/containervitalhubeduardo/profilepattern.png";
                 }
             }
-            catch (Exception)
-            {
+			catch (Exception)
+			{
 
-                throw;
-            }
+				throw;
+			}
         }
     }
 }

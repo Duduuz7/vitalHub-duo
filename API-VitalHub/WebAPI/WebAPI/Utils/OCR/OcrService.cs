@@ -1,13 +1,15 @@
-﻿using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
+﻿using Azure.Core.GeoJson;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 
 namespace WebAPI.Utils.OCR
 {
     public class OcrService
     {
-        private readonly string _subscriptKey = "dd90934fa05d436b9328e00aecf1cffe";
+        private readonly string _subscriptKey = "0c68bc4867c14ba5882c4bca490bc505";
 
-        private readonly string _endpoint = "https://cvvitalhub-heitor.cognitiveservices.azure.com/";
+        private readonly string _endpoint = "https://cvvitalhub-eduardo.cognitiveservices.azure.com/";
 
         public async Task<string> RecognizeTextAsync(Stream imageStream)
         {
@@ -20,15 +22,16 @@ namespace WebAPI.Utils.OCR
 
                 var ocrResult = await client.RecognizePrintedTextInStreamAsync(true, imageStream);
 
-                return ProcessoRecognitionResult (ocrResult);
+                return ProcessRecognitionResult( ocrResult );
+
             }
             catch (Exception ex)
             {
-                return "Erro ao reconhecer o texto: " + ex.Message;
+                   return "Erro ao reconhecer o texto: " + ex.Message;
             }
         }
 
-        private static string ProcessoRecognitionResult(OcrResult result)
+        private static string ProcessRecognitionResult(OcrResult result)
         {
             try
             {
@@ -40,12 +43,16 @@ namespace WebAPI.Utils.OCR
                     {
                         foreach (var word in line.Words)
                         {
-                            recognizedText += word.Text;
+                            recognizedText += word.Text + " ";
                         }
+
                         recognizedText += "\n";
-                     }
+
+                    }
                 }
+
                 return recognizedText;
+
             }
             catch (Exception)
             {

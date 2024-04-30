@@ -17,6 +17,11 @@ import moment from "moment"
 
 
 
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+
+
+
+
 export const DoctorConsultation = ({ navigation }) => {
 
     const [dataConsulta, setDataConsulta] = useState('') // vazio no inicio
@@ -28,28 +33,42 @@ export const DoctorConsultation = ({ navigation }) => {
 
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
-    function MostrarModal( modal, consulta) {
+    const [fotoPerfil, setFotoPerfil] = useState(null)
+
+
+
+
+    //state para cancelar consulta
+    const [consultaCancel, setConsultaCancel] = useState({
+        id: '',
+        //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
+        situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
+    })
+
+
+
+    function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
         if (modal == 'cancelar') {
             setShowModalCancel(true)
-        }else if (modal == 'prontuario') {
+        } else if (modal == 'prontuario') {
             setShowModalAppointment((selected === 'Agendada' ? true : false))
-        }else{
+        } else {
             console.log("asa");
         }
     }
 
 
 
-    async function ListarConsultas(){
-        
+    async function ListarConsultas() {
+
         // console.log(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
         await api.get(`/Medicos/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)
             console.log(response.data);
 
-        }).catch( error => {
+        }).catch(error => {
             console.log(error);
         })
 
@@ -63,35 +82,26 @@ export const DoctorConsultation = ({ navigation }) => {
             console.log(token)
             setToken(token)
 
-            setDataConsulta( moment().format("YYYY-MM-DD") ) 
+            setDataConsulta(moment().format("YYYY-MM-DD"))
         }
     }
 
-    // async function GetConsultas() {
-    //     try {
 
-    //         const token = await tokenClean();
+    async function BuscarFotoDePerfil() {
 
-    //         if (token) {
+        const tokenB = await userDecodeToken();
 
-    //             const response = await api.get('/Consultas', {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`
-    //                 }
-    //             });
+        await api.get(`/Usuario/BuscarPorId?&id=${tokenB.idUsuario}`).then(response => {
 
-    //             setConsultaLista(response.data);
+            console.log(response.data.foto);
+            setFotoPerfil(response.data.foto)
+            console.log(fotoPerfil);
 
-    //             console.log("asdas", response.data);
+        }).catch(error => {
+            console.log(error);
+        })
 
-    //         } else {
-    //             console.log("Token não encontrado.");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-
+    }
 
 
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
@@ -102,69 +112,26 @@ export const DoctorConsultation = ({ navigation }) => {
     });
 
     useEffect(() => {
-        // GetConsultas()
-        // ListarConsultas()
         setSelected("Agendada")
         profileLoad()
     }, [])
 
+
     useEffect(() => {
-        if( dataConsulta != '' ){
+        if (dataConsulta != '') {
             ListarConsultas()
         }
         console.log(dataConsulta);
-    }, [dataConsulta])
+    }, [dataConsulta, showModalCancel])
 
-    const image = require("../../assets/ImageCard.png");
 
-    // CARD MOCADOS
+    useEffect(() => {
+        BuscarFotoDePerfil()
+    }, [fotoPerfil])
 
-    // const dataItens = [
-    //     {
-    //         id: 1,
-    //         hour: '14:00',
-    //         image: image,
-    //         name: 'Niccole Sarga',
-    //         age: '22 anos',
-    //         routine: 'Rotina',
-    //         status: "r"
-    //     },
-    //     {
-    //         id: 2,
-    //         hour: '15:00',
-    //         image: image,
-    //         name: 'Richard Kosta',
-    //         age: '28 anos',
-    //         routine: 'Urgência',
-    //         status: "a"
-    //     },
-    //     {
-    //         id: 3,
-    //         hour: '17:00',
-    //         image: image,
-    //         name: 'Neymar Jr',
-    //         age: '28 anos',
-    //         routine: 'Rotina',
-    //         status: "c"
-    //     }
-    // ]
 
-    // //FILTRO PARA CARD
+    // const image = require("../../assets/ImageCard.png");
 
-    // const Check = (data) => {
-    //     if (data.status === "a" && selected.agendadas) {
-    //         return true;
-    //     }
-    //     if (data.status === "r" && selected.realizadas) {
-    //         return true;
-    //     }
-    //     if (data.status === "c" && selected.canceladas) {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    // const data = consultaLista.filter(Check);
 
     // STATES PARA OS MODAIS
 
@@ -174,14 +141,14 @@ export const DoctorConsultation = ({ navigation }) => {
     // RETURN
 
     return (
+        
         <Container>
             <StatusBar translucent backgroundColor="transparent" />
             <Header>
 
-
                 <BoxHome>
 
-                    <ImagemHome source={require('../../assets/DoctorImage.png')} />
+                    <ImagemHome source={{ uri : fotoPerfil}} />
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
@@ -191,18 +158,17 @@ export const DoctorConsultation = ({ navigation }) => {
 
                 </BoxHome>
 
-
                 <MoveIconBell>
                     <Ionicons name="notifications" size={25} color="white" />
                 </MoveIconBell>
 
             </Header>
 
-            <Calendar setDataConsulta={setDataConsulta}/>
+            <Calendar setDataConsulta={setDataConsulta} />
 
             <ButtonHomeContainer>
 
-                <FilterButton onPress={() => { setSelected("Agendada")}} selected={selected === 'Agendada' ? true : false} text={'Agendadas'} />
+                <FilterButton onPress={() => { setSelected("Agendada") }} selected={selected === 'Agendada' ? true : false} text={'Agendadas'} />
                 {/* <FilterButton onPress={() => { setSelected({ agendadas: true }) }} selected={selected.agendadas} text={'Agendadas'} /> */}
 
                 <FilterButton onPress={() => { setSelected("Realizada") }} selected={selected === 'Realizada' ? true : false} text={'Realizadas'} />
@@ -221,20 +187,19 @@ export const DoctorConsultation = ({ navigation }) => {
                         dataConsulta={item.dataConsulta}
                         hour={"14:00"}
                         name={item.paciente.idNavigation.nome}
-                        age={`${
-                            moment().year() -
+                        age={`${moment().year() -
                             moment(item.paciente.dataNascimento).format("YYYY")
-                          } anos      .`}
-                        routine={item.prioridade == "1" ? 'Rotina' : item.prioridade == '2' ? 'Exame' : 'Urgência'}
-                        url={image}
+                            } anos      .`}
+                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                        url={item.paciente.idNavigation.foto}
                         status={item.situacao.situacao}
                         // onPressCancel={() => setShowModalCancel(true)}
-                        // onPressAppointment={() => { navigation.navigate("ViewPrescription") }}
+                        onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", { consulta: item }) }}
                         // onPressAppointmentCard={() => setShowModalAppointment(item.situacao.situacao === 'Agendada' ? true : false)}
 
-                        onPressCancel={() => {MostrarModal('cancelar', item)}}
-                        onPressAppointmentCard={() => {MostrarModal('prontuario', item)}}
-                        />}
+                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
+                        onPressAppointmentCard={() => { MostrarModal('prontuario', item) }}
+                    />}
 
                 keyExtractor={item => item.id}
 
@@ -243,6 +208,7 @@ export const DoctorConsultation = ({ navigation }) => {
             />
 
             <CancellationModal
+                consultaCancel={consultaCancel}
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
@@ -254,15 +220,7 @@ export const DoctorConsultation = ({ navigation }) => {
                 setShowModalAppointment={setShowModalAppointment}
             />
 
-
-            {/* <Card url={require('../../assets/ImageCard.png')} name={"Niccole Sarge"} age={"22 anos"} routine={"Rotina"} hour={"14:00"}/>
-
-                <Card url={require('../../assets/ImageCardMale.png')} name={"Richard Kosta"} age={"28 anos"} routine={"Urgência"} hour={"15:00"}/>
-
-                <Card url={require('../../assets/ney.webp')} name={"Neymar Jr"} age={"33 anos"} routine={"Rotina"} hour={"17:00"}/> */}
-
         </Container>
-
 
     )
 }

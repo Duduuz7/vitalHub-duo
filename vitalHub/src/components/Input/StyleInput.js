@@ -52,6 +52,10 @@ export const InputHighGrey = styled(InputHigh)`
     color: #33303E;
     background-color: #F5F3F3;
     font-family: MontserratAlternates_500Medium;
+    height: 175px;
+    text-align: left;
+    padding-left: 15px;
+    padding-bottom: 135px;
 `
 
 export const InputTextLarge = styled(InputText)`

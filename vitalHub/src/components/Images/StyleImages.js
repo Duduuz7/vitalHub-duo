@@ -15,6 +15,7 @@ export const LogoCreateAccount = styled.Image`
 export const ImageModalRecord = styled.Image`
     width: 285px;
     height: 181px;
+    border-radius: 4px;
 `
 
 export const Seta = styled.Image`
@@ -38,6 +39,7 @@ width: 60px;
 height: 60px;
 margin-top: 40px;
 margin-left: 9%;
+border-radius: 4px;
 `
 export const IconBell = styled.Image`
     width: 23px;

@@ -20,6 +20,8 @@ export const Login = ({ navigation }) => {
   
   const [email, setEmail] = useState("lima@email.com");
   const [senha, setSenha] = useState("123456");
+  // const [email, setEmail] = useState("thigas@email.com");
+  // const [senha, setSenha] = useState("10203040");
   const [loading, setLoading] = useState(false);
 
   async function Login() {
@@ -46,6 +48,8 @@ export const Login = ({ navigation }) => {
       })
       .catch((error) => {
         console.log(error);
+        alert("Senha ou email incorretos !!!")
+        setLoading(false)
       });
   }
 
