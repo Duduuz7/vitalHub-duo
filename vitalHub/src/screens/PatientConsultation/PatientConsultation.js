@@ -39,7 +39,7 @@ export const PatientConsultation = ({ navigation, route }) => {
     const [consultaCancel, setConsultaCancel] = useState({
         id: '',
         //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
-        situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
+        situacaoId: ''
     })
 
 
@@ -199,7 +199,7 @@ export const PatientConsultation = ({ navigation, route }) => {
                         onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
                         // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
 
-                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
+                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
                         onPressAppointmentCard={() => { MostrarModal('localization', item) }}
                     />}
 

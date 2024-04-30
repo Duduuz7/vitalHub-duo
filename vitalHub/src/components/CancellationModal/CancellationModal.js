@@ -29,7 +29,7 @@ export const CancellationModal = ({
         await api.put(`/Consultas/Status`,
 
 
-            { id: consultaCancel.id, situacaoId: consultaCancel.situacaoId }
+            { id: consultaCancel.id, status: consultaCancel.situacaoId }
 
 
         ).then(response => {
@@ -70,6 +70,7 @@ export const CancellationModal = ({
 
                    <ButtonModal disabled={loading} onPress={() =>
                         CancelarConsulta()
+                        // console.log(consultaCancel)
                     }>
                         {loading ? <ActivityIndicator /> : <ButtonText>Confirmar</ButtonText>}
                    </ButtonModal>

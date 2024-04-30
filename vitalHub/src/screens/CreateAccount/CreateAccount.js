@@ -1,4 +1,4 @@
-import { StatusBar } from 'react-native'
+import { ActivityIndicator, StatusBar } from 'react-native'
 import { ButtonNormal } from '../../components/Button/Button'
 import { NormalButton } from '../../components/Button/StyleButton'
 import { ButtonText } from '../../components/ButtonText/StyleButtonText'
@@ -20,7 +20,13 @@ export const CreateAccount = ({ navigation }) => {
     const [confirmarSenha, setConfirmarSenha] = useState('');
     const [nome, setNome] = useState('');
 
+    const [loading, setLoading] = useState(false);
+
+
     const handleCadastro = async () => {
+
+        setLoading(true);
+
         try {
 
             if (senha === confirmarSenha) {
@@ -57,11 +63,14 @@ export const CreateAccount = ({ navigation }) => {
             }
         } catch (error) {
             if (error.response) {
+                setLoading(false)
                 console.error('Erro ao cadastrar:', error.response.data);
             } else if (error.request) {
                 console.error('Erro de requisição:', error.request);
+                setLoading(false)
             } else {
                 console.error('Erro ao configurar:', error.message);
+                setLoading(false)
             }
         }
     };
@@ -105,7 +114,9 @@ export const CreateAccount = ({ navigation }) => {
                 value={confirmarSenha}
             />
 
-            <ButtonNormal text={"Cadastrar"} onPress={() => handleCadastro()} />
+            <ButtonNormal disabled={loading} text={"Cadastrar"} onPress={() => handleCadastro()}>
+                {loading ? <ActivityIndicator /> : <ButtonText>Entrar</ButtonText>}
+            </ButtonNormal>
 
             <Cancel onPress={() => { navigation.navigate("Login") }} />
 

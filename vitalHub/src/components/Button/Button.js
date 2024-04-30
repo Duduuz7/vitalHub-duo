@@ -26,15 +26,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export const ButtonNormal = ({ onPress, text, disabled }) => {
   return (
-    <NormalButton disabled={disabled} onPress={onPress}>
-      <ButtonText>{text}</ButtonText>
-    </NormalButton>
+    <NormalButton disabled={disabled} onPress={onPress}/>
   );
 };
 
-export const SendButton = ({ onPress, text }) => {
+export const SendButton = ({ onPress, text, disabled }) => {
   return (
-    <ButtonSend onPress={onPress}>
+    <ButtonSend disabled={disabled} onPress={onPress}>
       <MaterialCommunityIcons
         name="camera-plus-outline"
         size={24}
@@ -54,15 +52,15 @@ export const ButtonGoogle = ({ onPress, text }) => {
   );
 };
 
-export const ButtonLarge = ({ onPress, text }) => {
+export const ButtonLarge = ({ onPress, text, disabled }) => {
   return (
-    <LargeButton onPress={onPress}>
+    <LargeButton disabled={disabled} onPress={onPress}>
       <ButtonText>{text}</ButtonText>
     </LargeButton>
   );
 };
 
-export const ButtonLargeSelect = ({ onPress, text }) => {
+export const ButtonLargeSelect = ({ onPress, text, disabled }) => {
   return (
     <LargeButtonSelect onPress={onPress}>
       <ButtonText>{text}</ButtonText>
@@ -72,7 +70,7 @@ export const ButtonLargeSelect = ({ onPress, text }) => {
 
 export const BlockedButton = ({ onPress, text }) => {
   return (
-    <ButtonBlocked onPress={onPress}>
+    <ButtonBlocked  onPress={onPress}>
       <ButtonText>{text}</ButtonText>
     </ButtonBlocked>
   );
@@ -124,9 +122,9 @@ export const FilterButtonStet = ({
   );
 };
 
-export const ButtonLargeConfirmModal = ({ onPress, text }) => {
+export const ButtonLargeConfirmModal = ({ onPress, text, disabled }) => {
   return (
-    <LargeButtonConfirmModal onPress={onPress}>
+    <LargeButtonConfirmModal disabled={disabled} onPress={onPress}>
       <ButtonText>{text}</ButtonText>
     </LargeButtonConfirmModal>
   );

@@ -201,7 +201,7 @@ export const PatientProfile = ({ navigation, route }) => {
           placeholder="Ex. 04/05/1999"
           keyboardType="numeric"
           fieldValue={moment(dataNascimento).format("DD/MM/YYYY")}
-          editable={editable}
+          editable={false}
           onChangeText={setDataNascimento}
           fieldWidth={90}
         />
