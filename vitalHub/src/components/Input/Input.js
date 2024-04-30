@@ -1,9 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { InputHigh, InputHighGrey, InputNumeric, InputProfile, InputText, InputTextLarge } from "./StyleInput";
 import RNPickerSelect from 'react-native-picker-select';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import moment from "moment";
 
 
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -35,7 +36,8 @@ export function Input({
 
 
 
-export const InputSelect = () => {
+export const InputSelect = ({setHoraSelecionada}) => {
+
     const pickerStyles = {
         inputIOS: style.pickerInput,
         inputAndroid: style.pickerInput,
@@ -47,29 +49,70 @@ export const InputSelect = () => {
         color: '#34898F',
     };
 
+
+
+    const dataAtual = moment().format('YYYY-MM-DD')
+
+    const [arrayOptions, setArrayOptions] = useState(null)
+
+
+    async function loadOptions() {
+        
+        //Capturar a quantidade que faltam para 24h
+
+        const horasRestantes = moment(dataAtual).add(24, 'hours').diff( moment(), "hours")
+
+        console.log(horasRestantes);
+
+        //Criar um laço que rode a quantidade de horas
+
+        const  options = Array.from({length : horasRestantes}, (_, index) => {
+            let valor = new Date().getHours() + (index + 1)
+
+            //Pra cada hora será uma nova option
+
+            return {
+                label: `${valor}:00`, value : `${valor}:00`
+            }
+        })
+
+        setArrayOptions( options )
+
+    }
+
+    useEffect(() => {
+        loadOptions();
+    }, [])
+
+
     return (
         <View style={{ width: 356 }}>
-            <RNPickerSelect
-                useNativeAndroidPickerStyle={false}
-                style={style}
-                Icon={() => {
-                    return <FontAwesomeIcon icon={faCaretDown} color='#34898F' size={22} />
-                }}
-                placeholder={{
-                    label: 'Selecione um valor',
-                    value: null,
-                    color: '#34898F'
-                }}
-                onValueChange={(value) => console.log(value)}
-                items={[
-                    { label: "JavaScript", value: "JavaScript" },
-                    { label: "TypeScript", value: "TypeScript" },
-                    { label: "Python", value: "Python" },
-                    { label: "Java", value: "Java" },
-                    { label: "C++", value: "C++" },
-                    { label: "C", value: "C" },
-                ]}
-            />
+
+            {
+                arrayOptions ? (
+
+                    <RNPickerSelect
+                    useNativeAndroidPickerStyle={false}
+                    style={style}
+                    Icon={() => {
+                        return <FontAwesomeIcon icon={faCaretDown} color='#34898F' size={22} />
+                    }}
+                    placeholder={{
+                        label: 'Selecione um valor',
+                        value: null,
+                        color: '#34898F'
+                    }}
+                    onValueChange={(value) => setHoraSelecionada(value)}
+                    items={
+                        arrayOptions
+                    }
+                />
+
+                ) :
+
+                <ActivityIndicator style={{marginTop: 28}}/>
+            }
+           
         </View>
     )
 }
@@ -88,7 +131,7 @@ const style = StyleSheet.create({
         fontFamily: 'MontserratAlternates_600SemiBold'
     },
     inputAndroid: {
-        fontSize: 16,
+        fontSize: 18,
         padding: 16,
         borderWidth: 2,
         borderColor: '#60BFC5',
@@ -101,7 +144,7 @@ const style = StyleSheet.create({
     },
     iconContainer: {
         top: '31%',
-        marginRight: 10
+        marginRight: 17
     },
     placeholder: {
         color: '#34898F',

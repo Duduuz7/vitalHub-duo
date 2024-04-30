@@ -21,12 +21,39 @@ export const ViewPrescription = ({ navigation, route }) => {
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
     const [descricaoExame, setDescricaoExame] = useState(null)
 
+    const [idConsulta, setIdConsulta] = useState(null)
+
+
+    async function BuscarProntuarioB() {
+        await api.get(`/Consultas/BuscarPorId?id=${route.params.idConsulta}`)
+            .then(response => {
+
+                setConsultaSelecionada(response.data)
+
+                // setIdConsulta(response.data.id)
+
+                console.log(response.data);
+
+                console.log("IDDDD");
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
 
     async function BuscarProntuario() {
+
+        if (route.params.consulta.id === null) {
+            BuscarProntuarioB()
+        }
+        
         await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
             .then(response => {
 
                 setConsultaSelecionada(response.data)
+
+                // setIdConsulta(response.data.id)
 
                 console.log(response.data);
 
@@ -95,6 +122,7 @@ export const ViewPrescription = ({ navigation, route }) => {
         if (route.params.photoUri) {
             console.log("asdasda", route.params);
             InserirExame();
+            BuscarProntuario();
         }
     }, [route])
 
