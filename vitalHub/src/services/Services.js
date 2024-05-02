@@ -11,7 +11,7 @@ import axios from "axios";
 const portaApi = '4466'
 
 //declarar ip da máquina
-const ip = '172.16.39.87'
+const ip = '172.16.39.85'
 
 
 //definir a url padrao

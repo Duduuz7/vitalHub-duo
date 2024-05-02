@@ -172,7 +172,8 @@ export const PatientProfile = ({ navigation, route }) => {
       setCidade(cidade); // Atualize o estado com a nova cidade
       console.log(logradouro, cep, cidade);
     } catch (error) {
-      console.error("Erro ao atualizar dados do paciente:", error);
+      console.error("Erro ao atualizar paciente:", error);
+      Alert.alert("Erro", "Falha ao atualizar os dados.");
     }
   };
 
@@ -194,7 +195,6 @@ export const PatientProfile = ({ navigation, route }) => {
 
         <TitleProfile>{token.name}</TitleProfile>
         <DescriptionPassword description={token.email} />
-
         <InputBox
           placeholderTextColor="#A1A1A1"
           textLabel="Data de nascimento:"
