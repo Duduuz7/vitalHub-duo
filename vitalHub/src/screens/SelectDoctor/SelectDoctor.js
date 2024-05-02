@@ -17,7 +17,7 @@ export const SelectDoctor = ({ navigation, route }) => {
 
   const [medico, setMedico] = useState([]);
 
-  const [selectMedico, setSelectMedico] = useState(null)
+  const [selectMedico, setSelectMedico] = useState({})
 
   const [selected, setSelected] = useState(false)
 
@@ -74,6 +74,7 @@ export const SelectDoctor = ({ navigation, route }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CardSelectDoctor
+          selecionado={item.id === selectMedico.medicoClinicaId ? true : false}
             onPress={() => 
               setSelectMedico({
                 medicoClinicaId: item.id,

@@ -180,47 +180,41 @@ export const PatientConsultation = ({ navigation, route }) => {
 
             </ButtonHomeContainer>
 
-            {
+            <FlatContainer
+                data={consultaLista}
+                renderItem={({ item }) => {
+                    console.log("item", item);
+                    const situacao = item.situacao?.situacao; // Aqui acessamos a propriedade situacao corretamente
 
-                consultaLista != null ? (
+                    // Verifica se a situação da consulta é a mesma que a selecionada
+                    if (situacao === selected) {
+                        return (
+                            <Card
+                                navigation={navigation}
+                                dataConsulta={item.dataConsulta}
+                                hour={"14:00"}
+                                name={item.medicoClinica.medico.idNavigation.nome}
+                                age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
+                                routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                                url={item.medicoClinica.medico.idNavigation.foto}
+                                status={situacao} // Adiciona a situação da consulta como valor da prop status
+                                onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
+                                onPressAppointmentCard={() => { MostrarModal('localization', item) }}
+                            />
+                        );
+                    } else {
+                        // Se a situação não corresponder à selecionada, retornamos null
+                        return null;
+                    }
+                }}
+                keyExtractor={item => item.id}
+                showsVerticalScrollIndicator={false}
+            />
 
-                <FlatContainer
-                    data={consultaLista}
-                    renderItem={({ item }) =>
-                        // item.situacao == selected
-                        item.situacao.situacao == selected &&
-                        <Card
-                            navigation={navigation}
-                            dataConsulta={item.dataConsulta}
-                            hour={"14:00"}
-                            name={item.medicoClinica.medico.idNavigation.nome}
-                            age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
-                            routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
-                            url={item.medicoClinica.medico.idNavigation.foto}
-                            status={item.situacao.situacao}
-
-                            // onPressCancel={() => setShowModalCancel(true)} 
-                            onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
-                            // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
-
-                            onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
-                            onPressAppointmentCard={() => { MostrarModal('localization', item) }}
-                        />}
-
-
-                    keyExtractor={item => item.id}
-
-                    showsVerticalScrollIndicator={false}
-
-                />
-
-                ) : (<ActivityIndicator/>)
-
-            }
 
             <Stethoscope onPress={() => {
-                //  setShowModalStethoscope(true)
-                console.log(consultaLista);
+                setShowModalStethoscope(true)
+                // console.log(consultaLista);
             }}>
 
                 <FontAwesome6

@@ -23,13 +23,15 @@ export const SelectCLinic = ({ navigation, route }) => {
 
   const [selected, setSelected] = useState(false)
 
+  const [clinicaSelecionada, setClinicaSelecionada] = useState({})
+
 
   function handleContinue() {
     navigation.navigate("SelectDoctor", { 
       agendamento : {
       ...route.params.agendamento,
 
-      ...selectClinica
+      ...clinicaSelecionada
     }})
   }
 
@@ -81,9 +83,9 @@ export const SelectCLinic = ({ navigation, route }) => {
             // rate={item.rate}
             localization={`${item.endereco.logradouro}, ${item.endereco.numero}, ${item.endereco.cidade}
             `}
-            
+            selecionado={item.id === clinicaSelecionada.clinicaId ? true : false}
             onPress={() => {
-              setSelectClinica({
+              setClinicaSelecionada({
                 clinicaId: item.id,
 
                 clinicaLabel: item.nomeFantasia,

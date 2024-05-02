@@ -26,12 +26,9 @@ export const CancellationModal = ({
 
 
         //Chamando o metodo da api
-        await api.put(`/Consultas/Status`,
-
-
-            { id: consultaCancel.id, status: consultaCancel.situacaoId }
-
-
+        //Consultas/Status?idConsulta=57b9816a-4168-418f-9cce-151e6d573ce8&status=Cancelada
+        await api.put(`/Consultas/Status?idConsulta=${consultaCancel.id}&status=${"Cancelada"}`
+            // { id: consultaCancel.id, status: consultaCancel.situacaoId }
         ).then(response => {
 
             handleCallNotifications({

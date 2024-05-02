@@ -1,8 +1,8 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const CardContainer = styled.TouchableOpacity`
   /* box-shadow: 0px 0px 1px black; */
-  /* elevation: 4px; */
+  elevation: 4px; 
   margin-top: 12px;
   margin-bottom: 5px;
   align-self: center;
@@ -13,10 +13,18 @@ export const CardContainer = styled.TouchableOpacity`
   width: 90%;
   height: 105px;
   flex-direction: row;
+
+  ${props => props.selecionada && css`
+    border: 2px solid #49B3BA;
+  `}
+
 `;
 
 export const CardContainerClinic = styled(CardContainer)`
   height: 85px;
+  ${props => props.selecionada && css`
+    border: 2px solid #49B3BA;
+  `}
 `;
 
 export const AgeCard = styled.SafeAreaView`

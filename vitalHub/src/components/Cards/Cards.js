@@ -46,6 +46,7 @@ export const Card = ({
   navigation,
   dataConsulta,
 }) => {
+  
   const Check = () => {
     if (status === "Agendada") {
       return (
@@ -125,9 +126,9 @@ export const Card = ({
   );
 };
 
-export const CardSelectDoctor = ({ url, name, doctorArea, onPress }) => {
+export const CardSelectDoctor = ({ url, name, doctorArea, onPress, selecionado = false }) => {
   return (
-    <CardContainer onPress={onPress}>
+    <CardContainer onPress={onPress} selecionada={selecionado} >
       <ImageCard source={{ uri: url }} />
 
       <BoxCard>
