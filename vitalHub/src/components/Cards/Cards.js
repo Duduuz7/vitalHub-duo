@@ -44,7 +44,7 @@ export const Card = ({
   onPressAppointment,
   onPressAppointmentCard,
   navigation,
-  dataConsulta
+  dataConsulta,
 }) => {
   const Check = () => {
     if (status === "Agendada") {
@@ -105,7 +105,7 @@ export const Card = ({
   return (
     <CardContainer onPress={onPressAppointmentCard}>
       <BoxCard>
-        <ImageCard source={{uri : url}} />
+        <ImageCard source={{ uri: url }} />
 
         <BoxTextCard>
           <NameCard>{name}</NameCard>
@@ -125,13 +125,10 @@ export const Card = ({
   );
 };
 
-
 export const CardSelectDoctor = ({ url, name, doctorArea, onPress }) => {
   return (
-    <CardContainer
-      onPress={onPress}
-    >
-      <ImageCard source={{ uri: url}} />
+    <CardContainer onPress={onPress}>
+      <ImageCard source={{ uri: url }} />
 
       <BoxCard>
         <BoxTextDoctorCard>
@@ -144,15 +141,20 @@ export const CardSelectDoctor = ({ url, name, doctorArea, onPress }) => {
   );
 };
 
+
 export const CardSelectClinic = ({
-     name, 
-     localization, 
-     onPress
-    //  rate, 
-    //  openTime
-     }) => {
+  name,
+  localization,
+  onPress,
+  selecionado = false
+  //  rate,
+  //  openTime
+}) => {
   return (
-    <CardContainerClinic onPress={onPress}>
+    <CardContainerClinic
+      onPress={onPress}
+      selecionada={selecionado} 
+    >
       <BoxCard>
         <BoxTextClinicCard>
           <NameCardClinic>{name}</NameCardClinic>
