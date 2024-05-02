@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native"
+import { ActivityIndicator, StatusBar } from "react-native"
 import { BoxDataHome, BoxHome, ButtonHomeContainer, Container, FlatContainer, MoveIconBell } from "../../components/Container/StyleContainer"
 import { Header } from "../../components/Header/StyledHeader"
 import { ImagemHome } from "../../components/Images/StyleImages"
@@ -150,7 +150,7 @@ export const PatientConsultation = ({ navigation, route }) => {
 
                 <BoxHome>
 
-                    <ImagemHome source={{ uri : fotoPerfil}} />
+                    <ImagemHome source={{ uri: fotoPerfil }} />
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
@@ -180,37 +180,48 @@ export const PatientConsultation = ({ navigation, route }) => {
 
             </ButtonHomeContainer>
 
-            <FlatContainer
-                data={consultaLista}
-                renderItem={({ item }) =>
-                    // item.situacao == selected
-                    item.situacao.situacao == selected &&
-                    <Card
-                        navigation={navigation}
-                        dataConsulta={item.dataConsulta}
-                        hour={"14:00"}
-                        name={item.medicoClinica.medico.idNavigation.nome}
-                        age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
-                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
-                        url={item.medicoClinica.medico.idNavigation.foto}
-                        status={item.situacao.situacao}
+            {
 
-                        // onPressCancel={() => setShowModalCancel(true)} 
-                        onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
-                        // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
+                consultaLista != null ? (
 
-                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
-                        onPressAppointmentCard={() => { MostrarModal('localization', item) }}
-                    />}
+                <FlatContainer
+                    data={consultaLista}
+                    renderItem={({ item }) =>
+                        // item.situacao == selected
+                        item.situacao.situacao == selected &&
+                        <Card
+                            navigation={navigation}
+                            dataConsulta={item.dataConsulta}
+                            hour={"14:00"}
+                            name={item.medicoClinica.medico.idNavigation.nome}
+                            age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
+                            routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                            url={item.medicoClinica.medico.idNavigation.foto}
+                            status={item.situacao.situacao}
+
+                            // onPressCancel={() => setShowModalCancel(true)} 
+                            onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
+                            // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
+
+                            onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
+                            onPressAppointmentCard={() => { MostrarModal('localization', item) }}
+                        />}
 
 
-                keyExtractor={item => item.id}
+                    keyExtractor={item => item.id}
 
-                showsVerticalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
 
-            />
+                />
 
-            <Stethoscope onPress={() => { setShowModalStethoscope(true) }}>
+                ) : (<ActivityIndicator/>)
+
+            }
+
+            <Stethoscope onPress={() => {
+                //  setShowModalStethoscope(true)
+                console.log(consultaLista);
+            }}>
 
                 <FontAwesome6
                     name="stethoscope"
