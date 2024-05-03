@@ -4,7 +4,7 @@ import { StatusBar } from "react-native";
 import { Navegacao } from "./src/screens/Navegacao/Navegacao";
 import { Login } from "./src/screens/Login/Login";
 import { ForgotPassword } from "./src/screens/ForgotPassword/ForgotPassword";
-
+import * as MediaLibrary from "expo-media-library"
 
 import {
   useFonts,
@@ -35,6 +35,7 @@ import { ViewPrescriptionDoc } from "./src/screens/ViewPrescription/ViewPrescrip
 import DoctorProfile from "./src/screens/DoctorProfile/DoctorProfile";
 import PatientCam from "./src/components/Camera/PatientCamera";
 import DoctorCam from "./src/components/Camera/DoctorCamera";
+import { useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,15 @@ export default function App() {
     Quicksand_500Medium,
     Quicksand_600SemiBold,
   });
+
+  useEffect(() => {
+    (async () => {
+      const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync();
+      if (mediaStatus !== 'granted') {
+        console.log('Permissão de mídia não concedida');
+      }
+    })();
+  }, []);
 
   if (!fontsLoaded && !fontError) {
     return null;

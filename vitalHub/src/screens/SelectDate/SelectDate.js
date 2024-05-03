@@ -71,7 +71,7 @@ export const SelectDate = ({ navigation, route }) => {
 
             <BoxButtons>
                 <ButtonLarge onPress={
-                    () => handleContinue()
+                    () => horaSelecionada && horaSelecionada != null ? handleContinue() : alert("Preencha todos os campos para prosseguir !!!")
                 } 
                     text={'Confirmar'}
                 />

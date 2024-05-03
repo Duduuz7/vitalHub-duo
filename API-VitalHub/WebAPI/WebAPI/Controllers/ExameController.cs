@@ -23,6 +23,7 @@ namespace WebAPI.Controllers
             _ocrService = ocrService;
         }
 
+        [RequestSizeLimit(100_000_000)]
         [HttpPost("Cadastrar")]
         public async Task<IActionResult> Post([FromForm] ExameViewModel exameViewModel)
         {

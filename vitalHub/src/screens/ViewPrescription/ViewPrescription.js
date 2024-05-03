@@ -12,6 +12,7 @@ import { ImportImages, Line, TitleImage } from "./Style"
 import * as MediaLibrary from "expo-media-library"
 import { ActivityIndicator } from "react-native"
 import api from "../../services/Services"
+import { userDecodeToken } from "../../utils/Auth"
 
 // import { useRoute } from '@react-navigation/native';
 
@@ -19,7 +20,7 @@ export const ViewPrescription = ({ navigation, route }) => {
 
     // const { photoUri } = route.params;
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
-    const [descricaoExame, setDescricaoExame] = useState(null)
+    const [descricaoExame, setDescricaoExame] = useState("")
 
     const [idConsulta, setIdConsulta] = useState(null)
 
@@ -68,46 +69,42 @@ export const ViewPrescription = ({ navigation, route }) => {
 
 
     async function InserirExame() {
-
-        
-
-        const formData = new FormData();
-
-        formData.append('ConsultaId', route.params.idConsulta);
-        formData.append('Imagem', {
+        try {      
+          // Criação do FormData e adição dos parâmetros
+          const formData = new FormData();
+          formData.append('ConsultaId', route.params.idConsulta);
+          formData.append('Imagem', {
             uri: route.params.photoUri,
-            type: `image.${route.params.photoUri.split('.').pop()}`,
-            name: `image/${route.params.photoUri.split('.').pop()}`
-        })
-
-        await api.post(`/Exame/Cadastrar`, formData, {
+            name: `image.${route.params.photoUri.split('.').pop()}`,
+            type: `image/${route.params.photoUri.split('.').pop()}`
+          });
+      
+          // Chamada para a API para enviar o exame
+          const response = await api.post(`/Exame/Cadastrar`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+              'Content-Type': 'multipart/form-data'
             }
-        }).then(response => {
+          });
+      
+          // Lógica para lidar com a resposta da API em caso de sucesso
+          console.log("Entrou na requisição da OCR");
+          console.log(`response`);
+          console.log(response.data);
 
-            console.log("asdasdasdas");
-            console.log(response.data);
-            setDescricaoExame(response.data.descricao)
-            setDescricaoExame(descricaoExame + "\n" + response.data.descricao)
-            console.log(descricaoExame);
 
-        }).catch(error => {
-            console.log(error);
-        })
-
-    }
+          setDescricaoExame(descricaoExame + "\n" + response.data.descricao);
+        } catch (error) {
+          // Lógica para lidar com o erro em caso de falha na requisição
+          console.log("Entrou no catch da OCR");
+          console.log(error);
+        }
+      }
+      
 
     useEffect(() => {
-        // console.log(photoUri)
-        console.log("sada")
-        console.log(route.params)
-        console.log('SDJAKSD', consultaSelecionada);
         if (consultaSelecionada == null) {
             BuscarProntuario()
         }
-
-        // console.log(`/Consultas/BuscaPorId?id=${route.params.consulta.id}`);
     }, [route])
 
     useEffect(() => {
@@ -148,7 +145,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             placeholderTextColor={"#A1A1A1"}
                             textLabel={"Descrição da consulta"}
                             placeholder={"Descrição"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
                             multiline={true}
 
@@ -160,7 +157,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             placeholderTextColor={"#A1A1A1"}
                             textLabel={"Diagnóstico do paciente"}
                             placeholder={"Diagnóstico"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
 
                             fieldValue={consultaSelecionada.diagnostico}
@@ -205,7 +202,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             multiline={true}
                         />
 
-                        <CardBackLess onPressCancel={() => { navigation.navigate("PatientConsultation") }} text={"Voltar"} />
+                        <CardBackLess onPressCancel={() => { navigation.navigate("Main") }} text={"Voltar"} />
 
                     </Container>
 

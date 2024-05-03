@@ -10,6 +10,8 @@ import moment from "moment"
 import { ActivityIndicator } from "react-native"
 import api from "../../services/Services"
 import { handleCallNotifications } from "../../components/Notifications/Notifications"
+import { ButtonText } from "../../components/ButtonText/StyleButtonText"
+import { Button } from "../../components/Button/StyleButton"
 
 
 
@@ -31,7 +33,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 
         await api.put(`/Consultas/Prontuario`,
 
-            { id: consulta.id, descricao: descricao , diagnostico: diagnostico}
+            { consultaId: consulta.id, descricao: descricao, diagnostico: diagnostico }
 
         ).then(response => {
 
@@ -59,7 +61,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 
                 <>
 
-                    <ImagemPerfilPaciente source={{uri : consulta.paciente.idNavigation.foto}} />
+                    <ImagemPerfilPaciente source={{ uri: consulta.paciente.idNavigation.foto }} />
 
                     <Container>
 
@@ -111,7 +113,13 @@ export const MedicalRecords = ({ navigation, route }) => {
                             fieldWidth={90}
                         />
 
-                        <ButtonNormal onPress={() => { setEditable(false), HandleUpdate() }} text={"Salvar"} />
+                        {/* <ButtonNormal onPress={() => { setEditable(false), HandleUpdate() }}>
+                                <ButtonText>Salvar</ButtonText>
+                        </ButtonNormal> */}
+
+                        <Button onPress={() => { setEditable(false), HandleUpdate() }}>
+                            <ButtonText>Salvar</ButtonText>
+                        </Button>
 
                         {editable == false ?
 
@@ -119,9 +127,13 @@ export const MedicalRecords = ({ navigation, route }) => {
                                 text={"Editar"}
                             />)
                             :
-                            <ButtonNormal onPress={() => { setEditable(false) }}
-                                text={"Editar"}
-                            />
+                            <Button onPress={() => { setEditable(false)}}>
+                                <ButtonText>Editar</ButtonText>
+                            </Button>
+
+                            // <ButtonNormal onPress={() => { setEditable(false) }}
+                            //     text={"Editar"}
+                            // />
 
                         }
 

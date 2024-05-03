@@ -34,16 +34,18 @@ export const ModalStethoscope = ({
     urgencia: false,
   });
 
+  const [localizacaoP, setLocalizacaoP] = useState('');
+
 
   const [agendamento, setAgendamento] = useState(null);
 
-async function handleContinue() {
+  async function handleContinue() {
 
-  await setShowModalStethoscope(false);
+    await setShowModalStethoscope(false);
 
-  navigation.replace("SelectClinic", {agendamento : agendamento})
+    navigation.replace("SelectClinic", { agendamento: agendamento })
 
-}
+  }
 
 
   return (
@@ -60,12 +62,12 @@ async function handleContinue() {
               <FilterButtonStet
                 onPress={() => {
                   setSelected({ rotina: true }),
-                  setAgendamento({
-                    ...agendamento, //Manter as informações que já existem dentro do state (agendamento)
+                    setAgendamento({
+                      ...agendamento, //Manter as informações que já existem dentro do state (agendamento)
 
-                    prioridadeId: '53B330BD-4EF9-42AD-B987-0259AC3DD128',
-                    prioridadeLabel: 'Rotina'
-                  })
+                      prioridadeId: '53B330BD-4EF9-42AD-B987-0259AC3DD128',
+                      prioridadeLabel: 'Rotina'
+                    })
                 }}
                 selected={selected.rotina}
                 text={"Rotina"}
@@ -75,12 +77,12 @@ async function handleContinue() {
               <FilterButtonStet
                 onPress={() => {
                   setSelected({ exame: true }),
-                  setAgendamento({
-                    ...agendamento,
+                    setAgendamento({
+                      ...agendamento,
 
-                    prioridadeId: '6120E1C4-F1A1-445B-BDB8-81E8CBD82F29',
-                    prioridadeLabel: 'Exame'
-                  })
+                      prioridadeId: '6120E1C4-F1A1-445B-BDB8-81E8CBD82F29',
+                      prioridadeLabel: 'Exame'
+                    })
                 }}
                 selected={selected.exame}
                 text={"Exame"}
@@ -91,12 +93,12 @@ async function handleContinue() {
               <FilterButtonStet
                 onPress={() => {
                   setSelected({ urgencia: true }),
-                  setAgendamento({
-                    ...agendamento,
+                    setAgendamento({
+                      ...agendamento,
 
-                    prioridadeId: '50A6C7FF-5720-4D41-9B36-6E1C813A4908',
-                    prioridadeLabel: 'Urgência'
-                  })
+                      prioridadeId: '50A6C7FF-5720-4D41-9B36-6E1C813A4908',
+                      prioridadeLabel: 'Urgência'
+                    })
                 }}
                 selected={selected.urgencia}
                 text={"Urgência"}
@@ -115,17 +117,21 @@ async function handleContinue() {
 
             onChangeText={x => {
               setAgendamento({
-                ...agendamento, 
+                ...agendamento,
 
                 localizacao: x
-              })
+              }),
+                setLocalizacaoP(x)
+
             }}
           />
 
           <FlexButtons>
             <ButtonLargeSelect
               onPress={() => {
-                handleContinue()
+                localizacaoP != null && selected.exame == true || selected.rotina == true || selected.urgencia == true ?
+                  handleContinue() :
+                  alert("Preencha os campos para prosseguir !!!")
               }}
               text={"Continuar"}
             />
@@ -134,6 +140,7 @@ async function handleContinue() {
               onPressCancel={() => setShowModalStethoscope(false)}
               text={"Cancelar"}
             />
+
           </FlexButtons>
         </ModalStetContent>
       </StethoscopeModal>

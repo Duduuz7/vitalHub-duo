@@ -200,6 +200,8 @@ export const PatientConsultation = ({ navigation, route }) => {
                                 status={situacao} // Adiciona a situação da consulta como valor da prop status
                                 onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
                                 onPressAppointmentCard={() => { MostrarModal('localization', item) }}
+                                onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
+                                
                             />
                         );
                     } else {

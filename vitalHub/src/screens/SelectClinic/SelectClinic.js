@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 import { ButtonLargeSelect } from "../../components/Button/Button";
 import { LargeButtonSelect } from "../../components/Button/StyleButton";
 import { CardSelectClinic } from "../../components/Cards/Cards";
@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import api from "../../services/Services";
 
 export const SelectCLinic = ({ navigation, route }) => {
-  
+
 
   const [clinicas, setClinicas] = useState([]);
 
@@ -27,12 +27,13 @@ export const SelectCLinic = ({ navigation, route }) => {
 
 
   function handleContinue() {
-    navigation.navigate("SelectDoctor", { 
-      agendamento : {
-      ...route.params.agendamento,
+    navigation.navigate("SelectDoctor", {
+      agendamento: {
+        ...route.params.agendamento,
 
-      ...clinicaSelecionada
-    }})
+        ...clinicaSelecionada
+      }
+    })
   }
 
 
@@ -74,7 +75,46 @@ export const SelectCLinic = ({ navigation, route }) => {
 
       <TitleSelect>Selecionar clínica</TitleSelect>
 
-      <FlatContainerSelect
+      {clinicas == "" ? (
+
+        <Text
+          style={{textAlign: "center", fontSize: 19, marginLeft: 2, marginRight: 2, marginBottom: "120%", marginTop: 10}}
+        >
+          Nenhuma clínica encontrada, tente novamente procurando por outra localização !!!
+        </Text>
+
+      ) : (
+
+        <FlatContainerSelect
+          data={clinicas}
+          renderItem={({ item }) => (
+            <CardSelectClinic
+              // openTime={item.openTime}
+              name={item.nomeFantasia}
+              // rate={item.rate}
+              localization={`${item.endereco.logradouro}, ${item.endereco.numero}, ${item.endereco.cidade}
+            `}
+              selecionado={item.id === clinicaSelecionada.clinicaId ? true : false}
+              onPress={() => {
+                
+                setClinicaSelecionada({
+                  clinicaId: item.id,
+
+                  clinicaLabel: item.nomeFantasia,
+                }),
+                setSelected(true)
+              }}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+        />
+
+      )
+
+      }
+
+      {/* <FlatContainerSelect
         data={clinicas}
         renderItem={({ item }) => (
           <CardSelectClinic
@@ -95,10 +135,11 @@ export const SelectCLinic = ({ navigation, route }) => {
         )}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-      />
+      /> */}
 
       <ButtonLargeSelect
         onPress={() => {
+          selected == false ? alert("Selecione uma clínica para prosseguir !!!") :
           handleContinue()
         }}
         text={"Continuar"}
