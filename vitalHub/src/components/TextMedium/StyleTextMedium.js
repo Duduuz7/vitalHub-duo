@@ -6,4 +6,5 @@ export const TextMedium = styled.Text`
     color: #8C8A97;
     text-decoration: underline;
     margin-top: 2px;
+    margin-left: -14px;
 `

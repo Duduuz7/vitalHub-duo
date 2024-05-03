@@ -23,7 +23,7 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
 
 
     async function BuscarProntuario() {
-        await api.get(`/Consultas/BuscaPorId?id=${route.params.consulta.id}`)
+        await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
             .then(response => {
 
                 setConsultaSelecionada(response.data)
@@ -78,7 +78,7 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
                             placeholderTextColor={"#A1A1A1"}
                             textLabel={"Descrição da consulta"}
                             placeholder={"Descrição"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
                             
 
@@ -89,7 +89,7 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
                             placeholderTextColor={"#A1A1A1"}
                             textLabel={"Diagnóstico do paciente"}
                             placeholder={"Diagnóstico"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
 
                             fieldValue={consultaSelecionada.diagnostico}
@@ -100,7 +100,7 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
                             placeholderTextColor={"#A1A1A1"}
                             textLabel={"Prescrição médica"}
                             placeholder={"Prescrição"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
 
                             fieldValue={consultaSelecionada.receita.medicamento}
@@ -131,7 +131,7 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
                             fieldWidth={90}
                         /> */}
 
-                        <CardBackLess onPressCancel={() => { navigation.navigate("DoctorConsultation") }} text={"Voltar"} />
+                        <CardBackLess onPressCancel={() => { navigation.replace("DoctorMain") }} text={"Voltar"} />
 
                     </Container>
 

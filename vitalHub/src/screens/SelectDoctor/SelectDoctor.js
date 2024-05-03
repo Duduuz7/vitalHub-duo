@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 import {
   Container,
   FlatContainerSelect,
@@ -22,12 +22,13 @@ export const SelectDoctor = ({ navigation, route }) => {
   const [selected, setSelected] = useState(false)
 
   function handleContinue() {
-    navigation.navigate("SelectDate", { 
-      agendamento : {
-      ...route.params.agendamento,
+    navigation.navigate("SelectDate", {
+      agendamento: {
+        ...route.params.agendamento,
 
-      ...selectMedico
-    }})
+        ...selectMedico
+      }
+    })
   }
 
   const ListarMedico = async () => {
@@ -69,32 +70,47 @@ export const SelectDoctor = ({ navigation, route }) => {
 
       <TitleSelect>Selecionar Médico</TitleSelect>
 
-      <FlatContainerSelect
-        data={medico}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <CardSelectDoctor
-          selecionado={item.id === selectMedico.medicoClinicaId ? true : false}
-            onPress={() => 
-              setSelectMedico({
-                medicoClinicaId: item.id,
+      {medico == "" ? (
 
-                medicoLabel: item.idNavigation.nome,
+        <Text
+          style={{ textAlign: "center", fontSize: 19, marginLeft: 2, marginRight: 2, marginBottom: "120%", marginTop: 10 }}
+        >
+          Nenhum médico encontrado, tente novamente procurando por outra clínica ou localização !!!
+        </Text>
 
-                medicoEspecialidade: item.especialidade.especialidade1
-              })
-            }
-            doctorArea={item.especialidade.especialidade1}
-            name={item.idNavigation.nome}
-            url={item.idNavigation.foto}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-      />
+      ) : (
+        <FlatContainerSelect
+          data={medico}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CardSelectDoctor
+              selecionado={item.id === selectMedico.medicoClinicaId ? true : false}
+              onPress={() => {
+                setSelectMedico({
+                  medicoClinicaId: item.id,
+
+                  medicoLabel: item.idNavigation.nome,
+
+                  medicoEspecialidade: item.especialidade.especialidade1
+                }),
+                  setSelected(true)
+              }}
+              doctorArea={item.especialidade.especialidade1}
+              name={item.idNavigation.nome}
+              url={item.idNavigation.foto}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+
+
+
 
       <ButtonLargeSelect
         onPress={() => {
-          handleContinue();
+          selected == false ? alert("Selecione um médico para prosseguir !!!") :
+            handleContinue()
         }}
         text={"Continuar"}
       />
