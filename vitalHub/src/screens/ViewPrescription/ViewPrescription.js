@@ -26,12 +26,12 @@ export const ViewPrescription = ({ navigation, route }) => {
 
 
     async function BuscarProntuarioB() {
-        await api.get(`/Consultas/BuscarPorId?id=${route.params.idConsulta}`)
+        await api.get(`/Consultas/BuscarPorId?id=${idConsulta}`)
             .then(response => {
 
                 setConsultaSelecionada(response.data)
 
-                // setIdConsulta(response.data.id)
+                setIdConsulta(response.data.id)
 
                 console.log(response.data);
 
@@ -45,61 +45,62 @@ export const ViewPrescription = ({ navigation, route }) => {
 
     async function BuscarProntuario() {
 
-        if (route.params.consulta.id === null) {
+        if (idConsulta != null) {
             BuscarProntuarioB()
+        } else {
+
+            await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
+                .then(response => {
+
+                    setConsultaSelecionada(response.data)
+
+                    // setIdConsulta(response.data.id)
+
+                    console.log(response.data);
+
+                    console.log("IDDDD");
+
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
-        
-        await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
-            .then(response => {
-
-                setConsultaSelecionada(response.data)
-
-                // setIdConsulta(response.data.id)
-
-                console.log(response.data);
-
-                console.log("IDDDD");
-
-            })
-            .catch(error => {
-                console.log(error);
-            })
     }
 
 
 
     async function InserirExame() {
-        try {      
-          // Criação do FormData e adição dos parâmetros
-          const formData = new FormData();
-          formData.append('ConsultaId', route.params.idConsulta);
-          formData.append('Imagem', {
-            uri: route.params.photoUri,
-            name: `image.${route.params.photoUri.split('.').pop()}`,
-            type: `image/${route.params.photoUri.split('.').pop()}`
-          });
-      
-          // Chamada para a API para enviar o exame
-          const response = await api.post(`/Exame/Cadastrar`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
-      
-          // Lógica para lidar com a resposta da API em caso de sucesso
-          console.log("Entrou na requisição da OCR");
-          console.log(`response`);
-          console.log(response.data);
+        try {
+            // Criação do FormData e adição dos parâmetros
+            const formData = new FormData();
+            formData.append('ConsultaId', route.params.idConsulta);
+            formData.append('Imagem', {
+                uri: route.params.photoUri,
+                name: `image.${route.params.photoUri.split('.').pop()}`,
+                type: `image/${route.params.photoUri.split('.').pop()}`
+            });
+
+            // Chamada para a API para enviar o exame
+            const response = await api.post(`/Exame/Cadastrar`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            // Lógica para lidar com a resposta da API em caso de sucesso
+            console.log("Entrou na requisição da OCR");
+            console.log(`response`);
+            console.log(response.data);
 
 
-          setDescricaoExame(descricaoExame + "\n" + response.data.descricao);
+            setDescricaoExame(descricaoExame + "\n" + response.data.descricao);
         } catch (error) {
-          // Lógica para lidar com o erro em caso de falha na requisição
-          console.log("Entrou no catch da OCR");
-          console.log(error);
+            // Lógica para lidar com o erro em caso de falha na requisição
+            console.log("Entrou no catch da OCR");
+            console.log(error);
         }
-      }
-      
+    }
+
 
     useEffect(() => {
         if (consultaSelecionada == null) {
@@ -168,7 +169,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             placeholderTextColor={"#A1A1A1"}
                             textLabel={"Prescrição médica"}
                             placeholder={"Prescrição"}
-                            editable={true}
+                            editable={false}
                             fieldWidth={90}
                             multiline={true}
 
@@ -199,7 +200,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             editable={false}
                             fieldWidth={90}
                             fieldValue={descricaoExame}
-                            multiline={true}
+                            multiline={false}
                         />
 
                         <CardBackLess onPressCancel={() => { navigation.navigate("Main") }} text={"Voltar"} />

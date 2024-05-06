@@ -211,7 +211,7 @@ export const PatientProfile = ({ navigation, route }) => {
           placeholder="CPF..."
           keyboardType="numeric"
           maxLength={11}
-          fieldValue={cpf}
+          fieldValue={`${cpf.slice(0,3)}.${cpf.slice(3,6)}.${cpf.slice(6,9)}`}
           editable={editable}
           onChangeText={setCpf}
           fieldWidth={90}
@@ -234,9 +234,9 @@ export const PatientProfile = ({ navigation, route }) => {
             placeholderTextColor="#A1A1A1"
             textLabel="CEP"
             placeholder="CEP..."
-            maxLength={8}
+            maxLength={9}
             keyboardType="numeric"
-            fieldValue={cep} // Exibir o CEP cadastrado
+            fieldValue={`${cep.slice(0,5)}-${cep.slice(5,9)}`} // Exibir o CEP cadastrado
             editable={editable}
             onChangeText={handleCepChange}
             fieldWidth={40}

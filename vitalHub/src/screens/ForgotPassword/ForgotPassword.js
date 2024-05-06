@@ -60,7 +60,7 @@ export const ForgotPassword = ({ navigation }) => {
           indicator();
           email != null
             ? sendEmail()
-            : alert("Por favor! Preencha o campo de email imediatamente!");
+            : alert("Por favor! Preencha o campo de email!");
         //   navigation.navigate("CheckEmail", { emailRecuperacao: email });
         }}
       >

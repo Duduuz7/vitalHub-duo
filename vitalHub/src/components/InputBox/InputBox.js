@@ -40,6 +40,7 @@ export const HighInputBox = ({
     fieldWidth = 100,
     fieldHeight = 90,
     editable = false,
+    multiline,
     textLabel,
     placeholder,
     fieldValue = null,
@@ -55,6 +56,7 @@ export const HighInputBox = ({
             <Label textLabel={textLabel}/>
 
             <HighInput
+                multiline={multiline}
                 placeholder={placeholder}
                 editable={editable}
                 keyboardType={keyboardType}

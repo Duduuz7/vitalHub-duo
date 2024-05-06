@@ -203,6 +203,7 @@ export function ProfileInput({
 export function HighInput({
     placeholder,
     fieldValue,
+    multiline,
     onChangeText,
     keyboardType,
     maxLength,
@@ -212,6 +213,7 @@ export function HighInput({
 }) {
     return (
         <InputHigh
+            multiline={multiline}
             editable={editable}
             placeholder={placeholder}
             keyboardType={keyboardType}

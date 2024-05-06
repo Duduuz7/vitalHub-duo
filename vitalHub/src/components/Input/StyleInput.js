@@ -43,7 +43,8 @@ margin-bottom: 5px; */
 font-size: 16px;
 `
 export const InputHigh = styled(InputText)`
-    padding-bottom: 82px;
+    /* padding-bottom: 82px; */
+    padding-top: -50px;
     height: 125px;
     width: 100%;
 `
@@ -52,10 +53,10 @@ export const InputHighGrey = styled(InputHigh)`
     color: #33303E;
     background-color: #F5F3F3;
     font-family: MontserratAlternates_500Medium;
-    height: 175px;
+    height: 130px;
     text-align: left;
     padding-left: 15px;
-    padding-bottom: 135px;
+    padding-top: -200px;
 `
 
 export const InputTextLarge = styled(InputText)`

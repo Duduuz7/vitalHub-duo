@@ -91,6 +91,8 @@ export const MedicalRecords = ({ navigation, route }) => {
                             editable={editable}
                             fieldWidth={90}
 
+                            multiline={true}
+
                             onChangeText={x => setDescricao(x)}
                         />
 
@@ -105,6 +107,7 @@ export const MedicalRecords = ({ navigation, route }) => {
                         />
 
                         <HighInputBox
+                            multiline={true}
                             fieldHeight={350}
                             placeholderTextColor={"#34898F"}
                             textLabel={"Prescrição médica"}
@@ -127,7 +130,7 @@ export const MedicalRecords = ({ navigation, route }) => {
                                 text={"Editar"}
                             />)
                             :
-                            <Button onPress={() => { setEditable(false)}}>
+                            <Button onPress={() => { setEditable(false) }}>
                                 <ButtonText>Editar</ButtonText>
                             </Button>
 

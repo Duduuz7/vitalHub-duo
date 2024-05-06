@@ -48,7 +48,7 @@ export const Login = ({ navigation }) => {
       })
       .catch((error) => {
         console.log(error);
-        alert("Senha ou email incorretos !!!")
+        alert("Senha ou email incorretos!")
         setLoading(false)
       });
   }
@@ -90,7 +90,7 @@ export const Login = ({ navigation }) => {
       </Button>
 
       <ButtonGoogle
-        onPress={() => navigation.replace("DoctorMain")}
+        // onPress={() => navigation.replace("DoctorMain")}
         text={"Entrar com Google"}
       />
 

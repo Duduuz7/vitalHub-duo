@@ -132,7 +132,7 @@ export const RoutineTextCard = styled(AgeTextCard)`
   margin-top: 6px;
   height: 22px;
   color: #8c8a97;
-  margin-right: 1px
+  margin-right: 1px;
 `;
 
 export const HourText = styled.Text`
