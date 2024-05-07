@@ -17,6 +17,11 @@ import moment from "moment"
 
 
 
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+
+
+
+
 export const DoctorConsultation = ({ navigation }) => {
 
     const [dataConsulta, setDataConsulta] = useState('') // vazio no inicio
@@ -27,6 +32,10 @@ export const DoctorConsultation = ({ navigation }) => {
     const [token, setToken] = useState({});
 
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
+
+    const [fotoPerfil, setFotoPerfil] = useState(null)
+
+
 
 
     //state para cancelar consulta
@@ -77,6 +86,24 @@ export const DoctorConsultation = ({ navigation }) => {
         }
     }
 
+
+    async function BuscarFotoDePerfil() {
+
+        const tokenB = await userDecodeToken();
+
+        await api.get(`/Usuario/BuscarPorId?&id=${tokenB.idUsuario}`).then(response => {
+
+            console.log(response.data.foto);
+            setFotoPerfil(response.data.foto)
+            console.log(fotoPerfil);
+
+        }).catch(error => {
+            console.log(error);
+        })
+
+    }
+
+
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
         agendadas: "Agendada",
@@ -98,7 +125,12 @@ export const DoctorConsultation = ({ navigation }) => {
     }, [dataConsulta, showModalCancel])
 
 
-    const image = require("../../assets/ImageCard.png");
+    useEffect(() => {
+        BuscarFotoDePerfil()
+    }, [fotoPerfil])
+
+
+    // const image = require("../../assets/ImageCard.png");
 
 
     // STATES PARA OS MODAIS
@@ -116,7 +148,7 @@ export const DoctorConsultation = ({ navigation }) => {
 
                 <BoxHome>
 
-                    <ImagemHome source={require('../../assets/DoctorImage.png')} />
+                    <ImagemHome source={{ uri : fotoPerfil}} />
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
@@ -159,7 +191,7 @@ export const DoctorConsultation = ({ navigation }) => {
                             moment(item.paciente.dataNascimento).format("YYYY")
                             } anos      .`}
                         routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
-                        url={image}
+                        url={item.paciente.idNavigation.foto}
                         status={item.situacao.situacao}
                         // onPressCancel={() => setShowModalCancel(true)}
                         onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", { consulta: item }) }}

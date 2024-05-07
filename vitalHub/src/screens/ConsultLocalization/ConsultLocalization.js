@@ -4,7 +4,7 @@ import {
   ContainerCepCidade,
 } from "../../components/Container/StyleContainer";
 import { CardCancelLessLocal } from "../../components/Descriptions/Descriptions";
-import { AgeTextCard } from "../../components/Descriptions/StyledDescriptions";
+import { AgeTextCard, CityText } from "../../components/Descriptions/StyledDescriptions";
 import { MapImage } from "../../components/Images/StyleImages";
 import { InputBox } from "../../components/InputBox/InputBox";
 import Maps from "../../components/Maps/Maps";
@@ -25,18 +25,16 @@ export const ConsultLocalization = ({ navigation, route }) => {
   }, [clinica])
 
   useEffect(() => {
-
     console.log(route)
-
   }, [route.params])
-
-
-
+  
   async function BuscarClinica() {
+    console.log(`/Clinica/BuscarPorId?id=${route.params.clinicaId}`)
     await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaId}`)
       .then(response => {
         setClinica(response.data);
-        console.log("adsa", response.data);
+        console.log( response.data )
+        
       }).catch(error => {
         console.log(error);
       })
@@ -54,7 +52,7 @@ export const ConsultLocalization = ({ navigation, route }) => {
 
             <TitleLocalization>{clinica.nomeFantasia}</TitleLocalization>
 
-            <AgeTextCard>{clinica.endereco.cidade}</AgeTextCard>
+            <CityText>{clinica.endereco.cidade}</CityText>
 
             <InputBox
               placeholderTextColor={"#33303E"}
@@ -62,7 +60,7 @@ export const ConsultLocalization = ({ navigation, route }) => {
               placeholder={"Ex. Rua Vicenso Silva, 58"}
               fieldValue={clinica.endereco.logradouro}
               // keyboardType="numeric"
-              editable={true}
+              editable={false}
               fieldWidth={90}
             />
 
@@ -72,7 +70,7 @@ export const ConsultLocalization = ({ navigation, route }) => {
                 textLabel={"Número"}
                 placeholder={"Ex. 570"}
                 keyboardType="numeric"
-                editable={true}
+                editable={false}
                 fieldWidth={40}
                 fieldValue={`${clinica.endereco.numero}`}
               />
@@ -80,7 +78,7 @@ export const ConsultLocalization = ({ navigation, route }) => {
                 placeholderTextColor={"#33303E"}
                 textLabel={"Cidade"}
                 placeholder={"Ex. São Paulo"}
-                editable={true}
+                editable={false}
                 fieldWidth={40}
                 fieldValue={clinica.endereco.cidade}
               />

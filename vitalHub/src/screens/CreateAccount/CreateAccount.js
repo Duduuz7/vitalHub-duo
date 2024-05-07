@@ -1,6 +1,6 @@
-import { StatusBar } from 'react-native'
+import { ActivityIndicator, StatusBar } from 'react-native'
 import { ButtonNormal } from '../../components/Button/Button'
-import { NormalButton } from '../../components/Button/StyleButton'
+import { Button, NormalButton } from '../../components/Button/StyleButton'
 import { ButtonText } from '../../components/ButtonText/StyleButtonText'
 import { Container } from '../../components/Container/StyleContainer'
 import { DescriptionPassword } from '../../components/Descriptions/Descriptions'
@@ -11,36 +11,70 @@ import { LogoCreateAccount } from '../../components/Images/StyleImages'
 import { useState } from 'react'
 import axios from 'axios'
 import api from '../../services/Services'
+import moment from 'moment'
 
 
 export const CreateAccount = ({ navigation }) => {
+
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
+    const [dataNascimento, setDataNascimento] = useState('');
     const [nome, setNome] = useState('');
 
+    const [loading, setLoading] = useState(false);
+
+
     const handleCadastro = async () => {
+
+        setLoading(true);
+
         try {
-            const response = await api.post('/Pacientes' , {
-                email: email,
-                senha: senha,
-                nome: nome,
-                idTipoUsuario: 'F5856CC9-9922-433E-8297-C1A788D92D9F'
-            });
 
-            if (response.data.success) {
-                throw new Error('Yeah');
+            if (senha === confirmarSenha) {
+
+                const form = new FormData()
+
+                form.append("nome", `${nome}`);
+                form.append("email", `${email}`);
+                // form.append("dataNascimento", `${moment(dataNascimento).format("YYYY-MM-DD")}`);
+                form.append("senha", `${senha}`);
+                form.append("idTipoUsuario", `9850203C-3FEF-4824-A75C-D446187B7A5D`);
+
+                const response = await api.post('/Pacientes', form, {
+
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+
+                }
+
+                );
+
+                if (response.data.success) {
+                    throw new Error('Yeah');
+                }
+
+                //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
+
+                navigation.replace("Login");
+
+            } else {
+
+                alert("As senhas não coincidem");
+                setLoading(false)
+
             }
-
-            //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
-
-            navigation.replace("Login");
         } catch (error) {
             if (error.response) {
+                setLoading(false)
                 console.error('Erro ao cadastrar:', error.response.data);
             } else if (error.request) {
                 console.error('Erro de requisição:', error.request);
+                setLoading(false)
             } else {
                 console.error('Erro ao configurar:', error.message);
+                setLoading(false)
             }
         }
     };
@@ -69,6 +103,12 @@ export const CreateAccount = ({ navigation }) => {
                 onChangeText={text => setEmail(text)}
                 value={email}
             />
+            {/* <Input
+                placeholder={"Data de nascimento"}
+                placeholderTextColor={'#49B3BA'}
+                onChangeText={text => setDataNascimento(text)}
+                value={dataNascimento}
+            /> */}
             <Input
                 placeholder={"Senha"}
                 placeholderTextColor={'#49B3BA'}
@@ -76,15 +116,20 @@ export const CreateAccount = ({ navigation }) => {
                 onChangeText={text => setSenha(text)}
                 value={senha}
             />
-             {/* <Input
+            <Input
                 placeholder={"Confirmar Senha"}
                 placeholderTextColor={'#49B3BA'}
                 secureTextEntry={true}
-                onChangeText={text => setPassword(text)}
-                value={password}
-            /> */}
+                onChangeText={text => setConfirmarSenha(text)}
+                value={confirmarSenha}
+            />
 
-            <ButtonNormal text={"Cadastrar"} onPress={() => handleCadastro()}/>
+            <Button disabled={loading}
+                onPress={
+                    () => nome && email && senha && dataNascimento != null ? handleCadastro() : alert("Preenhca todos os campos para criar uma conta !!!")
+                }>
+                {loading ? <ActivityIndicator /> : <ButtonText>Cadastrar</ButtonText>}
+            </Button>
 
             <Cancel onPress={() => { navigation.navigate("Login") }} />
 

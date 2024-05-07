@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native"
+import { ActivityIndicator, StatusBar } from "react-native"
 import { BoxDataHome, BoxHome, ButtonHomeContainer, Container, FlatContainer, MoveIconBell } from "../../components/Container/StyleContainer"
 import { Header } from "../../components/Header/StyledHeader"
 import { ImagemHome } from "../../components/Images/StyleImages"
@@ -21,7 +21,7 @@ import api from "../../services/Services";
 import moment from "moment"
 
 
-export const PatientConsultation = ({ navigation }) => {
+export const PatientConsultation = ({ navigation, route }) => {
 
     // Criar o state para receber a lista de consultas (Array)
     const [consultaLista, setConsultaLista] = useState([]) // vazio no inicio
@@ -32,12 +32,14 @@ export const PatientConsultation = ({ navigation }) => {
 
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
 
+    const [fotoPerfil, setFotoPerfil] = useState(null)
+
 
     //STATE PARA CANCELAR CONSULTA 
     const [consultaCancel, setConsultaCancel] = useState({
         id: '',
         //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
-        situacaoId: "B8256AE1-AED5-47D1-9E8F-858435620AB5"
+        situacaoId: ''
     })
 
 
@@ -46,14 +48,14 @@ export const PatientConsultation = ({ navigation }) => {
     function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
 
-        console.log(consulta);
+        // console.log(consulta);
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
         } else if (modal == 'localization') {
             setShowModal(selected === 'Agendada' ? true : false)
         } else {
-            console.log('asdas');
+            // console.log('asdas');
         }
     }
 
@@ -64,7 +66,7 @@ export const PatientConsultation = ({ navigation }) => {
         await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)
-            console.log(consultaLista);
+            // console.log('pintooooooooooo', consultaLista);
 
         }).catch(error => {
             console.log(error);
@@ -85,6 +87,22 @@ export const PatientConsultation = ({ navigation }) => {
 
     }
 
+    async function BuscarFotoDePerfil() {
+
+        const tokenB = await userDecodeToken();
+
+        await api.get(`/Usuario/BuscarPorId?&id=${tokenB.idUsuario}`).then(response => {
+
+            console.log(response.data.foto);
+            setFotoPerfil(response.data.foto)
+            console.log(fotoPerfil);
+
+        }).catch(error => {
+            console.log(error);
+        })
+
+    }
+
     //STATE PARA O ESTADO DOS CARDS FLATLIST, BOTOES FILTRO
     const [selected, setSelected] = useState({
         agendadas: "Agendada",
@@ -92,7 +110,7 @@ export const PatientConsultation = ({ navigation }) => {
         canceladas: "Cancelada",
     });
 
-    const image = require("../../assets/CardDoctorImage.png");
+    // const image = require("../../assets/CardDoctorImage.png");
 
     // STATES PARA OS MODAIS
 
@@ -118,6 +136,10 @@ export const PatientConsultation = ({ navigation }) => {
         // console.log(dataConsulta);
     }, [dataConsulta, showModalCancel])
 
+    useEffect(() => {
+        BuscarFotoDePerfil()
+    })
+
     return (
 
         <Container>
@@ -128,7 +150,7 @@ export const PatientConsultation = ({ navigation }) => {
 
                 <BoxHome>
 
-                    <ImagemHome source={require('../../assets/PatientHomeImage.png')} />
+                    <ImagemHome source={{ uri: fotoPerfil }} />
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
@@ -160,35 +182,42 @@ export const PatientConsultation = ({ navigation }) => {
 
             <FlatContainer
                 data={consultaLista}
-                renderItem={({ item }) =>
-                    // item.situacao == selected
-                    item.situacao.situacao == selected &&
-                    <Card
-                        navigation={navigation}
-                        dataConsulta={item.dataConsulta}
-                        hour={"14:00"}
-                        name={item.medicoClinica.medico.idNavigation.nome}
-                        age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
-                        routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
-                        url={image}
-                        status={item.situacao.situacao}
+                renderItem={({ item }) => {
+                    console.log("item", item);
+                    const situacao = item.situacao?.situacao; // Aqui acessamos a propriedade situacao corretamente
 
-                        // onPressCancel={() => setShowModalCancel(true)} 
-                        onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
-                        // onPressAppointmentCard={() => setShowModal(item.situacao.situacao === 'Agendada' ? true : false)} 
-
-                        onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
-                        onPressAppointmentCard={() => { MostrarModal('localization', item) }}
-                    />}
-
-
+                    // Verifica se a situação da consulta é a mesma que a selecionada
+                    if (situacao === selected) {
+                        return (
+                            <Card
+                                navigation={navigation}
+                                dataConsulta={item.dataConsulta}
+                                hour={moment(item.dataConsulta).format("HH:mm")}
+                                name={item.medicoClinica.medico.idNavigation.nome}
+                                age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
+                                routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                                url={item.medicoClinica.medico.idNavigation.foto}
+                                status={situacao} // Adiciona a situação da consulta como valor da prop status
+                                onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
+                                onPressAppointmentCard={() => { MostrarModal('localization', item) }}
+                                onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
+                                
+                            />
+                        );
+                    } else {
+                        // Se a situação não corresponder à selecionada, retornamos null
+                        return null;
+                    }
+                }}
                 keyExtractor={item => item.id}
-
                 showsVerticalScrollIndicator={false}
-
             />
 
-            <Stethoscope onPress={() => { setShowModalStethoscope(true) }}>
+
+            <Stethoscope onPress={() => {
+                setShowModalStethoscope(true)
+                // console.log(consultaLista);
+            }}>
 
                 <FontAwesome6
                     name="stethoscope"

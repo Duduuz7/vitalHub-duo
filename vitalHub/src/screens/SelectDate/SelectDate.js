@@ -7,12 +7,44 @@ import { Label, LabelSelect } from "../../components/Label/Label"
 import { ButtonLarge, ButtonNormal } from "../../components/Button/Button"
 import { CardCancelLess } from "../../components/Descriptions/Descriptions"
 import { BoxButtons } from "../../components/Button/StyleButton"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ConfirmAppointmentModal } from "../../components/ConfirmAppointmentModal/ConfirmAppointmentModal"
 
 
-export const SelectDate = ({ navigation }) => {
+export const SelectDate = ({ navigation, route }) => {
+
     const [showModal, setShowModal] = useState(false);
+
+    const [agendamento, setAgendamento] = useState(
+        {
+            dataSelecionada : ""
+        }
+    )
+
+    const [dataSelecionada, setDataSelecionada] = useState("")
+
+    const [horaSelecionada, setHoraSelecionada] = useState("")
+
+    function handleContinue() {
+
+        setAgendamento({
+            ...route.params.agendamento,
+
+            dataConsulta: `${dataSelecionada} ${horaSelecionada}`,
+        });
+
+        setShowModal(true)
+    }
+
+    useEffect(() => {
+        console.log(route);
+    }, [route]);
+
+    useEffect(() => {
+        console.log(dataSelecionada);
+    }, [dataSelecionada]);
+
+
     return (
 
         <Container>
@@ -21,23 +53,36 @@ export const SelectDate = ({ navigation }) => {
 
             <TitleSelect>Selecionar Data</TitleSelect>
 
-            <CalendarComponent />
+            <CalendarComponent
+                setDataSelecionada={setDataSelecionada}
+                dataSelecionada={dataSelecionada}
+            />
 
             <BoxInputSelectLabel>
+
                 <LabelSelect textLabel={'Selecione um horário disponível'} />
-                <InputSelect />
+
+                <InputSelect
+                    setHoraSelecionada={setHoraSelecionada}
+                />
+
             </BoxInputSelectLabel>
 
 
             <BoxButtons>
-                <ButtonLarge onPress={() => setShowModal(true)} text={'Confirmar'} />
+                <ButtonLarge onPress={
+                    () => horaSelecionada && horaSelecionada != null ? handleContinue() : alert("Preencha todos os campos para prosseguir !!!")
+                } 
+                    text={'Confirmar'}
+                />
 
                 <CardCancelLess onPressCancel={() => {
-                    navigation.navigate("SelectDoctor");
+                    navigation.replace("Main");
                 }} text={"Cancelar"} />
             </BoxButtons>
 
             <ConfirmAppointmentModal
+                agendamento={agendamento}
                 navigation={navigation}
                 visible={showModal}
                 setShowModal={setShowModal}

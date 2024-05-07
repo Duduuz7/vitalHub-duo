@@ -25,12 +25,16 @@ export const PatientAppointmentModal = ({
 
 
   function handlePress(rota) {
-    console.log('consulta');
-    console.log(consulta);
-
+    
     navigation.replace(rota, { clinicaId: consulta.medicoClinica.clinicaId })
-
   }
+
+  useEffect(() => {
+    console.log('consulta');
+    if( consulta ){
+      console.log(consulta.medicoClinica.clinicaId);
+    }
+  }, [visible])
 
 
   return (
@@ -40,7 +44,7 @@ export const PatientAppointmentModal = ({
           <PatientModal>
             <ModalContent>
               <ImageModalRecord
-                source={require("../../assets/CardRecordPatient(doctorImage).png")}
+                source={{uri : consulta.medicoClinica.medico.idNavigation.foto}}
               />
 
               <TitleModalRecord>{consulta.medicoClinica.medico.idNavigation.nome}</TitleModalRecord>

@@ -1,44 +1,100 @@
-import { StatusBar } from 'react-native'
-import { ButtonNormal } from '../../components/Button/Button'
-import { NormalButton } from '../../components/Button/StyleButton'
-import { ButtonText } from '../../components/ButtonText/StyleButtonText'
-import { Container } from '../../components/Container/StyleContainer'
-import { DescriptionPassword } from '../../components/Descriptions/Descriptions'
-import { Input } from '../../components/Input/Input'
-import { Close, Logo } from '../../components/Images/StyleImages'
-import { Title } from '../../components/Title/StyleTitle'
+import { ActivityIndicator, StatusBar } from "react-native";
+import { ButtonNormal } from "../../components/Button/Button";
+import { Button, NormalButton } from "../../components/Button/StyleButton";
+import { ButtonText } from "../../components/ButtonText/StyleButtonText";
+import { Container } from "../../components/Container/StyleContainer";
+import { DescriptionPassword } from "../../components/Descriptions/Descriptions";
+import { Input } from "../../components/Input/Input";
+import { Close, Logo } from "../../components/Images/StyleImages";
+import { Title } from "../../components/Title/StyleTitle";
+import { useState } from "react";
+import api from "../../services/Services";
 
-export const RedefinePassword = () => {
+export const RedefinePassword = ({ navigation, route }) => {
+  // const { email } = route.params.emailRecuperacao;
 
-    return (
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [loading, setLoading] = useState(false);
 
-        <Container>
-            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+  async function indicator() {
+    setLoading(true);
+  }
 
-            {/* <Close source={require('../../assets/x-top-screen.png')}/> */}
+  async function changePassword() {
+    if (novaSenha !== confirmarSenha) {
+      alert("A senha e sua confirmação não são iguais !!!");
+    }
 
-            <Logo source={require('../../assets/VitalHub_Logo1.png')} />
+    await api
+      .put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+        senhaNova: novaSenha,
+      })
+      .then(() => {
+        navigation.replace("Login");
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Por favor! Preencha o campo imediatamente!");
+        // console.log(
+        //   `$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`
+        // );
+      });
+  }
 
-            <Title>Redefinir Senha</Title>
+  return (
+    <Container>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
-            <DescriptionPassword description={"Insira e confirme a sua nova senha"} />
+      {/* <Close source={require('../../assets/x-top-screen.png')}/> */}
 
-            <Input
-                placeholder={"Nova Senha"}
-                placeholderTextColor={'#49B3BA'}
-                secureTextEntry={true}
-            />
+      <Logo source={require("../../assets/VitalHub_Logo1.png")} />
 
-            <Input
-                placeholder={"Confirmar nova senha"}
-                placeholderTextColor={'#49B3BA'}
-                secureTextEntry={true}
-            />
+      <Title>Redefinir Senha</Title>
 
-            <ButtonNormal text={"Confirmar nova senha"}/>
-            
-        </Container>
+      <DescriptionPassword description={"Insira e confirme a sua nova senha"} />
 
-    )
+      <Input
+        placeholder={"Nova Senha"}
+        placeholderTextColor={"#49B3BA"}
+        secureTextEntry={true}
+        fieldValue={novaSenha}
+        onChangeText={(x) => setNovaSenha(x)}
+      />
 
-}
+      <Input
+        placeholder={"Confirmar nova senha"}
+        placeholderTextColor={"#49B3BA"}
+        secureTextEntry={true}
+        fieldValue={confirmarSenha}
+        onChangeText={(x) => setConfirmarSenha(x)}
+      />
+
+      {/* <ButtonNormal
+                onPress={() => changePassword()}
+                text={"Confirmar nova senha"}
+            /> */}
+
+      <Button
+        disabled={loading}
+        onPress={() => {
+          indicator();
+          changePassword();
+          novaSenha, confirmarSenha != null
+            ? changePassword()
+            : alert("Por favor! Preencha o campo imediatamente!");
+        }}
+      >
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <ButtonText>Confirmar nova Senha</ButtonText>
+        )}
+      </Button>
+    </Container>
+  );
+};

@@ -67,11 +67,12 @@ export const CancelButton = styled(ResendCode)`
 `;
 
 export const CancelLessMargin = styled(CancelButton)`
-  margin-left: 36%;
+  /* margin-left: 40px; */
   margin-top: 2px;
   margin-bottom: 30px;
-  align-self: center;
-  justify-self: center;
+  text-align: center;
+  margin-left: 0px;
+  margin-right: 0px;
 `;
 
 export const CancelLocal = styled(CancelButton)`
@@ -100,6 +101,7 @@ export const CancelButtonRecords = styled(CancelButton)`
   margin-bottom: 40px;
 `;
 
+
 export const AgeTextCard = styled(DescripritionForgot)`
   margin-top: 4px;
   margin-right: 0px;
@@ -112,6 +114,10 @@ export const AgeTextCard = styled(DescripritionForgot)`
   height: 20px;
   width: 100px;
 `;
+
+export const CityText = styled(AgeTextCard)`
+  margin-left: 18px;
+`
 
 export const DoctorArea = styled(DescripritionForgot)`
   color: #8c8a97;
@@ -131,7 +137,7 @@ export const RoutineTextCard = styled(AgeTextCard)`
   margin-top: 6px;
   height: 22px;
   color: #8c8a97;
-  margin-right: 1px
+  margin-right: 1px;
 `;
 
 export const HourText = styled.Text`
@@ -195,4 +201,16 @@ export const TextSplash = styled.Text`
   font-size: 18px;
   text-align: center;
   width: 203px;
+`;
+
+
+
+
+export const RefazerLessMargin = styled(CancelButton)`
+  /* margin-left: 40px; */
+  margin-top: 2px;
+  margin-bottom: 30px;
+  text-align: center;
+  margin-left: 35px;
+  margin-right: 0px;
 `;

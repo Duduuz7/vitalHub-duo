@@ -46,7 +46,7 @@ export default function Maps({latitude, longitude}) {
 
       setInitialPosition(currentPosition)
 
-      console.log(initialPosition);
+      // console.log(initialPosition);
     }
   }
 

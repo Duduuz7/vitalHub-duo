@@ -7,14 +7,54 @@ import { Label } from "../Label/Label"
 import { LabelDescription } from "../Label/StyleLabel"
 import { CardCancelLess, DescripritionModalSmall, DescripritionModalSmall2 } from "../Descriptions/Descriptions"
 import { ButtonLargeConfirmModal, ButtonLargeModal, ButtonLargeSelect } from "../Button/Button"
+import moment from "moment"
+import api from "../../services/Services"
+import { userDecodeToken } from "../../utils/Auth"
+import { useEffect, useState } from "react"
 
 
 export const ConfirmAppointmentModal = ({
+    agendamento,
     navigation,
     visible,
     setShowModal = null,
     ...rest
 }) => {
+
+    const [profile, setProfile] = useState(null)
+
+    async function profileLoad() {
+        const token = await userDecodeToken()
+
+        setProfile(token)
+    }
+
+
+    async function handleConfirm() {
+
+        await api.post(`/Consultas/Cadastrar`, {
+            ...agendamento,
+
+            pacienteId: profile.idUsuario,
+
+            situacaoId: 'E2D4051A-33D5-4AE1-809F-357BD6AE3412'
+        }).then(
+
+            setShowModal(false),
+
+            navigation.replace("Main")
+
+        ).catch((error) => {
+            console.log(error);
+        })
+
+    }
+
+    useEffect(() => {
+        profileLoad()
+    }, [])
+
+
     return (
 
         <Modal
@@ -36,25 +76,36 @@ export const ConfirmAppointmentModal = ({
 
                         <LabelDescription>Data da consulta</LabelDescription>
 
-                        <DescripritionModalSmall text={"1 de Novembro de 2023"} />
+                        <DescripritionModalSmall text={moment(agendamento.dataConsulta).format("DD/MM/YYYY  ||  HH:mm")} />
 
                         <LabelDescription>Médico(a) da consulta</LabelDescription>
 
-                        <DescripritionModalSmall2 text={"Dra Alessandra"} />
+                        <DescripritionModalSmall2 text={agendamento.medicoLabel} />
 
-                        <DescripritionModalSmall text={"Demartologa, Esteticista"} />
+                        <DescripritionModalSmall text={agendamento.medicoEspecialidade} />
+
+                        <LabelDescription>Clínica da consulta</LabelDescription>
+
+                        <DescripritionModalSmall text={agendamento.clinicaLabel} />
 
                         <LabelDescription>Local da consulta</LabelDescription>
 
-                        <DescripritionModalSmall text={"São Paulo, SP"} />
+                        <DescripritionModalSmall text={agendamento.localizacao} />
 
                         <LabelDescription>Tipo da consulta</LabelDescription>
 
-                        <DescripritionModalSmall text={"Rotina"} />
+                        <DescripritionModalSmall text={agendamento.prioridadeLabel} />
 
                     </BoxDescriptions>
 
-                    <ButtonLargeConfirmModal onPress={() => { navigation.navigate("Main") }} text={"Confirmar"} />
+                    <ButtonLargeConfirmModal
+                        onPress={
+                            () => {
+                                handleConfirm()
+                            }
+                        }
+                        text={"Confirmar"}
+                    />
 
                     <CardCancelLess onPressCancel={() => setShowModal(false)} text={"Cancelar"} />
 
@@ -63,7 +114,5 @@ export const ConfirmAppointmentModal = ({
             </PatientModal>
 
         </Modal>
-
-
     )
 }

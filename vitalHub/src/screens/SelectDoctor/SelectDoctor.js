@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 import {
   Container,
   FlatContainerSelect,
@@ -12,42 +12,36 @@ import { CardCancelLessLocal } from "../../components/Descriptions/Descriptions"
 import api from "../../services/Services";
 import { useEffect, useState } from "react";
 
-export const SelectDoctor = ({ navigation }) => {
+export const SelectDoctor = ({ navigation, route }) => {
+
+
   const [medico, setMedico] = useState([]);
 
-  const image = require("../../assets/ImageCard.png");
-  const dataItens = [
-    {
-      id: "fsdfsfsdf",
-      doctorArea: "Dermatóloga, Esteticista",
-      image: image,
-      name: "Dr Alessandra",
-    },
-    {
-      id: "fsdfsf",
-      doctorArea: "Cirurgião, Cardiologista",
-      image: image,
-      name: "Dr Kumushiro",
-    },
-    {
-      id: "fsdf",
-      doctorArea: "Clínico, Pediatra",
-      image: image,
-      name: "Dr Rodrigo Santos",
-    },
-  ];
+  const [selectMedico, setSelectMedico] = useState({})
+
+  const [selected, setSelected] = useState(false)
+
+  function handleContinue() {
+    navigation.navigate("SelectDate", {
+      agendamento: {
+        ...route.params.agendamento,
+
+        ...selectMedico
+      }
+    })
+  }
 
   const ListarMedico = async () => {
     // await api.get("/Medicos").then(response => {
     //     setMedico(response.data)
-        
+
     //     console.log(medico)
-        
+
     // }).catch(error => {
     //     console.log(error);
     // })
-     try {
-      const returnApi = await api.get("/Medicos")
+    try {
+      const returnApi = await api.get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
 
       setMedico(returnApi.data);
     } catch (erro) {
@@ -55,9 +49,16 @@ export const SelectDoctor = ({ navigation }) => {
     }
   };
 
+
   useEffect(() => {
     ListarMedico();
   }, []);
+
+
+  useEffect(() => {
+    console.log(route);
+  }, [route]);
+
 
   return (
     <Container>
@@ -69,22 +70,47 @@ export const SelectDoctor = ({ navigation }) => {
 
       <TitleSelect>Selecionar Médico</TitleSelect>
 
-      <FlatContainerSelect
-        data={medico}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <CardSelectDoctor
-            doctorArea={item.especialidade.especialidade1}
-            name={item.idNavigation.nome}
-            url={image}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-      />
+      {medico == "" ? (
+
+        <Text
+          style={{ textAlign: "center", fontSize: 19, marginLeft: 2, marginRight: 2, marginBottom: "120%", marginTop: 10 }}
+        >
+          Nenhum médico encontrado, tente novamente procurando por outra clínica ou localização !!!
+        </Text>
+
+      ) : (
+        <FlatContainerSelect
+          data={medico}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <CardSelectDoctor
+              selecionado={item.id === selectMedico.medicoClinicaId ? true : false}
+              onPress={() => {
+                setSelectMedico({
+                  medicoClinicaId: item.id,
+
+                  medicoLabel: item.idNavigation.nome,
+
+                  medicoEspecialidade: item.especialidade.especialidade1
+                }),
+                  setSelected(true)
+              }}
+              doctorArea={item.especialidade.especialidade1}
+              name={item.idNavigation.nome}
+              url={item.idNavigation.foto}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+
+
+
 
       <ButtonLargeSelect
         onPress={() => {
-          navigation.navigate("SelectDate");
+          selected == false ? alert("Selecione um médico para prosseguir !!!") :
+            handleContinue()
         }}
         text={"Continuar"}
       />
