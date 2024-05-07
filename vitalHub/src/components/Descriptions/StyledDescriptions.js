@@ -101,6 +101,7 @@ export const CancelButtonRecords = styled(CancelButton)`
   margin-bottom: 40px;
 `;
 
+
 export const AgeTextCard = styled(DescripritionForgot)`
   margin-top: 4px;
   margin-right: 0px;
@@ -113,6 +114,10 @@ export const AgeTextCard = styled(DescripritionForgot)`
   height: 20px;
   width: 100px;
 `;
+
+export const CityText = styled(AgeTextCard)`
+  margin-left: 18px;
+`
 
 export const DoctorArea = styled(DescripritionForgot)`
   color: #8c8a97;
@@ -196,4 +201,16 @@ export const TextSplash = styled.Text`
   font-size: 18px;
   text-align: center;
   width: 203px;
+`;
+
+
+
+
+export const RefazerLessMargin = styled(CancelButton)`
+  /* margin-left: 40px; */
+  margin-top: 2px;
+  margin-bottom: 30px;
+  text-align: center;
+  margin-left: 35px;
+  margin-right: 0px;
 `;

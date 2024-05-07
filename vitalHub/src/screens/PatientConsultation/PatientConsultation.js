@@ -48,14 +48,14 @@ export const PatientConsultation = ({ navigation, route }) => {
     function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
 
-        console.log(consulta);
+        // console.log(consulta);
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
         } else if (modal == 'localization') {
             setShowModal(selected === 'Agendada' ? true : false)
         } else {
-            console.log('asdas');
+            // console.log('asdas');
         }
     }
 
@@ -66,7 +66,7 @@ export const PatientConsultation = ({ navigation, route }) => {
         await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)
-            console.log(consultaLista);
+            // console.log('pintooooooooooo', consultaLista);
 
         }).catch(error => {
             console.log(error);
@@ -192,7 +192,7 @@ export const PatientConsultation = ({ navigation, route }) => {
                             <Card
                                 navigation={navigation}
                                 dataConsulta={item.dataConsulta}
-                                hour={"14:00"}
+                                hour={moment(item.dataConsulta).format("HH:mm")}
                                 name={item.medicoClinica.medico.idNavigation.nome}
                                 age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
                                 routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}

@@ -26,12 +26,15 @@ export const PatientAppointmentModal = ({
 
   function handlePress(rota) {
     
-    console.log('consulta');
-    console.log(consulta);
-
     navigation.replace(rota, { clinicaId: consulta.medicoClinica.clinicaId })
-
   }
+
+  useEffect(() => {
+    console.log('consulta');
+    if( consulta ){
+      console.log(consulta.medicoClinica.clinicaId);
+    }
+  }, [visible])
 
 
   return (

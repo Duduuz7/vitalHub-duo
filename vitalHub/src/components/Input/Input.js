@@ -62,7 +62,7 @@ export const InputSelect = ({setHoraSelecionada}) => {
 
         const horasRestantes = moment(dataAtual).add(24, 'hours').diff( moment(), "hours")
 
-        console.log(horasRestantes);
+        // console.log(horasRestantes);
 
         //Criar um laço que rode a quantidade de horas
 

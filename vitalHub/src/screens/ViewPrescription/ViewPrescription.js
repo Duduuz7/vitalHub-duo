@@ -23,26 +23,6 @@ export const ViewPrescription = ({ navigation, route }) => {
     const [descricaoExame, setDescricaoExame] = useState("")
 
     const [idConsulta, setIdConsulta] = useState(null)
-
-
-    async function BuscarProntuarioB() {
-        await api.get(`/Consultas/BuscarPorId?id=${idConsulta}`)
-            .then(response => {
-
-                setConsultaSelecionada(response.data)
-
-                setIdConsulta(response.data.id)
-
-                console.log(response.data);
-
-                console.log("IDDDD");
-
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
     async function BuscarProntuario() {
 
         if (idConsulta != null) {
@@ -53,12 +33,6 @@ export const ViewPrescription = ({ navigation, route }) => {
                 .then(response => {
 
                     setConsultaSelecionada(response.data)
-
-                    // setIdConsulta(response.data.id)
-
-                    console.log(response.data);
-
-                    console.log("IDDDD");
 
                 })
                 .catch(error => {
@@ -118,7 +92,6 @@ export const ViewPrescription = ({ navigation, route }) => {
 
     useEffect(() => {
         if (route.params.photoUri) {
-            console.log("asdasda", route.params);
             InserirExame();
             BuscarProntuario();
         }
@@ -187,7 +160,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                         </BoxViewImageImport>
 
                         <BoxBtn>
-                            <SendButton onPress={() => { navigation.navigate("Camera", { id: route.params.consulta.id }) }} text={"Enviar"} />
+                            <SendButton onPress={() => { navigation.navigate("Camera", { id: consultaSelecionada.id }) }} text={"Enviar"} />
                             <CardCancel onPressCancel={() => { navigation.replace("Main") }} text={"Cancelar"} />
                         </BoxBtn>
 
@@ -200,7 +173,7 @@ export const ViewPrescription = ({ navigation, route }) => {
                             editable={false}
                             fieldWidth={90}
                             fieldValue={descricaoExame}
-                            multiline={false}
+                            multiline={true}
                         />
 
                         <CardBackLess onPressCancel={() => { navigation.navigate("Main") }} text={"Voltar"} />

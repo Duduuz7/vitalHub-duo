@@ -26,7 +26,7 @@ export const Main = ({ navigation, route }) => {
     const token = await userDecodeToken();
 
     if (token) {
-      console.log(token)
+      // console.log(token)
     }
   }
 

@@ -53,7 +53,6 @@ export const DoctorProfile = ({ navigation, route }) => {
                     setCrm(crm);
                     // Definir o estado `cep` com o CEP do paciente
                     setCep(endereco.cep);
-                    console.log(endereco);
                 } catch (error) {
                     console.error("Erro ao buscar dados do medico:", error);
                 }
@@ -90,9 +89,6 @@ export const DoctorProfile = ({ navigation, route }) => {
     async function AlterarFotoPerfil() {
   
       const userToken = await userDecodeToken();
-  
-      console.log("asasasasasasas", route.params);
-      console.log(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`);
   
       const formData = new FormData();
   

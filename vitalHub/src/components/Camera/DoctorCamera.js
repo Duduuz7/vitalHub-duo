@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
 import { ButtonLargeConfirmModal } from '../Button/Button';
-import { CardCancelLess } from '../Descriptions/Descriptions';
+import { CardCancelLess, RefazerLess } from '../Descriptions/Descriptions';
 import { LastPhoto } from './Style';
 
 import * as ImagePicker from "expo-image-picker"
@@ -58,7 +58,6 @@ export default function DoctorCam({ navigation }) {
 
         const { assets } = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 })
 
-        console.log(assets)
 
         if (assets.length > 0) {
             setLastPhoto(assets[0].uri)
@@ -104,7 +103,7 @@ export default function DoctorCam({ navigation }) {
 
     async function UploadPhoto() {
 
-        console.log(photo)
+        // console.log(photo)
         navigation.navigate("DoctorMain", { photoUri: photo, screen: "DoctorProfile" });
 
     }
@@ -208,7 +207,7 @@ export default function DoctorCam({ navigation }) {
 
                                         <ButtonLargeConfirmModal text={"Confirmar"} onPress={() => UploadPhoto()} />
 
-                                        <CardCancelLess onPressCancel={() => navigation.replace("DoctorCamera")} text={"Refazer"} />
+                                        <RefazerLess onPressCancel={() => navigation.replace("DoctorCamera")} text={"Refazer"} />
 
                                     </View>
 
