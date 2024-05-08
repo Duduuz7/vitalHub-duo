@@ -28,12 +28,14 @@ export const MedicalRecords = ({ navigation, route }) => {
 
     const [diagnostico, setDiagnostico] = useState('')
 
+    const [medicamento, setMedicamento] = useState('')
+
 
     async function HandleUpdate() {
 
         await api.put(`/Consultas/Prontuario`,
 
-            { consultaId: consulta.id, descricao: descricao, diagnostico: diagnostico }
+            { consultaId: consulta.id, descricao: descricao, diagnostico: diagnostico, medicamento: medicamento }
 
         ).then(response => {
 
@@ -89,6 +91,7 @@ export const MedicalRecords = ({ navigation, route }) => {
                             textLabel={"Descrição da consulta"}
                             placeholder={consulta.descricao}
                             editable={editable}
+                            fieldValue={descricao}
                             fieldWidth={90}
 
                             multiline={true}
@@ -100,6 +103,7 @@ export const MedicalRecords = ({ navigation, route }) => {
                             placeholderTextColor={"#34898F"}
                             textLabel={"Diagnóstico do paciente"}
                             placeholder={consulta.diagnostico}
+                            fieldValue={diagnostico}
                             editable={editable}
                             fieldWidth={90}
 
@@ -111,7 +115,9 @@ export const MedicalRecords = ({ navigation, route }) => {
                             fieldHeight={350}
                             placeholderTextColor={"#34898F"}
                             textLabel={"Prescrição médica"}
-                            placeholder={"Prescriçao médica"}
+                            placeholder={medicamento ? medicamento : 'Prescrição médica'}
+                            fieldValue={medicamento}
+                            onChangeText={x => setMedicamento(x)}
                             editable={editable}
                             fieldWidth={90}
                         />

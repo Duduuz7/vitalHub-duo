@@ -24,6 +24,12 @@ export const ScrollContainer = styled.ScrollView`
   width: 100%;
   background-color: #fafafa;
 `;
+export const ScrollContainerB = styled.ScrollView`
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  background-color: #fafafa;
+`;
 
 export const ContainerCepCidade = styled.SafeAreaView`
   margin-bottom: 3px;

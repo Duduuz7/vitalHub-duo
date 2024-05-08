@@ -66,7 +66,7 @@ export const Login = ({ navigation }) => {
       <Title>Entrar ou criar conta</Title>
 
       <Input
-        placeholder={"Usuário ou E-mail"}
+        placeholder={"E-mail"}
         placeholderTextColor={"#49B3BA"}
         fieldValue={email}
         onChangeText={(txt) => setEmail(txt)}

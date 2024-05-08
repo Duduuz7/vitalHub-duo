@@ -1,4 +1,4 @@
-import { ActivityIndicator, StatusBar } from "react-native";
+import { ActivityIndicator, Alert, StatusBar } from "react-native";
 import { ButtonNormal } from "../../components/Button/Button";
 import {
   BoxNumeric,
@@ -50,7 +50,10 @@ export const CheckEmail = ({ navigation, route }) => {
       navigation.navigate("RedefinePassword", {
         emailRecuperacao: route.params.emailRecuperacao,
       });
+      setLoading(false)
     } catch (error) {
+      alert("Código incorreto !!!")
+      setLoading(false)
       console.log(error, email);
     }
   }

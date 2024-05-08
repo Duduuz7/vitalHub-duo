@@ -22,23 +22,31 @@ export const ViewPrescription = ({ navigation, route }) => {
     const [consultaSelecionada, setConsultaSelecionada] = useState(null)
     const [descricaoExame, setDescricaoExame] = useState("")
 
-    const [idConsulta, setIdConsulta] = useState(null)
+    async function BuscarExame() {
+        await api.get(`/Exames/BuscarPorId?id=${route.params.consulta.id}`)
+            .then(response => {
+
+                setDescricaoExame(...descricaoExame, response.data.descricao)
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
     async function BuscarProntuario() {
 
-        if (idConsulta != null) {
-            BuscarProntuarioB()
-        } else {
 
-            await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
-                .then(response => {
+        await api.get(`/Consultas/BuscarPorId?id=${route.params.consulta.id}`)
+            .then(response => {
 
-                    setConsultaSelecionada(response.data)
+                setConsultaSelecionada(response.data)
 
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
     }
 
 
@@ -67,7 +75,7 @@ export const ViewPrescription = ({ navigation, route }) => {
             console.log(response.data);
 
 
-            setDescricaoExame(descricaoExame + "\n" + response.data.descricao);
+            setDescricaoExame(...descricaoExame + "\n" + response.data.descricao);
         } catch (error) {
             // Lógica para lidar com o erro em caso de falha na requisição
             console.log("Entrou no catch da OCR");
@@ -87,6 +95,13 @@ export const ViewPrescription = ({ navigation, route }) => {
             BuscarProntuario();
         }
     }, [consultaSelecionada])
+
+    useEffect(() => {
+        if (descricaoExame == null) {
+            BuscarExame();
+        }
+    }, [descricaoExame])
+
 
 
 

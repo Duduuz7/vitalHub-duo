@@ -8,6 +8,7 @@ import { TitleModal, TitleModalRecord } from "../Title/StyleTitle"
 import { BoxAgeEmailModal } from "./StyleAppointmentModal"
 import moment from "moment"
 import { useEffect } from "react"
+import api from "../../services/Services"
 
 
 export const AppointmentModal = ({
@@ -17,6 +18,31 @@ export const AppointmentModal = ({
     setShowModalAppointment = null,
     ...rest
 }) => {
+    
+    function HandleContinue() {
+        ConsultaRealizada()
+        navigation.replace("MedicalRecords",  { consulta : consulta })
+    }
+
+    async function ConsultaRealizada() {
+   //Chamando o metodo da api
+
+        // console.log(`/Consultas/Status?idConsulta=${consulta.id}&status=${"Realizada"}`)
+        await api.put(`/Consultas/Status?idConsulta=${consulta.id}&status=${"Realizada"}`
+            // { id: consultaCancel.id, status: consultaCancel.situacaoId }
+        ).then(response => {
+
+            console.log("DEU CERTO PAI");
+            // console.log(response);
+
+        }).catch(error => {
+
+            console.log("DEU ERRADO PAI");
+            console.log(error)
+
+        })
+
+    }
     
     return (
 
@@ -46,7 +72,7 @@ export const AppointmentModal = ({
                             </BoxAgeEmailModal>
 
                             <ButtonLargeSelect
-                                onPress={() => { navigation.replace("MedicalRecords",  { consulta : consulta })}}
+                                onPress={() => {HandleContinue()}}
                                 text={"Inserir Prontuário"}
                             />
 

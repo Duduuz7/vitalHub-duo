@@ -21,7 +21,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ButtonCamera, ImageView } from "./Style";
 
-
+import { mask, unMask } from "remask";
 
 
 
@@ -128,8 +128,10 @@ export const PatientProfile = ({ navigation, route }) => {
   };
 
   const handleCepChange = async (newCep) => {
-    setCep(newCep);
-    if (newCep.length === 8) {
+    
+    setCep(unMask(newCep));
+
+    if (newCep.length === 9) {
       try {
         const response = await fetch(
           `https://viacep.com.br/ws/${newCep}/json/`
@@ -153,10 +155,10 @@ export const PatientProfile = ({ navigation, route }) => {
         `/Pacientes?idUsuario=${token.idUsuario}`,
         {
           logradouro: logradouro,
-          cep: cep,
+          cep: unMask(cep),
           cidade: cidade,
           dataNascimento: dataNascimento,
-          cpf: cpf,
+          cpf: unMask(cpf),
         },
         {
           headers: {
@@ -199,8 +201,9 @@ export const PatientProfile = ({ navigation, route }) => {
           placeholderTextColor="#A1A1A1"
           textLabel="Data de nascimento:"
           placeholder="Ex. 04/05/1999"
-          keyboardType="numeric"
+          // keyboardType="numeric"
           fieldValue={moment(dataNascimento).format("DD/MM/YYYY")}
+          // fieldValue={dataNascimento}
           editable={false}
           onChangeText={setDataNascimento}
           fieldWidth={90}
@@ -211,7 +214,8 @@ export const PatientProfile = ({ navigation, route }) => {
           placeholder="CPF..."
           keyboardType="numeric"
           maxLength={11}
-          fieldValue={`${cpf.slice(0,3)}.${cpf.slice(3,6)}.${cpf.slice(6,9)}`}
+          // fieldValue={cpf ? `${cpf.slice(0,3)}.${cpf.slice(3,6)}.${cpf.slice(6,9)}` : ""}
+          fieldValue={mask(cpf, "999.999.999-99")}
           editable={editable}
           onChangeText={setCpf}
           fieldWidth={90}
@@ -236,7 +240,7 @@ export const PatientProfile = ({ navigation, route }) => {
             placeholder="CEP..."
             maxLength={9}
             keyboardType="numeric"
-            fieldValue={`${cep.slice(0,5)}-${cep.slice(5,9)}`} // Exibir o CEP cadastrado
+            fieldValue={mask(cep, "99999-999")} // Exibir o CEP cadastrado
             editable={editable}
             onChangeText={handleCepChange}
             fieldWidth={40}

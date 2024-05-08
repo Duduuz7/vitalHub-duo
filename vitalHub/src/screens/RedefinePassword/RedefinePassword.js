@@ -24,22 +24,29 @@ export const RedefinePassword = ({ navigation, route }) => {
   async function changePassword() {
     if (novaSenha !== confirmarSenha) {
       alert("A senha e sua confirmação não são iguais !!!");
+      setLoading(false)
+    } 
+    else {
+      await api
+        .put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+          senhaNova: novaSenha,
+        })
+        .then(() => {
+          navigation.replace("Login");
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Por favor! Preencha o campo!");
+          setLoading(false)
+          // console.log(
+          //   `$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`
+          // );
+        });
     }
 
-    await api
-      .put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
-        senhaNova: novaSenha,
-      })
-      .then(() => {
-        navigation.replace("Login");
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Por favor! Preencha o campo imediatamente!");
-        // console.log(
-        //   `$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`
-        // );
-      });
+
+
   }
 
   return (
@@ -86,7 +93,7 @@ export const RedefinePassword = ({ navigation, route }) => {
           changePassword();
           novaSenha, confirmarSenha != null
             ? changePassword()
-            : alert("Por favor! Preencha o campo imediatamente!");
+            : alert("Por favor! Preencha o campo !");
         }}
       >
         {loading ? (

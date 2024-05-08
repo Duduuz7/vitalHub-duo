@@ -64,6 +64,7 @@ export const CancelButton = styled(ResendCode)`
   font-family: MontserratAlternates_600SemiBold;
   margin-top: 40px;
   margin-left: 40%;
+  margin-bottom: 40px;
 `;
 
 export const CancelLessMargin = styled(CancelButton)`

@@ -2,7 +2,7 @@ import { ActivityIndicator, StatusBar } from 'react-native'
 import { ButtonNormal } from '../../components/Button/Button'
 import { Button, NormalButton } from '../../components/Button/StyleButton'
 import { ButtonText } from '../../components/ButtonText/StyleButtonText'
-import { Container } from '../../components/Container/StyleContainer'
+import { Container, ScrollContainer, ScrollContainerB } from '../../components/Container/StyleContainer'
 import { DescriptionPassword } from '../../components/Descriptions/Descriptions'
 import { Input } from '../../components/Input/Input'
 import { Cancel } from '../../components/Link/Link'
@@ -40,6 +40,7 @@ export const CreateAccount = ({ navigation }) => {
                 // form.append("dataNascimento", `${moment(dataNascimento).format("YYYY-MM-DD")}`);
                 form.append("senha", `${senha}`);
                 form.append("idTipoUsuario", `9850203C-3FEF-4824-A75C-D446187B7A5D`);
+                form.append("dataNascimento", `${dataNascimento}`);
 
                 const response = await api.post('/Pacientes', form, {
 
@@ -81,59 +82,63 @@ export const CreateAccount = ({ navigation }) => {
 
     return (
 
-        <Container>
 
-            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+        <ScrollContainerB>
+            <Container>
 
-            <LogoCreateAccount source={require('../../assets/VitalHub_Logo1.png')} />
+                <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
 
-            <Title>Criar Conta</Title>
+                <LogoCreateAccount source={require('../../assets/VitalHub_Logo1.png')} />
 
-            <DescriptionPassword description={"Insira seu endereço de e-mail e senha para realizar seu cadastro."} />
+                <Title>Criar Conta</Title>
 
-            <Input
-                placeholder={"Nome"}
-                placeholderTextColor={'#49B3BA'}
-                onChangeText={text => setNome(text)}
-                value={nome}
-            />
-            <Input
-                placeholder={"Email"}
-                placeholderTextColor={'#49B3BA'}
-                onChangeText={text => setEmail(text)}
-                value={email}
-            />
-            {/* <Input
-                placeholder={"Data de nascimento"}
-                placeholderTextColor={'#49B3BA'}
-                onChangeText={text => setDataNascimento(text)}
-                value={dataNascimento}
-            /> */}
-            <Input
-                placeholder={"Senha"}
-                placeholderTextColor={'#49B3BA'}
-                secureTextEntry={true}
-                onChangeText={text => setSenha(text)}
-                value={senha}
-            />
-            <Input
-                placeholder={"Confirmar Senha"}
-                placeholderTextColor={'#49B3BA'}
-                secureTextEntry={true}
-                onChangeText={text => setConfirmarSenha(text)}
-                value={confirmarSenha}
-            />
+                <DescriptionPassword description={"Preencha os campos para realizar seu cadastro."} />
 
-            <Button disabled={loading}
-                onPress={
-                    () => nome && email && senha && dataNascimento != null ? handleCadastro() : alert("Preenhca todos os campos para criar uma conta !!!")
-                }>
-                {loading ? <ActivityIndicator /> : <ButtonText>Cadastrar</ButtonText>}
-            </Button>
+                <Input
+                    placeholder={"Nome"}
+                    placeholderTextColor={'#49B3BA'}
+                    onChangeText={text => setNome(text)}
+                    value={nome}
+                />
+                <Input
+                    placeholder={"Email"}
+                    placeholderTextColor={'#49B3BA'}
+                    onChangeText={text => setEmail(text)}
+                    value={email}
+                />
+                <Input
+                    placeholder={"Nascimento (ano-mes-dia)"}
+                    placeholderTextColor={'#49B3BA'}
+                    onChangeText={text => setDataNascimento(text)}
+                    value={dataNascimento}
+                />
+                <Input
+                    placeholder={"Senha"}
+                    placeholderTextColor={'#49B3BA'}
+                    secureTextEntry={true}
+                    onChangeText={text => setSenha(text)}
+                    value={senha}
+                />
+                <Input
+                    placeholder={"Confirmar Senha"}
+                    placeholderTextColor={'#49B3BA'}
+                    secureTextEntry={true}
+                    onChangeText={text => setConfirmarSenha(text)}
+                    value={confirmarSenha}
+                />
 
-            <Cancel onPress={() => { navigation.navigate("Login") }} />
+                <Button disabled={loading}
+                    onPress={
+                        () => nome && email && senha && dataNascimento != null ? handleCadastro() : alert("Preencha todos os campos para criar uma conta !!!")
+                    }>
+                    {loading ? <ActivityIndicator /> : <ButtonText>Cadastrar</ButtonText>}
+                </Button>
 
-        </Container>
+                <Cancel onPress={() => { navigation.navigate("Login") }} />
+            </Container>
+        </ScrollContainerB>
+
+
     )
 
 }

@@ -22,6 +22,7 @@ export const ForgotPassword = ({ navigation }) => {
     try {
       await api.post(`/RecuperarSenha?email=${email}`);
       navigation.navigate("CheckEmail", { emailRecuperacao: email });
+      setLoading(false)
     } catch (error) {
       console.log(error);
       alert("Por favor! Preencha o campo de email imediatamente!");
