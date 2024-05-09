@@ -73,6 +73,7 @@ export const HighInputBox = ({
 
 export const HighInputBoxGrey = ({
     multiline,
+    numberOfLines,
     fieldWidth = 100,
     fieldHeight = 90,
     editable = false,
@@ -82,7 +83,8 @@ export const HighInputBoxGrey = ({
     onChangeText = null,
     keyboardType = "default",
     maxLength,
-    placeholderTextColor
+    placeholderTextColor,
+    
 }) => {
     return (
 
@@ -91,6 +93,7 @@ export const HighInputBoxGrey = ({
             <Label textLabel={textLabel}/>
 
             <HighInputGrey
+                numberOfLines={numberOfLines}
                 multiline={multiline}
                 placeholder={placeholder}
                 editable={editable}

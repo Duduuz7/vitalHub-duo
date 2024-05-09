@@ -1,5 +1,5 @@
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Camera, CameraType } from 'expo-camera';
+import { Camera, CameraView } from 'expo-camera';
 import { useEffect, useRef, useState } from 'react';
 
 import { PinchGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -28,9 +28,9 @@ export default function Cam({ navigation, route }) {
 
     const [photo, setPhoto] = useState(null)
 
-    const [tipoCamera, setTipoCamera] = useState(CameraType.back)
+    const [tipoCamera, setTipoCamera] = useState('back')
 
-    const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+    const [flashMode, setFlashMode] = useState('off');
 
     const [zoom, setZoom] = useState(0)
 
@@ -141,15 +141,15 @@ export default function Cam({ navigation, route }) {
             <PinchGestureHandler onGestureEvent={(event) => { changeZoom(event) }}>
                 <View style={styles.container}>
 
-                    <Camera
+                    <CameraView
                         ref={cameraRef}
                         zoom={zoom}
                         style={styles.camera}
-                        type={tipoCamera}
+                        facing={tipoCamera}
                         ratio='16:9'
                         autoFocus={true}
                         whiteBalance={'shadow'}
-                        flashMode={flashMode}
+                        flash={flashMode}
                     >
 
                         <TouchableOpacity style={styles.btnClear} onPress={() => { navigation.replace("ViewPrescription") }} >
@@ -158,7 +158,7 @@ export default function Cam({ navigation, route }) {
 
                         <TouchableOpacity
                                 style={styles.btnFlip}
-                                onPress={() => setTipoCamera(tipoCamera == CameraType.front ? CameraType.back : CameraType.front)}
+                                onPress={() => setTipoCamera(tipoCamera === 'front' ? 'back' : 'front')}
                             >
 
                                 <Ionicons name="camera-reverse" size={32} color="white" />
@@ -192,12 +192,12 @@ export default function Cam({ navigation, route }) {
 
                             <TouchableOpacity
                                 style={styles.btnFlash}
-                                onPress={() => setFlashMode(flashMode === Camera.Constants.FlashMode.off
-                                    ? Camera.Constants.FlashMode.on
-                                    : Camera.Constants.FlashMode.off)}
+                                onPress={() => setFlashMode(flashMode === 'off'
+                                    ? 'on'
+                                    : 'off')}
                             >
 
-                                {flashMode ? <Ionicons name="flash" size={23} color="white" /> : <Ionicons name="flash-off" size={24} color="white" />}
+                                {flashMode === 'on'? <Ionicons name="flash" size={23} color="white" /> : <Ionicons name="flash-off" size={24} color="white" />}
 
                             </TouchableOpacity>
 
@@ -235,7 +235,7 @@ export default function Cam({ navigation, route }) {
 
                         </View>
 
-                    </Camera>
+                    </CameraView>
                 </View>
             </PinchGestureHandler>
         </GestureHandlerRootView>

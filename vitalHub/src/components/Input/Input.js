@@ -228,6 +228,7 @@ export function HighInput({
 
 export function HighInputGrey({
     multiline,
+    numberOfLines,
     placeholder,
     fieldValue,
     onChangeText,
@@ -239,6 +240,7 @@ export function HighInputGrey({
 }) {
     return (
         <InputHighGrey
+            numberOfLines={numberOfLines}
             multiline={multiline}
             editable={editable}
             placeholder={placeholder}

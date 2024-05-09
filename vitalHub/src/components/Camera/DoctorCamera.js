@@ -1,5 +1,5 @@
 import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Camera, CameraType } from 'expo-camera';
+import { Camera, CameraView} from 'expo-camera';
 import { useEffect, useRef, useState } from 'react';
 
 import { PinchGestureHandler, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -28,9 +28,9 @@ export default function DoctorCam({ navigation }) {
 
     const [photo, setPhoto] = useState(null)
 
-    const [tipoCamera, setTipoCamera] = useState(CameraType.back)
+    const [tipoCamera, setTipoCamera] = useState('back')
 
-    const [flashMode, setFlashMode] = useState(Camera.Constants.FlashMode.off);
+    const [flashMode, setFlashMode] = useState('off');
 
     const [zoom, setZoom] = useState(0)
 
@@ -122,7 +122,7 @@ export default function DoctorCam({ navigation }) {
             <PinchGestureHandler onGestureEvent={(event) => { changeZoom(event) }}>
                 <View style={styles.container}>
 
-                    <Camera
+                    <CameraView
                         ref={cameraRef}
                         zoom={zoom}
                         style={styles.camera}
@@ -141,7 +141,7 @@ export default function DoctorCam({ navigation }) {
 
                         <TouchableOpacity
                             style={styles.btnFlip}
-                            onPress={() => setTipoCamera(tipoCamera == CameraType.front ? CameraType.back : CameraType.front)}
+                            onPress={() => setTipoCamera(tipoCamera == 'front' ? 'back' : 'front')}
                         >
 
                             <Ionicons name="camera-reverse" size={32} color="white" />
@@ -174,12 +174,12 @@ export default function DoctorCam({ navigation }) {
 
                             <TouchableOpacity
                                 style={styles.btnFlash}
-                                onPress={() => setFlashMode(flashMode === Camera.Constants.FlashMode.off
-                                    ? Camera.Constants.FlashMode.on
-                                    : Camera.Constants.FlashMode.off)}
+                                onPress={() => setFlashMode(flashMode === 'off'
+                                    ? 'on'
+                                    : 'off')}
                             >
 
-                                {flashMode ? <Ionicons name="flash" size={23} color="white" /> : <Ionicons name="flash-off" size={24} color="white" />}
+                                {flashMode === 'on'? <Ionicons name="flash" size={23} color="white" /> : <Ionicons name="flash-off" size={24} color="white" />}
 
                             </TouchableOpacity>
 
@@ -217,7 +217,7 @@ export default function DoctorCam({ navigation }) {
 
                         </View>
 
-                    </Camera>
+                    </CameraView>
                 </View>
             </PinchGestureHandler>
         </GestureHandlerRootView>

@@ -213,7 +213,7 @@ export const PatientProfile = ({ navigation, route }) => {
           textLabel="CPF"
           placeholder="CPF..."
           keyboardType="numeric"
-          maxLength={11}
+          maxLength={14}
           // fieldValue={cpf ? `${cpf.slice(0,3)}.${cpf.slice(3,6)}.${cpf.slice(6,9)}` : ""}
           fieldValue={mask(cpf, "999.999.999-99")}
           editable={editable}

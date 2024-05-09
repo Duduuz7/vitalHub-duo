@@ -75,7 +75,7 @@ export const ViewPrescription = ({ navigation, route }) => {
             console.log(response.data);
 
 
-            setDescricaoExame(...descricaoExame + "\n" + response.data.descricao);
+            setDescricaoExame(descricaoExame + "\n" + response.data.descricao);
         } catch (error) {
             // Lógica para lidar com o erro em caso de falha na requisição
             console.log("Entrou no catch da OCR");
@@ -109,6 +109,8 @@ export const ViewPrescription = ({ navigation, route }) => {
         if (route.params.photoUri) {
             InserirExame();
             BuscarProntuario();
+        }else{
+            console.log("é, nn tem msm");
         }
     }, [route])
 
@@ -183,6 +185,7 @@ export const ViewPrescription = ({ navigation, route }) => {
 
                         <HighInputBoxGrey
                             // fieldHeight={350}
+                            numberOfLines={5}
                             placeholderTextColor={"#A1A1A1"}
                             placeholder={"Resultado do exame"}
                             editable={false}

@@ -21,6 +21,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ButtonCamera, ImageView } from "./Style";
 
+import { mask, unMask } from "remask";
+
+
+
+
 export const DoctorProfile = ({ navigation, route }) => {
     const [cep, setCep] = useState("");
     const [logradouro, setLogradouro] = useState("");
@@ -123,24 +128,27 @@ export const DoctorProfile = ({ navigation, route }) => {
     };
 
     const handleCepChange = async (newCep) => {
-        setCep(newCep);
-        if (newCep.length === 8) {
-            try {
-                const response = await fetch(
-                    `https://viacep.com.br/ws/${newCep}/json/`
-                );
-                const data = await response.json();
-                if (!data.erro) {
-                    setLogradouro(data.logradouro);
-                    setCidade(data.localidade);
-                } else {
-                    console.error("CEP não encontrado");
-                }
-            } catch (error) {
-                console.error("Erro ao consultar ViaCEP:", error);
+    
+        setCep(unMask(newCep));
+    
+        if (newCep.length === 9) {
+          try {
+            const response = await fetch(
+              `https://viacep.com.br/ws/${newCep}/json/`
+            );
+            const data = await response.json();
+            if (!data.erro) {
+              setLogradouro(data.logradouro);
+              setCidade(data.localidade);
+            } else {
+              console.error("CEP não encontrado");
             }
+          } catch (error) {
+            console.error("Erro ao consultar ViaCEP:", error);
+          }
         }
-    };
+      };
+
 
     const handleSave = async () => {
         try {
@@ -167,7 +175,7 @@ export const DoctorProfile = ({ navigation, route }) => {
             console.log("Dados do Médico atualizados com sucesso.");
             setEditable(false);
             setLogradouro(logradouro); // Atualize o estado com o novo logradouro
-            setCep(cep); // Atualize o estado com o novo CEP
+            setCep(unMask(cep)); // Atualize o estado com o novo CEP
             setCidade(cidade); // Atualize o estado com a nova cidade
             console.log(logradouro, cep, cidade);
         } catch (error) {
@@ -237,9 +245,9 @@ export const DoctorProfile = ({ navigation, route }) => {
                         placeholderTextColor="#A1A1A1"
                         textLabel="CEP"
                         placeholder="CEP..."
-                        maxLength={8}
+                        maxLength={9}
                         keyboardType="numeric"
-                        fieldValue={cep} // Exibir o CEP cadastrado
+                        fieldValue={mask(cep, "99999-999")} // Exibir o CEP cadastrado
                         editable={editable}
                         onChangeText={handleCepChange}
                         fieldWidth={40}

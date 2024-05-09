@@ -13,21 +13,26 @@ import axios from 'axios'
 import api from '../../services/Services'
 import moment from 'moment'
 
+import { mask, unMask } from "remask";
+
 
 export const CreateAccount = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
-    const [dataNascimento, setDataNascimento] = useState('');
+    const [dataNascimento, setDataNascimento] = useState("");
     const [nome, setNome] = useState('');
 
     const [loading, setLoading] = useState(false);
 
-
     const handleCadastro = async () => {
 
         setLoading(true);
+
+        const arrayDataNascimento = dataNascimento.split("/")
+
+        const dataNascimentoFormatada = `${arrayDataNascimento[2]}-${arrayDataNascimento[1]}-${arrayDataNascimento[0]}`  
 
         try {
 
@@ -40,7 +45,7 @@ export const CreateAccount = ({ navigation }) => {
                 // form.append("dataNascimento", `${moment(dataNascimento).format("YYYY-MM-DD")}`);
                 form.append("senha", `${senha}`);
                 form.append("idTipoUsuario", `9850203C-3FEF-4824-A75C-D446187B7A5D`);
-                form.append("dataNascimento", `${dataNascimento}`);
+                form.append("dataNascimento", `${dataNascimentoFormatada}`);
 
                 const response = await api.post('/Pacientes', form, {
 
@@ -58,7 +63,10 @@ export const CreateAccount = ({ navigation }) => {
 
                 //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
 
+                setLoading(false)
+                
                 navigation.replace("Login");
+                
 
             } else {
 
@@ -110,7 +118,9 @@ export const CreateAccount = ({ navigation }) => {
                     placeholder={"Nascimento (ano-mes-dia)"}
                     placeholderTextColor={'#49B3BA'}
                     onChangeText={text => setDataNascimento(text)}
-                    value={dataNascimento}
+                    // keyboardType={'numeric'}
+                    fieldValue={mask(dataNascimento, "99/99/9999")}
+                    
                 />
                 <Input
                     placeholder={"Senha"}

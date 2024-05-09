@@ -129,9 +129,22 @@ export const ModalStethoscope = ({
           <FlexButtons>
             <ButtonLargeSelect
               onPress={() => {
-                localizacaoP != null && selected.exame == true || selected.rotina == true || selected.urgencia == true ?
-                  handleContinue() :
+
+                // localizacaoP != null && selected.exame == true || selected.rotina == true || selected.urgencia == true ?
+                //   handleContinue() :
+                //   alert("Preencha os campos para prosseguir !!!")
+                
+                if(selected.exame == true || selected.rotina == true || selected.urgencia == true){
+                  
+                    if(localizacaoP != ""){
+                      handleContinue()
+                    }else{
+                      alert("Preencha os campos para prosseguir !!!")
+                    }
+              
+                }else{
                   alert("Preencha os campos para prosseguir !!!")
+                }
               }}
               text={"Continuar"}
             />
