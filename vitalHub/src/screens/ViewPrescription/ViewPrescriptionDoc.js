@@ -119,17 +119,18 @@ export const ViewPrescriptionDoc = ({ navigation, route }) => {
                         <BoxBtn>
                             <SendButton onPress={() => { navigation.navigate("Camera") }} text={"Enviar"} />
                             <CardCancel onPressCancel={() => { navigation.replace("Main") }} text={"Cancelar"} />
-                        </BoxBtn>
+                        </BoxBtn>*/}
 
-                        <Line /> */}
+                        <Line /> 
 
-                        {/* <HighInputBoxGrey
+                        <HighInputBoxGrey
                             // fieldHeight={350}
                             placeholderTextColor={"#A1A1A1"}
                             placeholder={"Resultado do exame"}
                             editable={true}
                             fieldWidth={90}
-                        /> */}
+                            fieldValue={consultaSelecionada.exames.descricao != null ? consultaSelecionada.exames.descrica : null}
+                        /> 
 
                         <CardBackLess onPressCancel={() => { navigation.replace("DoctorMain") }} text={"Voltar"} />
 

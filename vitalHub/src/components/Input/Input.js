@@ -1,10 +1,14 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { InputHigh, InputHighGrey, InputNumeric, InputProfile, InputText, InputTextLarge } from "./StyleInput";
+import { ContainerSecure, InputHigh, InputHighGrey, InputNumeric, InputProfile, InputText, InputTextLarge } from "./StyleInput";
 import RNPickerSelect from 'react-native-picker-select';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
+
+import { Entypo } from '@expo/vector-icons';
+import { EyeContainer } from "../Container/StyleContainer";
+
 
 
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -34,9 +38,42 @@ export function Input({
     )
 }
 
+export function InputSecure({
+    onPress,
+    placeholder,
+    fieldValue,
+    onChangeText,
+    keyboardType,
+    maxLength,
+    placeholderTextColor,
+    editable = true,
+    secureTextEntry = false
+}) {
+    return (
+        <ContainerSecure>
+
+            <EyeContainer onPress={onPress}>
+                {secureTextEntry ? <Entypo name="eye" size={24} color="#49B3BA" /> : <Entypo name="eye-with-line" size={24} color="#49B3BA" />}
+            </EyeContainer>
+
+            <InputText
+                editable={editable}
+                placeholder={placeholder}
+                keyboardType={keyboardType}
+                placeholderTextColor={placeholderTextColor}
+                maxLength={maxLength}
+                value={fieldValue}
+                onChangeText={onChangeText}
+                secureTextEntry={secureTextEntry}
+            />
+        </ContainerSecure>
+    )
+}
 
 
-export const InputSelect = ({setHoraSelecionada}) => {
+
+
+export const InputSelect = ({ setHoraSelecionada }) => {
 
     const pickerStyles = {
         inputIOS: style.pickerInput,
@@ -57,26 +94,26 @@ export const InputSelect = ({setHoraSelecionada}) => {
 
 
     async function loadOptions() {
-        
+
         //Capturar a quantidade que faltam para 24h
 
-        const horasRestantes = moment(dataAtual).add(24, 'hours').diff( moment(), "hours")
+        const horasRestantes = moment(dataAtual).add(24, 'hours').diff(moment(), "hours")
 
         // console.log(horasRestantes);
 
         //Criar um laço que rode a quantidade de horas
 
-        const  options = Array.from({length : horasRestantes}, (_, index) => {
+        const options = Array.from({ length: horasRestantes }, (_, index) => {
             let valor = new Date().getHours() + (index + 1)
 
             //Pra cada hora será uma nova option
 
             return {
-                label: `${valor}:00`, value : `${valor}:00`
+                label: `${valor}:00`, value: `${valor}:00`
             }
         })
 
-        setArrayOptions( options )
+        setArrayOptions(options)
 
     }
 
@@ -92,27 +129,27 @@ export const InputSelect = ({setHoraSelecionada}) => {
                 arrayOptions ? (
 
                     <RNPickerSelect
-                    useNativeAndroidPickerStyle={false}
-                    style={style}
-                    Icon={() => {
-                        return <FontAwesomeIcon icon={faCaretDown} color='#34898F' size={22} />
-                    }}
-                    placeholder={{
-                        label: 'Selecione um valor',
-                        value: null,
-                        color: '#34898F'
-                    }}
-                    onValueChange={(value) => setHoraSelecionada(value)}
-                    items={
-                        arrayOptions
-                    }
-                />
+                        useNativeAndroidPickerStyle={false}
+                        style={style}
+                        Icon={() => {
+                            return <FontAwesomeIcon icon={faCaretDown} color='#34898F' size={22} />
+                        }}
+                        placeholder={{
+                            label: 'Selecione um valor',
+                            value: null,
+                            color: '#34898F'
+                        }}
+                        onValueChange={(value) => setHoraSelecionada(value)}
+                        items={
+                            arrayOptions
+                        }
+                    />
 
                 ) :
 
-                <ActivityIndicator style={{marginTop: 28}}/>
+                    <ActivityIndicator style={{ marginTop: 28 }} />
             }
-           
+
         </View>
     )
 }

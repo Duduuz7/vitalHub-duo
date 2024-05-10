@@ -62,3 +62,11 @@ export const InputHighGrey = styled(InputHigh)`
 export const InputTextLarge = styled(InputText)`
     width: 100%;
 `
+
+export const ContainerSecure = styled.View`
+    width: 100%;
+    height: 90px;
+    margin-left: 10%;
+    margin-bottom: 18px;
+    margin-top: -25px;
+`

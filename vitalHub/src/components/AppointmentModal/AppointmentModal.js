@@ -11,6 +11,8 @@ import { useEffect } from "react"
 import api from "../../services/Services"
 
 
+import { mask, unMask } from "remask";
+
 export const AppointmentModal = ({
     consulta = null,
     navigation,
@@ -19,13 +21,15 @@ export const AppointmentModal = ({
     ...rest
 }) => {
     
+    const dataHoje = new Date()
+
     function HandleContinue() {
         ConsultaRealizada()
-        navigation.replace("MedicalRecords",  { consulta : consulta })
+        navigation.replace("MedicalRecords", { consulta: consulta })
     }
 
     async function ConsultaRealizada() {
-   //Chamando o metodo da api
+        //Chamando o metodo da api
 
         // console.log(`/Consultas/Status?idConsulta=${consulta.id}&status=${"Realizada"}`)
         await api.put(`/Consultas/Status?idConsulta=${consulta.id}&status=${"Realizada"}`
@@ -43,7 +47,7 @@ export const AppointmentModal = ({
         })
 
     }
-    
+
     return (
 
         <Modal
@@ -58,7 +62,7 @@ export const AppointmentModal = ({
 
                         <ModalContent>
 
-                            <ImageModalRecord source={{uri : consulta.paciente.idNavigation.foto}} />
+                            <ImageModalRecord source={{ uri: consulta.paciente.idNavigation.foto }} />
 
                             <TitleModalRecord>{consulta.paciente.idNavigation.nome}</TitleModalRecord>
 
@@ -67,12 +71,15 @@ export const AppointmentModal = ({
                                 <DescriptionModalRecord>
                                     {`${moment().year() - moment(consulta.paciente.dataNascimento).format("YYYY")} anos`}
                                 </DescriptionModalRecord>
+                                
                                 <DescriptionModalRecord>{consulta.paciente.idNavigation.email}</DescriptionModalRecord>
 
                             </BoxAgeEmailModal>
 
                             <ButtonLargeSelect
-                                onPress={() => {HandleContinue()}}
+                                onPress={() => {
+                                    moment(consulta.dataConsulta).format('YYYY/MM/dd') > moment(dataHoje).format('YYYY/MM/dd') ? alert("Só é possível inserir prontuário no dia da consulta ou em dias posteriores !!!") : HandleContinue()
+                                }}
                                 text={"Inserir Prontuário"}
                             />
 

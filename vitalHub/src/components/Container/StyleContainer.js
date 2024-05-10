@@ -198,3 +198,10 @@ export const ContentBar = styled.TouchableOpacity`
   /* height: 60px; */
   /* margin-bottom: 50px; */
 `;
+
+export const EyeContainer = styled.TouchableOpacity`
+  position: fixed;
+  top: 65%;
+  left: 78%;
+  z-index: 999;
+`

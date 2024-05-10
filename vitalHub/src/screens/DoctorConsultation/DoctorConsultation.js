@@ -194,7 +194,7 @@ export const DoctorConsultation = ({ navigation }) => {
                         url={item.paciente.idNavigation.foto}
                         status={item.situacao.situacao}
                         // onPressCancel={() => setShowModalCancel(true)}
-                        onPressAppointment={() => { navigation.navigate("ViewPrescriptionDoc", { consulta: item }) }}
+                        onPressAppointment={() => { navigation.navigate("MedicalRecords", { consulta: item }) }}
                         // onPressAppointmentCard={() => setShowModalAppointment(item.situacao.situacao === 'Agendada' ? true : false)}
 
                         onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(prevState => ({ ...prevState, id: item.id })), ListarConsultas() }}
