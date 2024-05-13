@@ -25,22 +25,6 @@ export const CheckEmail = ({ navigation, route }) => {
     setLoading(true);
   }
 
-  // const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
-
-  // function focusNextInput( index ){
-  //     //Verificar se o index é menor do que a quantidade de campos
-
-  //     if (index < inputs.length - 1) {
-  //         inputs[index + 1].current.focus()
-  //     }
-  // }
-
-  // function focusPrevInput( index ){
-  //     if (index > 0) {
-  //         inputs[index - 1].current.focus()
-  //     }
-  // }
-
   async function validateRecoveryCode() {
     try {
       await api.post(
@@ -52,7 +36,15 @@ export const CheckEmail = ({ navigation, route }) => {
       });
       setLoading(false)
     } catch (error) {
-      alert("Código incorreto !!!")
+
+      Alert.alert(
+        'Erro ao prosseguir !!',
+        'Código incorreto !!!',
+        [
+          { text: 'Ok'},
+        ]
+      );
+
       setLoading(false)
       console.log(error, email);
     }
@@ -82,47 +74,8 @@ export const CheckEmail = ({ navigation, route }) => {
 
       <EmailDescription email={route.params.emailRecuperacao} />
 
-      {/* <BoxNumeric>
-                {
-                    [0, 1, 2, 3].map((index) => (
-                        <NumericInput
-                            key={index}
+      <CodeInput value={code} setValue={setCode} />
 
-                            ref={inputs[index]}
-
-                            placeholder={"0"}
-                            placeholderTextColor={"#34898F"}
-
-                            onChangeText={(x) => {
-                                //Verificar se o campo é vazio
-
-                                if (x == "") {
-
-                                    focusPrevInput( index )
-
-                                } else {
-                                    //Verificar se o campo foi preenchido
-
-                                    const codigoInformado = [...codigo]
-                                    codigoInformado[index] = x
-
-                                    setCodigo(codigoInformado.join)
-
-                                    focusNextInput( index )
-                                }
-
-                            }}
-                        />
-                    ))
-                }
-
-            </BoxNumeric> */}
-
-      <CodeInput code={code} setCode={setCode} />
-
-      {/* <ButtonNormal text={"Confirmar"} onPress={() => {validateRecoveryCode(), navigation.navigate("RedefinePassword", email) }} /> */}
-
-      {/* <ButtonNormal text={"Confirmar"} onPress={() =>  validateRecoveryCode() } /> */}
 
       <Button
         disabled={loading}
@@ -135,6 +88,7 @@ export const CheckEmail = ({ navigation, route }) => {
       </Button>
 
       <CodeResend onPress={() => resendCode()} text={"Reenviar Código"} />
+      
     </Container>
   );
 };

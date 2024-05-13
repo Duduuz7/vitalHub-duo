@@ -23,14 +23,14 @@ export const ConfirmAppointmentModal = ({
 
     const [profile, setProfile] = useState(null)
 
-    async function profileLoad() {
+    async function ProfileLoad() {
         const token = await userDecodeToken()
 
         setProfile(token)
     }
 
 
-    async function handleConfirm() {
+    async function HandleConfirm() {
 
         await api.post(`/Consultas/Cadastrar`, {
             ...agendamento,
@@ -51,7 +51,7 @@ export const ConfirmAppointmentModal = ({
     }
 
     useEffect(() => {
-        profileLoad()
+        ProfileLoad()
     }, [])
 
 
@@ -101,7 +101,7 @@ export const ConfirmAppointmentModal = ({
                     <ButtonLargeConfirmModal
                         onPress={
                             () => {
-                                handleConfirm()
+                                HandleConfirm()
                             }
                         }
                         text={"Confirmar"}

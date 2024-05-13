@@ -21,7 +21,7 @@ export const Main = ({ navigation, route }) => {
 
   const routeParams = route.params
 
-  async function profileLoad() {
+  async function ProfileLoad() {
 
     const token = await userDecodeToken();
 
@@ -31,7 +31,7 @@ export const Main = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    profileLoad()
+    ProfileLoad()
   }, [])
 
   return (

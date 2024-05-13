@@ -1,10 +1,10 @@
-import { ActivityIndicator, StatusBar } from 'react-native'
+import { ActivityIndicator, Alert, StatusBar } from 'react-native'
 import { ButtonNormal } from '../../components/Button/Button'
 import { Button, NormalButton } from '../../components/Button/StyleButton'
 import { ButtonText } from '../../components/ButtonText/StyleButtonText'
 import { Container, ScrollContainer, ScrollContainerB } from '../../components/Container/StyleContainer'
 import { DescriptionPassword } from '../../components/Descriptions/Descriptions'
-import { Input } from '../../components/Input/Input'
+import { Input, InputSecure } from '../../components/Input/Input'
 import { Cancel } from '../../components/Link/Link'
 import { Title } from '../../components/Title/StyleTitle'
 import { LogoCreateAccount } from '../../components/Images/StyleImages'
@@ -26,17 +26,24 @@ export const CreateAccount = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
 
+
+
+    const [secureSenha, setSecureSenha] = useState(true);
+
+
+
+
     const handleCadastro = async () => {
 
         setLoading(true);
 
         const arrayDataNascimento = dataNascimento.split("/")
 
-        const dataNascimentoFormatada = `${arrayDataNascimento[2]}-${arrayDataNascimento[1]}-${arrayDataNascimento[0]}`  
+        const dataNascimentoFormatada = `${arrayDataNascimento[2]}-${arrayDataNascimento[1]}-${arrayDataNascimento[0]}`
 
         try {
 
-            if (senha === confirmarSenha) {
+            if (senha === confirmarSenha && senha.length >= 4) {
 
                 const form = new FormData()
 
@@ -64,13 +71,20 @@ export const CreateAccount = ({ navigation }) => {
                 //Após o cadastro, vai redirecionar para a tela de Login ( Se Deus quiser )
 
                 setLoading(false)
-                
+
                 navigation.replace("Login");
-                
+
 
             } else {
 
-                alert("As senhas não coincidem");
+                Alert.alert(
+                    'Erro ao efetuar o cadastro !!',
+                    'As senhas não coincidem, a senha precisa ter 4 digitos ou mais !!!',
+                    [
+                      { text: 'Ok'},
+                    ]
+                  );
+
                 setLoading(false)
 
             }
@@ -115,31 +129,58 @@ export const CreateAccount = ({ navigation }) => {
                     value={email}
                 />
                 <Input
-                    placeholder={"Nascimento (ano-mes-dia)"}
+                    placeholder={"Data de Nascimento"}
                     placeholderTextColor={'#49B3BA'}
                     onChangeText={text => setDataNascimento(text)}
                     // keyboardType={'numeric'}
                     fieldValue={mask(dataNascimento, "99/99/9999")}
-                    
+
                 />
-                <Input
+
+                <InputSecure
+                    onPress={() => { secureSenha ? setSecureSenha(false) : setSecureSenha(true) }}
                     placeholder={"Senha"}
-                    placeholderTextColor={'#49B3BA'}
-                    secureTextEntry={true}
-                    onChangeText={text => setSenha(text)}
-                    value={senha}
+                    placeholderTextColor={"#49B3BA"}
+                    secureTextEntry={secureSenha}
+                    fieldValue={senha}
+                    onChangeText={(txt) => setSenha(txt)}
                 />
-                <Input
+
+                <InputSecure
+                    onPress={() => { secureSenha ? setSecureSenha(false) : setSecureSenha(true) }}
                     placeholder={"Confirmar Senha"}
-                    placeholderTextColor={'#49B3BA'}
-                    secureTextEntry={true}
-                    onChangeText={text => setConfirmarSenha(text)}
-                    value={confirmarSenha}
+                    placeholderTextColor={"#49B3BA"}
+                    secureTextEntry={secureSenha}
+                    fieldValue={confirmarSenha}
+                    onChangeText={(txt) => setConfirmarSenha(txt)}
                 />
 
                 <Button disabled={loading}
                     onPress={
-                        () => nome && email && senha && dataNascimento != null ? handleCadastro() : alert("Preencha todos os campos para criar uma conta !!!")
+                        () => {
+                            if (nome && email && senha && dataNascimento != null) {
+                                if (dataNascimento.length < 10) {
+                                    Alert.alert(
+                                        'Erro ao efetuar o cadastro !!',
+                                        'A data de nascimento inserida é inválida !',
+                                        [
+                                          { text: 'Ok'},
+                                        ]
+                                      );
+                                }
+                                else {
+                                    handleCadastro()
+                                }
+                            } else {
+                                Alert.alert(
+                                    'Erro ao efetuar o cadastro !!',
+                                    'Preencha todos os campos !',
+                                    [
+                                      { text: 'Ok'},
+                                    ]
+                                  );
+                            }
+                        }
                     }>
                     {loading ? <ActivityIndicator /> : <ButtonText>Cadastrar</ButtonText>}
                 </Button>

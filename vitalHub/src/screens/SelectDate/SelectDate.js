@@ -1,4 +1,4 @@
-import { StatusBar } from "react-native"
+import { Alert, StatusBar } from "react-native"
 import { BoxInputSelectLabel, Container } from "../../components/Container/StyleContainer"
 import { TitleSelect } from "../../components/Title/StyleTitle"
 import CalendarComponent from "../../components/CalendarComponent/CalendarComponent"
@@ -71,7 +71,13 @@ export const SelectDate = ({ navigation, route }) => {
 
             <BoxButtons>
                 <ButtonLarge onPress={
-                    () => horaSelecionada && horaSelecionada != null ? handleContinue() : alert("Preencha todos os campos para prosseguir !!!")
+                    () => horaSelecionada && dataSelecionada != null ? handleContinue() : Alert.alert(
+                        'Erro ao prosseguir !!',
+                        'Preencha todos os campos para prosseguir !!!',
+                        [
+                          { text: 'Ok'},
+                        ]
+                      )
                 } 
                     text={'Confirmar'}
                 />

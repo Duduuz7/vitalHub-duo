@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Calendar from "../../components/Calendar/Calendar"
 
 import { FilterButton } from "../../components/Button/Button"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Card } from "../../components/Cards/Cards"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 
@@ -19,6 +19,7 @@ import { tokenClean, userDecodeToken } from "../../utils/Auth"
 
 import api from "../../services/Services";
 import moment from "moment"
+import { useFocusEffect } from "@react-navigation/native"
 
 
 export const PatientConsultation = ({ navigation, route }) => {
@@ -41,6 +42,13 @@ export const PatientConsultation = ({ navigation, route }) => {
         //ID DE CONSULTAS CANCELADAS, PEGAR NO BANCO -----------------------------
         situacaoId: ''
     })
+
+
+    const [reload, setReload] = useState(false)
+
+    // States para verficar os dias
+    const [diaAtual, setDiaAtual] = useState()
+    const [diaDaConsulta, setDiaDaConsulta] = useState()
 
 
     //Criar a função para obter a lista de consultas da api e setar no state
@@ -87,6 +95,27 @@ export const PatientConsultation = ({ navigation, route }) => {
 
     }
 
+
+    function AtualizarStatus() {
+        const currentDate = new Date();
+        setDiaAtual(currentDate.getTime())
+
+        consultaLista.forEach((item) => {
+
+            const dataComoObjeto = new Date(item.dataConsulta);
+            const dataComoInteiro = dataComoObjeto.getTime();
+            setDiaDaConsulta(dataComoInteiro);
+            if (dataComoInteiro < currentDate.getTime()) {
+                async () => {
+                    await api.put(`/Consultas/Status?idConsulta=${item.id}&status=${"Realizada"}`)
+                    setReload(true)
+                }
+            }
+        });
+
+    }
+
+
     async function BuscarFotoDePerfil() {
 
         const tokenB = await userDecodeToken();
@@ -122,19 +151,28 @@ export const PatientConsultation = ({ navigation, route }) => {
 
     // RETURN
 
+
+    //ATUALIZA FOTO DE PERFIL SEMPRE QUE ALTERADA AO VOLTAR PARA A PAGINA HOME
+    useFocusEffect(
+        useCallback(() => {
+            profileLoad()
+            BuscarFotoDePerfil()
+        }, [])
+    )
+
     useEffect(() => {
         profileLoad()
         setSelected("Agendada")
-
-        // GetConsultas()
     }, [])
+
 
     useEffect(() => {
         if (dataConsulta != '') {
             ListarConsultas()
+            AtualizarStatus();
         }
         // console.log(dataConsulta);
-    }, [dataConsulta, showModalCancel])
+    }, [dataConsulta, showModalCancel, reload])
 
     useEffect(() => {
         BuscarFotoDePerfil()

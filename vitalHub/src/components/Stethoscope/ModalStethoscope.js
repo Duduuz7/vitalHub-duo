@@ -39,7 +39,7 @@ export const ModalStethoscope = ({
 
   const [agendamento, setAgendamento] = useState(null);
 
-  async function handleContinue() {
+  async function HandleContinue() {
 
     await setShowModalStethoscope(false);
 
@@ -131,13 +131,13 @@ export const ModalStethoscope = ({
               onPress={() => {
 
                 // localizacaoP != null && selected.exame == true || selected.rotina == true || selected.urgencia == true ?
-                //   handleContinue() :
+                //   HandleContinue() :
                 //   alert("Preencha os campos para prosseguir !!!")
                 
                 if(selected.exame == true || selected.rotina == true || selected.urgencia == true){
                   
                     if(localizacaoP != ""){
-                      handleContinue()
+                      HandleContinue()
                     }else{
                       alert("Preencha os campos para prosseguir !!!")
                     }

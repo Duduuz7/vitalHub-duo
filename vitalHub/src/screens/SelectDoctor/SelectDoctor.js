@@ -1,4 +1,4 @@
-import { StatusBar, Text } from "react-native";
+import { Alert, StatusBar, Text } from "react-native";
 import {
   Container,
   FlatContainerSelect,
@@ -109,7 +109,13 @@ export const SelectDoctor = ({ navigation, route }) => {
 
       <ButtonLargeSelect
         onPress={() => {
-          selected == false ? alert("Selecione um médico para prosseguir !!!") :
+          selected == false ? Alert.alert(
+            'Erro ao prosseguir !!',
+            'Selecione um médico para prosseguir !!!',
+            [
+              { text: 'Ok'},
+            ]
+          ) :
             handleContinue()
         }}
         text={"Continuar"}

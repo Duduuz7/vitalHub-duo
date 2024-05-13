@@ -24,7 +24,7 @@ export const PatientAppointmentModal = ({
 }) => {
 
 
-  function handlePress(rota) {
+  function HandlePress(rota) {
     
     navigation.replace(rota, { clinicaId: consulta.medicoClinica.clinicaId })
   }
@@ -57,7 +57,7 @@ export const PatientAppointmentModal = ({
               <ButtonLargeConfirmModal
                 onPress={() => {
                   // navigation.navigate("ConsultLocalization", { latitude: doctorData.latitude , longitude: doctorData.longitude } ),
-                  handlePress("ConsultLocalization")
+                  HandlePress("ConsultLocalization")
                   setShowModal(false);
                 }}
                 text={"Ver Local da Consulta"}

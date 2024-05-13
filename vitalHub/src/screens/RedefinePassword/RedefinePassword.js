@@ -1,4 +1,4 @@
-import { ActivityIndicator, StatusBar } from "react-native";
+import { ActivityIndicator, Alert, StatusBar } from "react-native";
 import { ButtonNormal } from "../../components/Button/Button";
 import { Button, NormalButton } from "../../components/Button/StyleButton";
 import { ButtonText } from "../../components/ButtonText/StyleButtonText";
@@ -23,7 +23,15 @@ export const RedefinePassword = ({ navigation, route }) => {
 
   async function changePassword() {
     if (novaSenha !== confirmarSenha) {
-      alert("A senha e sua confirmação não são iguais !!!");
+
+      Alert.alert(
+        'Erro ao prosseguir !!',
+        'A senha e sua confirmação não são iguais !!!',
+        [
+          { text: 'Ok'},
+        ]
+      );
+
       setLoading(false)
     } 
     else {
@@ -37,7 +45,15 @@ export const RedefinePassword = ({ navigation, route }) => {
         })
         .catch((error) => {
           console.log(error);
-          alert("Por favor! Preencha o campo!");
+
+          Alert.alert(
+            'Erro ao prosseguir !!',
+            'Por favor preencha o campo !!!',
+            [
+              { text: 'Ok'},
+            ]
+          );
+
           setLoading(false)
           // console.log(
           //   `$/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`
@@ -93,7 +109,13 @@ export const RedefinePassword = ({ navigation, route }) => {
           changePassword();
           novaSenha, confirmarSenha != null
             ? changePassword()
-            : alert("Por favor! Preencha o campo !");
+            :  Alert.alert(
+              'Erro ao prosseguir !!',
+              'Por favor preencha o campo !!!',
+              [
+                { text: 'Ok'},
+              ]
+            );
         }}
       >
         {loading ? (

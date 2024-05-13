@@ -1,4 +1,4 @@
-import { StatusBar, Text } from "react-native";
+import { Alert, StatusBar, Text } from "react-native";
 import { ButtonLargeSelect } from "../../components/Button/Button";
 import { LargeButtonSelect } from "../../components/Button/StyleButton";
 import { CardSelectClinic } from "../../components/Cards/Cards";
@@ -139,7 +139,14 @@ export const SelectCLinic = ({ navigation, route }) => {
 
       <ButtonLargeSelect
         onPress={() => {
-          selected == false ? alert("Selecione uma clínica para prosseguir !!!") :
+          selected == false ? Alert.alert(
+            'Erro ao prosseguir !!',
+            'Selecione uma clínica para prosseguir !!!',
+            [
+              { text: 'Ok'},
+            ]
+          )
+         :
           handleContinue()
         }}
         text={"Continuar"}

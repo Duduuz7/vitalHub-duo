@@ -1,4 +1,4 @@
-import { ActivityIndicator, StatusBar } from "react-native";
+import { ActivityIndicator, Alert, StatusBar } from "react-native";
 import { ButtonNormal } from "../../components/Button/Button";
 import { Container } from "../../components/Container/StyleContainer";
 import { DescriptionPassword } from "../../components/Descriptions/Descriptions";
@@ -11,7 +11,8 @@ import { Button } from "../../components/Button/StyleButton";
 import { ButtonText } from "../../components/ButtonText/StyleButtonText";
 
 export const ForgotPassword = ({ navigation }) => {
-  const [email, setEmail] = useState("heitorperrotta@gmail.com");
+  
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function indicator() {
@@ -25,7 +26,15 @@ export const ForgotPassword = ({ navigation }) => {
       setLoading(false)
     } catch (error) {
       console.log(error);
-      alert("Por favor! Preencha o campo de email imediatamente!");
+    
+      Alert.alert(
+        'Erro ao prosseguir !!',
+        'Preencha o campo de email com o seu email para prosseguir !!!',
+        [
+          { text: 'Ok'},
+        ]
+      );
+
       setLoading(false);
     }
   }
@@ -61,7 +70,13 @@ export const ForgotPassword = ({ navigation }) => {
           indicator();
           email != null
             ? sendEmail()
-            : alert("Por favor! Preencha o campo de email!");
+            : Alert.alert(
+              'Erro ao prosseguir !!',
+              'Preencha o campo de email !!!',
+              [
+                { text: 'Ok'},
+              ]
+            );
         //   navigation.navigate("CheckEmail", { emailRecuperacao: email });
         }}
       >

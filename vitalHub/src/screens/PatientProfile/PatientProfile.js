@@ -15,7 +15,7 @@ import {
 import { userDecodeToken, userLogoutToken } from "../../utils/Auth";
 import api from "../../services/Services";
 import moment from "moment/moment";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -52,13 +52,21 @@ export const PatientProfile = ({ navigation, route }) => {
             `/Pacientes/BuscarPorId?id=${userToken.idUsuario}`
           );
           const { endereco, dataNascimento, cpf, foto } = response.data;
+
           setPacienteData(response.data);
+
           console.log("Azulllll");
+
           setPhoto(response.data.idNavigation.foto)
+
           setLogradouro(endereco.logradouro);
+
           setCidade(endereco.cidade);
+
           setDataNascimento(dataNascimento);
+
           setCpf(cpf);
+          
           // Definir o estado `cep` com o CEP do paciente
           setCep(endereco.cep);
           console.log(endereco);
@@ -79,7 +87,7 @@ export const PatientProfile = ({ navigation, route }) => {
 
     console.log(route);
 
-    if (route.params != null ) {
+    if (route.params != null) {
       console.log(route.params);
       AlterarFotoPerfil()
     }
@@ -101,22 +109,22 @@ export const PatientProfile = ({ navigation, route }) => {
 
     const formData = new FormData();
 
-    formData.append('Arquivo',{
-      uri : route.params.photoUri ,
-      name : `image.${ route.params.photoUri.split(".")[1] }`,
-      type : `image/${ route.params.photoUri.split(".")[1] }`
+    formData.append('Arquivo', {
+      uri: route.params.photoUri,
+      name: `image.${route.params.photoUri.split(".")[1]}`,
+      type: `image/${route.params.photoUri.split(".")[1]}`
     });
 
-    
+
     await api.put(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
 
-    }).then( response => {
+    }).then(response => {
       console.log(response);
       setPhoto(route.params.photoUri)
-    }).catch( error => {
+    }).catch(error => {
       console.log(error);
     })
   }
@@ -128,7 +136,7 @@ export const PatientProfile = ({ navigation, route }) => {
   };
 
   const handleCepChange = async (newCep) => {
-    
+
     setCep(unMask(newCep));
 
     if (newCep.length === 9) {
@@ -150,33 +158,69 @@ export const PatientProfile = ({ navigation, route }) => {
   };
 
   const handleSave = async () => {
-    try {
-      await api.put(
-        `/Pacientes?idUsuario=${token.idUsuario}`,
-        {
-          logradouro: logradouro,
-          cep: unMask(cep),
-          cidade: cidade,
-          dataNascimento: dataNascimento,
-          cpf: unMask(cpf),
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + JSON.parse(token.token).token,
-          },
-        }
-      );
 
-      console.log("Dados do paciente atualizados com sucesso.");
-      setEditable(false);
-      setLogradouro(logradouro); // Atualize o estado com o novo logradouro
-      setCep(cep); // Atualize o estado com o novo CEP
-      setCidade(cidade); // Atualize o estado com a nova cidade
-      console.log(logradouro, cep, cidade);
-    } catch (error) {
-      console.error("Erro ao atualizar paciente:", error);
-      Alert.alert("Erro", "Falha ao atualizar os dados.");
+    if (cpf.length == 14) {
+
+      if (cep.length == 8) {
+
+        try {
+
+          await api.put(
+            `/Pacientes?idUsuario=${token.idUsuario}`,
+            {
+              logradouro: logradouro,
+              cep: unMask(cep),
+              cidade: cidade,
+              dataNascimento: dataNascimento,
+              cpf: unMask(cpf),
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + JSON.parse(token.token).token,
+              },
+            }
+          );
+
+          console.log("Dados do paciente atualizados com sucesso.");
+          setEditable(false);
+          setLogradouro(logradouro); // Atualize o estado com o novo logradouro
+          setCep(cep); // Atualize o estado com o novo CEP
+          setCidade(cidade); // Atualize o estado com a nova cidade
+          console.log(logradouro, cep, cidade);
+        } catch (error) {
+          console.error("Erro ao atualizar paciente:", error);
+          
+          Alert.alert(
+            'Erro ao prosseguir !!',
+            'Erro ao atualizar os dados !!!',
+            [
+              { text: 'Ok'},
+            ]
+          );
+        }
+
+      }
+      else {
+        Alert.alert(
+          'Erro ao atualizar !!',
+          'O CEP precisa ter 9 digitos !!!',
+          [
+            { text: 'Ok'},
+          ]
+        );
+      }
+
+    } else {
+
+      Alert.alert(
+        'Erro ao atualizar !!',
+        'O CPF precisa ter 14 digitos !!!',
+        [
+          { text: 'Ok'},
+        ]
+      );
     }
+    
   };
 
   return (
@@ -184,10 +228,10 @@ export const PatientProfile = ({ navigation, route }) => {
       <Container>
 
         <ImageView>
-          
+
           <ImagemPerfilPaciente
             // source={require("../../assets/LimaCorinthians.png")}
-            source={{uri: photo}}
+            source={{ uri: photo }}
           />
 
           <ButtonCamera onPress={() => { navigation.navigate("PatientCamera") }}>

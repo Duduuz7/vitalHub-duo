@@ -93,13 +93,13 @@ export default function DoctorCam({ navigation }) {
         }
     }
 
-    async function ClearPhoto() {
+    // async function ClearPhoto() {
 
-        setPhoto(null)
+    //     setPhoto(null)
 
-        setOpenModal(false)
+    //     setOpenModal(false)
 
-    }
+    // }
 
     async function UploadPhoto() {
 

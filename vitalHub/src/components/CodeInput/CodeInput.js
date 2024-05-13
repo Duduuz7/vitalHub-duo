@@ -8,12 +8,12 @@ import { CodeText, CodeView } from './StyleCodeInput';
 
 const CELL_COUNT = 4;
 
-export default function CodeInput({ code, setCode }) {
-    const ref = useBlurOnFulfill({code, cellCount: CELL_COUNT});
+export default function CodeInput({ value, setValue }) {
+    const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
 
     const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-      code,
-      setCode,
+      value,
+      setValue,
     });
 
     return (
@@ -21,9 +21,9 @@ export default function CodeInput({ code, setCode }) {
             <CodeField
                 ref={ref}
                 {...props}
-                value={code}
+                value={value}
                 autoFocus={true}
-                onChangeText={setCode}
+                onChangeText={setValue}
                 cellCount={CELL_COUNT}
                 rootStyle={codeFieldStyle}
                 keyboardType="number-pad"

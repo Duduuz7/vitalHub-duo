@@ -6,7 +6,7 @@ import { LinkMedium } from "../../components/TextMedium/TextMedium";
 import { LinkAccount } from "../../components/Link/Link";
 
 import { ButtonGoogle } from "../../components/Button/Button";
-import { ActivityIndicator, StatusBar, View } from "react-native";
+import { ActivityIndicator, Alert, StatusBar, View } from "react-native";
 import { useState } from "react";
 
 import api from "../../services/Services";
@@ -18,17 +18,26 @@ import { Button } from "../../components/Button/StyleButton";
 
 
 import { Entypo } from '@expo/vector-icons';
+import { ErrorModal } from "../../components/ErrorModal/ErrorModal";
 
 
 export const Login = ({ navigation }) => {
 
-  const [email, setEmail] = useState("lima@email.com");
-  const [senha, setSenha] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  // const [email, setEmail] = useState("lima@email.com");
+  // const [senha, setSenha] = useState("123456");
   // const [email, setEmail] = useState("thigas@email.com");
   // const [senha, setSenha] = useState("10203040");
   const [loading, setLoading] = useState(false);
 
   const [secureSenha, setSecureSenha] = useState(true);
+
+  //MODAL ERROR
+  const [showModalError, setShowModalError] = useState(false);
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   async function Login() {
     setLoading(true);
@@ -54,7 +63,15 @@ export const Login = ({ navigation }) => {
       })
       .catch((error) => {
         console.log(error);
-        alert("Senha ou email incorretos!")
+
+        Alert.alert(
+          'Erro ao efetuar o login !!',
+          'Senha ou email incorretos !',
+          [
+            { text: 'Ok'},
+          ]
+        );
+
         setLoading(false)
       });
   }
@@ -106,11 +123,13 @@ export const Login = ({ navigation }) => {
       </Button>
 
       <ButtonGoogle
-        // onPress={() => navigation.replace("DoctorMain")}
         text={"Entrar com Google"}
       />
 
       <LinkAccount onPress={() => navigation.replace("CreateAccount")} />
+
     </Container>
+
+    
   );
 };

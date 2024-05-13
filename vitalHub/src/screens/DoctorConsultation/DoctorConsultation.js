@@ -35,7 +35,11 @@ export const DoctorConsultation = ({ navigation }) => {
 
     const [fotoPerfil, setFotoPerfil] = useState(null)
 
+    const [reload, setReload] = useState(false)
 
+    // States para verficar os dias
+    const [diaAtual, setDiaAtual] = useState()
+    const [diaDaConsulta, setDiaDaConsulta] = useState()
 
 
     //state para cancelar consulta
@@ -73,6 +77,30 @@ export const DoctorConsultation = ({ navigation }) => {
         })
 
     }
+
+
+
+    function AtualizarStatus() {
+        const currentDate = new Date();
+        setDiaAtual(currentDate.getTime())
+
+        consultaLista.forEach((item) => {
+
+            const dataComoObjeto = new Date(item.dataConsulta);
+            const dataComoInteiro = dataComoObjeto.getTime();
+            setDiaDaConsulta(dataComoInteiro);
+            if (dataComoInteiro < currentDate.getTime()) {
+                async () => {
+                    await api.put(`/Consultas/Status?idConsulta=${item.id}&status=${"Realizada"}`)
+                    setReload(true)
+                }
+            }
+        });
+
+    }
+    
+
+
 
     async function profileLoad() {
 
@@ -120,9 +148,10 @@ export const DoctorConsultation = ({ navigation }) => {
     useEffect(() => {
         if (dataConsulta != '') {
             ListarConsultas()
+            AtualizarStatus();
         }
-        console.log(dataConsulta);
-    }, [dataConsulta, showModalCancel])
+        // console.log(dataConsulta);
+    }, [dataConsulta, showModalCancel, reload])
 
 
     useEffect(() => {

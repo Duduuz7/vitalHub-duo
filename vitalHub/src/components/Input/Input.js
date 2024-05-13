@@ -93,7 +93,7 @@ export const InputSelect = ({ setHoraSelecionada }) => {
     const [arrayOptions, setArrayOptions] = useState(null)
 
 
-    async function loadOptions() {
+    async function LoadOptions() {
 
         //Capturar a quantidade que faltam para 24h
 
@@ -118,7 +118,7 @@ export const InputSelect = ({ setHoraSelecionada }) => {
     }
 
     useEffect(() => {
-        loadOptions();
+        LoadOptions();
     }, [])
 
 

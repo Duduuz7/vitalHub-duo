@@ -99,13 +99,13 @@ export default function Cam({ navigation, route }) {
         }
     }
 
-    async function ClearPhoto() {
+    // async function ClearPhoto() {
 
-        setPhoto(null)
+    //     setPhoto(null)
 
-        setOpenModal(false)
+    //     setOpenModal(false)
 
-    }
+    // }
 
     async function UploadPhoto() {
 
