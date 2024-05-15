@@ -76,7 +76,6 @@ export const PatientConsultation = ({ navigation, route }) => {
         await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)
-            // console.log('pintooooooooooo', consultaLista);
 
         }).catch(error => {
             console.log(error);

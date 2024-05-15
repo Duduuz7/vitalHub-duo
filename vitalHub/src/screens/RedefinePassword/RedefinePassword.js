@@ -4,7 +4,7 @@ import { Button, NormalButton } from "../../components/Button/StyleButton";
 import { ButtonText } from "../../components/ButtonText/StyleButtonText";
 import { Container } from "../../components/Container/StyleContainer";
 import { DescriptionPassword } from "../../components/Descriptions/Descriptions";
-import { Input } from "../../components/Input/Input";
+import { Input, InputSecure } from "../../components/Input/Input";
 import { Close, Logo } from "../../components/Images/StyleImages";
 import { Title } from "../../components/Title/StyleTitle";
 import { useState } from "react";
@@ -16,6 +16,7 @@ export const RedefinePassword = ({ navigation, route }) => {
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [loading, setLoading] = useState(false);
+  const [secureSenha, setSecureSenha] = useState(false);
 
   async function indicator() {
     setLoading(true);
@@ -28,12 +29,12 @@ export const RedefinePassword = ({ navigation, route }) => {
         'Erro ao prosseguir !!',
         'A senha e sua confirmação não são iguais !!!',
         [
-          { text: 'Ok'},
+          { text: 'Ok' },
         ]
       );
 
       setLoading(false)
-    } 
+    }
     else {
       await api
         .put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
@@ -50,7 +51,7 @@ export const RedefinePassword = ({ navigation, route }) => {
             'Erro ao prosseguir !!',
             'Por favor preencha o campo !!!',
             [
-              { text: 'Ok'},
+              { text: 'Ok' },
             ]
           );
 
@@ -81,18 +82,20 @@ export const RedefinePassword = ({ navigation, route }) => {
 
       <DescriptionPassword description={"Insira e confirme a sua nova senha"} />
 
-      <Input
+      <InputSecure
+        onPress={() => { secureSenha ? setSecureSenha(false) : setSecureSenha(true) }}
         placeholder={"Nova Senha"}
         placeholderTextColor={"#49B3BA"}
-        secureTextEntry={true}
+        secureTextEntry={secureSenha}
         fieldValue={novaSenha}
         onChangeText={(x) => setNovaSenha(x)}
       />
 
-      <Input
+      <InputSecure
+        onPress={() => { secureSenha ? setSecureSenha(false) : setSecureSenha(true) }}
         placeholder={"Confirmar nova senha"}
         placeholderTextColor={"#49B3BA"}
-        secureTextEntry={true}
+        secureTextEntry={secureSenha}
         fieldValue={confirmarSenha}
         onChangeText={(x) => setConfirmarSenha(x)}
       />
@@ -109,11 +112,11 @@ export const RedefinePassword = ({ navigation, route }) => {
           changePassword();
           novaSenha, confirmarSenha != null
             ? changePassword()
-            :  Alert.alert(
+            : Alert.alert(
               'Erro ao prosseguir !!',
               'Por favor preencha o campo !!!',
               [
-                { text: 'Ok'},
+                { text: 'Ok' },
               ]
             );
         }}

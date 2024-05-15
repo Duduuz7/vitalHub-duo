@@ -218,7 +218,7 @@ export const PatientProfile = ({ navigation, route }) => {
 
       Alert.alert(
         'Erro ao atualizar !!',
-        'O CPF precisa ter 14 digitos !!!',
+        'O CPF precisa ter 11 digitos !!!',
         [
           { text: 'Ok' },
         ]
