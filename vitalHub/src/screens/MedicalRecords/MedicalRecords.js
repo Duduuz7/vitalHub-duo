@@ -19,7 +19,7 @@ export const MedicalRecords = ({ navigation, route }) => {
 
     const [consulta, setConsulta] = useState(null)
 
-    const [editable, setEditable] = useState(false)
+    const [editable, setEditable] = useState(true)
 
 
     //PROPS PARA MÉTODO DE ATUALIZAR

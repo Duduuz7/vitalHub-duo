@@ -3,7 +3,7 @@ import {
   Container,
   ContainerCepCidade,
 } from "../../components/Container/StyleContainer";
-import { CardCancelLessLocal } from "../../components/Descriptions/Descriptions";
+import { CardCancelLessLocal, CardCancelLessLocalB } from "../../components/Descriptions/Descriptions";
 import { AgeTextCard, CityText } from "../../components/Descriptions/StyledDescriptions";
 import { MapImage } from "../../components/Images/StyleImages";
 import { InputBox } from "../../components/InputBox/InputBox";
@@ -84,7 +84,7 @@ export const ConsultLocalization = ({ navigation, route }) => {
               />
             </ContainerCepCidade>
 
-            <CardCancelLessLocal
+            <CardCancelLessLocalB
               onPressCancel={() => {
                 navigation.replace("Main");
               }}

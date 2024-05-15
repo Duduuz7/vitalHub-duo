@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Logo = styled.Image`
     width: 214px;
     height: 120px;
-    margin-top: 175px;
+    margin-top: 160px;
     margin-bottom: 28px;
     
 `
@@ -41,6 +41,12 @@ margin-top: 40px;
 margin-left: 9%;
 border-radius: 4px;
 `
+
+export const BoxImageHome = styled.TouchableOpacity`
+width: 62px;
+height: 62px;
+`
+
 export const IconBell = styled.Image`
     width: 23px;
     height: 26px;

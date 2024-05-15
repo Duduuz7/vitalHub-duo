@@ -7,7 +7,7 @@ import { LinkAccount } from "../../components/Link/Link";
 
 import { ButtonGoogle } from "../../components/Button/Button";
 import { ActivityIndicator, Alert, StatusBar, View } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import api from "../../services/Services";
 
@@ -18,10 +18,13 @@ import { Button } from "../../components/Button/StyleButton";
 
 
 import { Entypo } from '@expo/vector-icons';
-import { ErrorModal } from "../../components/ErrorModal/ErrorModal";
 
+
+import { LogBox } from 'react-native';
 
 export const Login = ({ navigation }) => {
+
+  LogBox.ignoreLogs(['Warning: ...']);
 
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -32,12 +35,6 @@ export const Login = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const [secureSenha, setSecureSenha] = useState(true);
-
-  //MODAL ERROR
-  const [showModalError, setShowModalError] = useState(false);
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
   async function Login() {
     setLoading(true);
@@ -68,7 +65,7 @@ export const Login = ({ navigation }) => {
           'Erro ao efetuar o login !!',
           'Senha ou email incorretos !',
           [
-            { text: 'Ok'},
+            { text: 'Ok' },
           ]
         );
 
@@ -95,16 +92,8 @@ export const Login = ({ navigation }) => {
         onChangeText={(txt) => setEmail(txt)}
       />
 
-      {/* <Input
-        placeholder={"Senha"}
-        placeholderTextColor={"#49B3BA"}
-        secureTextEntry={secureSenha}
-        fieldValue={senha}
-        onChangeText={(txt) => setSenha(txt)}
-      /> */}
-
       <InputSecure
-        onPress={() => {secureSenha ? setSecureSenha(false) : setSecureSenha(true) }}
+        onPress={() => { secureSenha ? setSecureSenha(false) : setSecureSenha(true) }}
         placeholder={"Senha"}
         placeholderTextColor={"#49B3BA"}
         secureTextEntry={secureSenha}
@@ -130,6 +119,6 @@ export const Login = ({ navigation }) => {
 
     </Container>
 
-    
+
   );
 };

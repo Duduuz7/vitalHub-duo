@@ -5,7 +5,7 @@ import {
   ScrollContainer,
 } from "../../components/Container/StyleContainer";
 import { DescriptionPassword } from "../../components/Descriptions/Descriptions";
-import { InputBox } from "../../components/InputBox/InputBox";
+import { InputBox, InputBoxB } from "../../components/InputBox/InputBox";
 import { ImagemPerfilPaciente } from "../../components/Images/StyleImages";
 import { TitleProfile } from "../../components/Title/StyleTitle";
 import {
@@ -23,9 +23,13 @@ import { ButtonCamera, ImageView } from "./Style";
 
 import { mask, unMask } from "remask";
 
+import { LogBox } from 'react-native';
+
 
 
 export const PatientProfile = ({ navigation, route }) => {
+
+  LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
@@ -51,7 +55,7 @@ export const PatientProfile = ({ navigation, route }) => {
           const response = await api.get(
             `/Pacientes/BuscarPorId?id=${userToken.idUsuario}`
           );
-          const { endereco, dataNascimento, cpf, foto } = response.data;
+          const { endereco, dataNascimento, cpf } = response.data;
 
           setPacienteData(response.data);
 
@@ -66,7 +70,7 @@ export const PatientProfile = ({ navigation, route }) => {
           setDataNascimento(dataNascimento);
 
           setCpf(cpf);
-          
+
           // Definir o estado `cep` com o CEP do paciente
           setCep(endereco.cep);
           console.log(endereco);
@@ -189,12 +193,12 @@ export const PatientProfile = ({ navigation, route }) => {
           console.log(logradouro, cep, cidade);
         } catch (error) {
           console.error("Erro ao atualizar paciente:", error);
-          
+
           Alert.alert(
             'Erro ao prosseguir !!',
             'Erro ao atualizar os dados !!!',
             [
-              { text: 'Ok'},
+              { text: 'Ok' },
             ]
           );
         }
@@ -205,7 +209,7 @@ export const PatientProfile = ({ navigation, route }) => {
           'Erro ao atualizar !!',
           'O CEP precisa ter 9 digitos !!!',
           [
-            { text: 'Ok'},
+            { text: 'Ok' },
           ]
         );
       }
@@ -216,11 +220,11 @@ export const PatientProfile = ({ navigation, route }) => {
         'Erro ao atualizar !!',
         'O CPF precisa ter 14 digitos !!!',
         [
-          { text: 'Ok'},
+          { text: 'Ok' },
         ]
       );
     }
-    
+
   };
 
   return (
@@ -264,18 +268,6 @@ export const PatientProfile = ({ navigation, route }) => {
           onChangeText={setCpf}
           fieldWidth={90}
         />
-        <InputBox
-          placeholderTextColor="#A1A1A1"
-          textLabel="Endereço"
-          placeholder="Endereço..."
-          editable={false}
-          fieldValue={logradouro}
-          fieldWidth={90}
-        />
-
-        {/* <Text>{cep}</Text>
-        <Text>{cidade}</Text>
-        <Text>{logradouro}</Text> */}
 
         <ContainerCepCidade>
           <InputBox
@@ -298,6 +290,18 @@ export const PatientProfile = ({ navigation, route }) => {
             fieldWidth={40}
           />
         </ContainerCepCidade>
+
+        <InputBoxB
+          placeholderTextColor="#A1A1A1"
+          textLabel="Endereço"
+          placeholder="Endereço..."
+          editable={false}
+          fieldValue={logradouro}
+          fieldWidth={90}
+        />
+
+
+
 
         {editable ? (
           <ButtonLarge text="Salvar" onPress={handleSave} />

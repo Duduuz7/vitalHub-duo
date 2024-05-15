@@ -78,10 +78,12 @@ export const SelectCLinic = ({ navigation, route }) => {
       {clinicas == "" ? (
 
         <Text
-          style={{textAlign: "center", fontSize: 19, marginLeft: 2, marginRight: 2, marginBottom: "120%", marginTop: 10}}
+          style={{textAlign: "center", fontSize: 19, marginLeft: 1, marginBottom: "120%", marginTop: 10}}
         >
           Nenhuma clínica encontrada, tente novamente procurando por outra localização !!!
         </Text>
+
+        
 
       ) : (
 

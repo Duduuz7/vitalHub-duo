@@ -37,9 +37,13 @@ import PatientCam from "./src/components/Camera/PatientCamera";
 import DoctorCam from "./src/components/Camera/DoctorCamera";
 import { useEffect } from "react";
 
+import { LogBox } from 'react-native';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  LogBox.ignoreLogs(['Warning: ...']);
 
   let [fontsLoaded, fontError] = useFonts({
     MontserratAlternates_500Medium,

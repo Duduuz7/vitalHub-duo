@@ -73,11 +73,11 @@ export const SelectDoctor = ({ navigation, route }) => {
       {medico == "" ? (
 
         <Text
-          style={{ textAlign: "center", fontSize: 19, marginLeft: 2, marginRight: 2, marginBottom: "120%", marginTop: 10 }}
+          style={{ textAlign: "center", fontSize: 19, marginBottom: "120%", marginTop: 10 }}
         >
           Nenhum médico encontrado, tente novamente procurando por outra clínica ou localização !!!
         </Text>
-
+        
       ) : (
         <FlatContainerSelect
           data={medico}
@@ -113,7 +113,7 @@ export const SelectDoctor = ({ navigation, route }) => {
             'Erro ao prosseguir !!',
             'Selecione um médico para prosseguir !!!',
             [
-              { text: 'Ok'},
+              { text: 'Ok' },
             ]
           ) :
             handleContinue()

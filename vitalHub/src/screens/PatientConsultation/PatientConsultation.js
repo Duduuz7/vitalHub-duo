@@ -1,7 +1,7 @@
 import { ActivityIndicator, StatusBar } from "react-native"
 import { BoxDataHome, BoxHome, ButtonHomeContainer, Container, FlatContainer, MoveIconBell } from "../../components/Container/StyleContainer"
 import { Header } from "../../components/Header/StyledHeader"
-import { ImagemHome } from "../../components/Images/StyleImages"
+import { BoxImageHome, ImagemHome } from "../../components/Images/StyleImages"
 import { NameTitle, WelcomeTitle } from "../../components/Title/Title"
 import { Ionicons } from '@expo/vector-icons';
 import Calendar from "../../components/Calendar/Calendar"
@@ -20,6 +20,8 @@ import { tokenClean, userDecodeToken } from "../../utils/Auth"
 import api from "../../services/Services";
 import moment from "moment"
 import { useFocusEffect } from "@react-navigation/native"
+
+import { LogBox } from 'react-native';
 
 
 export const PatientConsultation = ({ navigation, route }) => {
@@ -188,7 +190,9 @@ export const PatientConsultation = ({ navigation, route }) => {
 
                 <BoxHome>
 
-                    <ImagemHome source={{ uri: fotoPerfil }} />
+                    <BoxImageHome onPress={() => navigation.navigate("PatientProfile")}>
+                        <ImagemHome source={{ uri: fotoPerfil }} />
+                    </BoxImageHome>
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />
@@ -232,14 +236,14 @@ export const PatientConsultation = ({ navigation, route }) => {
                                 dataConsulta={item.dataConsulta}
                                 hour={moment(item.dataConsulta).format("HH:mm")}
                                 name={item.medicoClinica.medico.idNavigation.nome}
-                                age={`CRM: ${item.medicoClinica.medico.crm}  .  `}
-                                routine={item.prioridade.prioridade == '1' ? "Rotina" : item.prioridade.prioridade == "2" ? "Exame" : "Urgência"}
+                                age={`CRM: ${item.medicoClinica.medico.crm}  .   `}
+                                routine={item.prioridade.prioridade == '1' ? " Rotina" : item.prioridade.prioridade == "2" ? " Exame" : " Urgência"}
                                 url={item.medicoClinica.medico.idNavigation.foto}
                                 status={situacao} // Adiciona a situação da consulta como valor da prop status
                                 onPressCancel={() => { MostrarModal('cancelar', item), setConsultaCancel(() => ({ situacaoId: 'B8256AE1-AED5-47D1-9E8F-858435620AB5', id: item.id })), ListarConsultas() }}
                                 onPressAppointmentCard={() => { MostrarModal('localization', item) }}
                                 onPressAppointment={() => { navigation.navigate("ViewPrescription", { consulta: item }) }}
-                                
+
                             />
                         );
                     } else {

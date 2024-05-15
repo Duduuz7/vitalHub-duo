@@ -38,7 +38,7 @@ export const ContainerCepCidade = styled.SafeAreaView`
   flex-direction: row;
   justify-content: space-around;
   /* gap: 50px; */
-  margin-bottom: 35px;
+  margin-bottom: 0px;
 `;
 
 export const BoxAgeEmail = styled.SafeAreaView`

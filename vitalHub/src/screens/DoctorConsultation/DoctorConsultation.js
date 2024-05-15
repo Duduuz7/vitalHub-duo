@@ -1,13 +1,13 @@
 import { StatusBar } from "react-native"
 import { BoxDataHome, BoxHome, ButtonHomeContainer, Container, FlatContainer, MoveIconBell, ScrollContainer } from "../../components/Container/StyleContainer"
 import { Header } from "../../components/Header/StyledHeader"
-import { ImagemHome } from "../../components/Images/StyleImages"
+import { BoxImageHome, ImagemHome } from "../../components/Images/StyleImages"
 import { NameTitle, WelcomeTitle } from "../../components/Title/Title"
 import { Ionicons } from '@expo/vector-icons';
 import Calendar from "../../components/Calendar/Calendar"
 
 import { FilterButton } from "../../components/Button/Button"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Card } from "../../components/Cards/Cards"
 import { CancellationModal } from "../../components/CancellationModal/CancellationModal"
 import { AppointmentModal } from "../../components/AppointmentModal/AppointmentModal"
@@ -15,14 +15,14 @@ import { tokenClean, userDecodeToken } from "../../utils/Auth"
 import api from "../../services/Services"
 import moment from "moment"
 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFocusEffect } from "@react-navigation/native"
 
-
-import {MaterialCommunityIcons} from '@expo/vector-icons';
-
-
-
+import { LogBox } from 'react-native';
 
 export const DoctorConsultation = ({ navigation }) => {
+
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 
     const [dataConsulta, setDataConsulta] = useState('') // vazio no inicio
 
@@ -98,7 +98,7 @@ export const DoctorConsultation = ({ navigation }) => {
         });
 
     }
-    
+
 
 
 
@@ -139,6 +139,7 @@ export const DoctorConsultation = ({ navigation }) => {
         canceladas: "Cancelada",
     });
 
+
     useEffect(() => {
         setSelected("Agendada")
         profileLoad()
@@ -158,6 +159,14 @@ export const DoctorConsultation = ({ navigation }) => {
         BuscarFotoDePerfil()
     }, [fotoPerfil])
 
+    //ATUALIZA FOTO DE PERFIL SEMPRE QUE ALTERADA AO VOLTAR PARA A PAGINA HOME
+    useFocusEffect(
+        useCallback(() => {
+            profileLoad()
+            BuscarFotoDePerfil()
+        }, [])
+    )
+
 
     // const image = require("../../assets/ImageCard.png");
 
@@ -170,14 +179,16 @@ export const DoctorConsultation = ({ navigation }) => {
     // RETURN
 
     return (
-        
+
         <Container>
             <StatusBar translucent backgroundColor="transparent" />
             <Header>
 
                 <BoxHome>
 
-                    <ImagemHome source={{ uri : fotoPerfil}} />
+                    <BoxImageHome  onPress={() => navigation.navigate("DoctorProfile")}>
+                        <ImagemHome source={{ uri: fotoPerfil }} />
+                    </BoxImageHome>
 
                     <BoxDataHome>
                         <WelcomeTitle textTitle={"Bem vindo"} />

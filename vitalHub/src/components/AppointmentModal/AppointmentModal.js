@@ -1,4 +1,4 @@
-import { Modal } from "react-native"
+import { Alert, Modal } from "react-native"
 import { ButtonLargeSelect } from "../Button/Button"
 import { ModalContent, PatientModal } from "../CancellationModal/StyleCancelationModal"
 import { CardCancelLess } from "../Descriptions/Descriptions"
@@ -78,7 +78,13 @@ export const AppointmentModal = ({
 
                             <ButtonLargeSelect
                                 onPress={() => {
-                                    moment(consulta.dataConsulta).format('YYYY/MM/dd') > moment(dataHoje).format('YYYY/MM/dd') ? alert("Só é possível inserir prontuário no dia da consulta ou em dias posteriores !!!") : HandleContinue()
+                                    moment(consulta.dataConsulta).format('YYYY/MM/dd') > moment(dataHoje).format('YYYY/MM/dd') ? Alert.alert(
+                                        'Envio de prontuário !!',
+                                        'Só é possível inserir prontuário no dia da consulta ou em dias posteriores !!!',
+                                        [
+                                          { text: 'Ok'},
+                                        ]
+                                      ) : HandleContinue()
                                 }}
                                 text={"Inserir Prontuário"}
                             />
@@ -94,3 +100,4 @@ export const AppointmentModal = ({
         </Modal>
     )
 }
+

@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 export const CardContainer = styled.TouchableOpacity`
   /* box-shadow: 0px 0px 1px black; */
-  elevation: 4px; 
+  elevation: 4; 
   margin-top: 12px;
   margin-bottom: 5px;
   align-self: center;

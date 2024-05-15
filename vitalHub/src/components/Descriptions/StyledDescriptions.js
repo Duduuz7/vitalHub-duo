@@ -84,6 +84,14 @@ export const CancelLocal = styled(CancelButton)`
   margin-right: 0px;
 `;
 
+export const CancelLocalB = styled(CancelButton)`
+  margin-top: 35px;
+  margin-bottom: 35px;
+  text-align: center;
+  margin-left: 0px;
+  margin-right: 7px;
+`;
+
 export const CancelBackMargin = styled(CancelButton)`
   margin-top: 30px;
   margin-bottom: 42px;

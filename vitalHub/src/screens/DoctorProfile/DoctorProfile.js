@@ -5,7 +5,7 @@ import {
     ScrollContainer,
 } from "../../components/Container/StyleContainer";
 import { DescriptionPassword } from "../../components/Descriptions/Descriptions";
-import { InputBox } from "../../components/InputBox/InputBox";
+import { InputBox, InputBoxB } from "../../components/InputBox/InputBox";
 import { ImagemPerfilPaciente } from "../../components/Images/StyleImages";
 import { TitleProfile } from "../../components/Title/StyleTitle";
 import {
@@ -24,9 +24,15 @@ import { ButtonCamera, ImageView } from "./Style";
 import { mask, unMask } from "remask";
 
 
+import { LogBox } from 'react-native';
+
 
 
 export const DoctorProfile = ({ navigation, route }) => {
+
+
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+
     const [cep, setCep] = useState("");
     const [logradouro, setLogradouro] = useState("");
     const [cidade, setCidade] = useState("");
@@ -88,33 +94,33 @@ export const DoctorProfile = ({ navigation, route }) => {
     useEffect(() => {
 
     }, [photo])
-  
+
     //FUNCAO PARA ALTERAR A IMAGEM DE PERFIL
-  
+
     async function AlterarFotoPerfil() {
-  
-      const userToken = await userDecodeToken();
-  
-      const formData = new FormData();
-  
-      formData.append('Arquivo',{
-        uri : route.params.photoUri ,
-        name : `image.${ route.params.photoUri.split(".")[1] }`,
-        type : `image/${ route.params.photoUri.split(".")[1] }`
-      });
-  
-      
-      await api.put(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-  
-      }).then( response => {
-        console.log(response);
-        setPhoto(route.params.photoUri)
-      }).catch( error => {
-        console.log(error);
-      })
+
+        const userToken = await userDecodeToken();
+
+        const formData = new FormData();
+
+        formData.append('Arquivo', {
+            uri: route.params.photoUri,
+            name: `image.${route.params.photoUri.split(".")[1]}`,
+            type: `image/${route.params.photoUri.split(".")[1]}`
+        });
+
+
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${userToken.idUsuario}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+
+        }).then(response => {
+            console.log(response);
+            setPhoto(route.params.photoUri)
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
 
@@ -128,29 +134,30 @@ export const DoctorProfile = ({ navigation, route }) => {
     };
 
     const handleCepChange = async (newCep) => {
-    
+
         setCep(unMask(newCep));
-    
+
         if (newCep.length === 9) {
-          try {
-            const response = await fetch(
-              `https://viacep.com.br/ws/${newCep}/json/`
-            );
-            const data = await response.json();
-            if (!data.erro) {
-              setLogradouro(data.logradouro);
-              setCidade(data.localidade);
-            } else {
-              console.error("CEP não encontrado");
+            try {
+                const response = await fetch(
+                    `https://viacep.com.br/ws/${newCep}/json/`
+                );
+                const data = await response.json();
+                if (!data.erro) {
+                    setLogradouro(data.logradouro);
+                    setCidade(data.localidade);
+                } else {
+                    console.error("CEP não encontrado");
+                }
+            } catch (error) {
+                console.error("Erro ao consultar ViaCEP:", error);
             }
-          } catch (error) {
-            console.error("Erro ao consultar ViaCEP:", error);
-          }
         }
-      };
+    };
 
 
     const handleSave = async () => {
+        
         try {
 
             const userToken = await userDecodeToken();
@@ -189,10 +196,10 @@ export const DoctorProfile = ({ navigation, route }) => {
 
                 <ImageView>
 
-                    
+
                     <ImagemPerfilPaciente
                         // source={require("../../assets/LimaCorinthians.png")}
-                        source={{uri: photo}}
+                        source={{ uri: photo }}
                     />
 
                     <ButtonCamera onPress={() => { navigation.navigate("DoctorCamera") }}>
@@ -205,17 +212,6 @@ export const DoctorProfile = ({ navigation, route }) => {
 
                 <DescriptionPassword description={token.email} />
 
-                {/* <InputBox
-          placeholderTextColor="#A1A1A1"
-          textLabel="Data de nascimento:"
-          placeholder="Ex. 04/05/1999"
-          keyboardType="numeric"
-          fieldValue={moment(dataNascimento).format("DD/MM/YYYY")}
-          editable={editable}
-          onChangeText={setDataNascimento}
-          fieldWidth={90}
-        /> */}
-
                 <InputBox
                     placeholderTextColor="#A1A1A1"
                     textLabel="CRM"
@@ -227,18 +223,6 @@ export const DoctorProfile = ({ navigation, route }) => {
                     onChangeText={setCrm}
                     fieldWidth={90}
                 />
-                <InputBox
-                    placeholderTextColor="#A1A1A1"
-                    textLabel="Endereço"
-                    placeholder="Endereço..."
-                    editable={false}
-                    fieldValue={logradouro}
-                    fieldWidth={90}
-                />
-
-                {/* <Text>{cep}</Text>
-        <Text>{cidade}</Text>
-        <Text>{logradouro}</Text> */}
 
                 <ContainerCepCidade>
                     <InputBox
@@ -262,6 +246,15 @@ export const DoctorProfile = ({ navigation, route }) => {
                     />
 
                 </ContainerCepCidade>
+
+                <InputBoxB
+                    placeholderTextColor="#A1A1A1"
+                    textLabel="Endereço"
+                    placeholder="Endereço..."
+                    editable={false}
+                    fieldValue={logradouro}
+                    fieldWidth={90}
+                />
 
                 {editable ? (
                     <ButtonLarge text="Salvar" onPress={handleSave} />

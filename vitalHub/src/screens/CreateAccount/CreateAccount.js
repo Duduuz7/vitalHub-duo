@@ -15,8 +15,12 @@ import moment from 'moment'
 
 import { mask, unMask } from "remask";
 
+import { LogBox } from 'react-native';
+
 
 export const CreateAccount = ({ navigation }) => {
+
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
@@ -26,11 +30,7 @@ export const CreateAccount = ({ navigation }) => {
 
     const [loading, setLoading] = useState(false);
 
-
-
     const [secureSenha, setSecureSenha] = useState(true);
-
-
 
 
     const handleCadastro = async () => {
@@ -185,7 +185,7 @@ export const CreateAccount = ({ navigation }) => {
                     {loading ? <ActivityIndicator /> : <ButtonText>Cadastrar</ButtonText>}
                 </Button>
 
-                <Cancel onPress={() => { navigation.navigate("Login") }} />
+                <Cancel onPress={() => { navigation.navigate("Login", {email : email, senha: senha}) }} />
             </Container>
         </ScrollContainerB>
 

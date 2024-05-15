@@ -1,4 +1,4 @@
-import { Modal } from "react-native";
+import { Alert, Modal } from "react-native";
 import { TitleModal } from "../Title/StyleTitle";
 import {
   ButtonLargeSelect,
@@ -139,11 +139,23 @@ export const ModalStethoscope = ({
                     if(localizacaoP != ""){
                       HandleContinue()
                     }else{
-                      alert("Preencha os campos para prosseguir !!!")
+                      Alert.alert(
+                        'Erro ao prosseguir !!!',
+                        'Preencha os campos para prosseguir !!!',
+                        [
+                          { text: 'Ok'},
+                        ]
+                      )
                     }
               
                 }else{
-                  alert("Preencha os campos para prosseguir !!!")
+                  Alert.alert(
+                    'Erro ao prosseguir !!!',
+                    'Preencha os campos para prosseguir !!!',
+                    [
+                      { text: 'Ok'},
+                    ]
+                  )
                 }
               }}
               text={"Continuar"}
