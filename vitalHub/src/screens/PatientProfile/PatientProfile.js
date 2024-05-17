@@ -36,7 +36,7 @@ export const PatientProfile = ({ navigation, route }) => {
   const [cidade, setCidade] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
   const [cpf, setCpf] = useState("");
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(true);
   const [token, setToken] = useState({});
   const [pacienteData, setPacienteData] = useState({});
 

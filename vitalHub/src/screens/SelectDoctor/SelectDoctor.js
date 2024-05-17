@@ -22,7 +22,7 @@ export const SelectDoctor = ({ navigation, route }) => {
   const [selected, setSelected] = useState(false)
 
   function handleContinue() {
-    navigation.navigate("SelectDate", {
+    navigation.replace("SelectDate", {
       agendamento: {
         ...route.params.agendamento,
 

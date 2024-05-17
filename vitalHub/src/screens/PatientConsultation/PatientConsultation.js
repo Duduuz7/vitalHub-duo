@@ -72,7 +72,7 @@ export const PatientConsultation = ({ navigation, route }) => {
 
     async function ListarConsultas() {
 
-        console.log(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
+        // console.log(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`);
         await api.get(`/Pacientes/BuscarPorData?data=${dataConsulta}&id=${token.idUsuario}`).then(response => {
 
             setConsultaLista(response.data)

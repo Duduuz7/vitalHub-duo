@@ -132,7 +132,7 @@ export const CreateAccount = ({ navigation }) => {
                     placeholder={"Data de Nascimento"}
                     placeholderTextColor={'#49B3BA'}
                     onChangeText={text => setDataNascimento(text)}
-                    // keyboardType={'numeric'}
+                    keyboardType={'numeric'}
                     fieldValue={mask(dataNascimento, "99/99/9999")}
 
                 />

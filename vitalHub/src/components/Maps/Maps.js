@@ -37,6 +37,7 @@ export default function Maps({latitude, longitude}) {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005
   })
+  
 
   async function CapturarLocalizacao() {
     const { granted } = await requestForegroundPermissionsAsync()
@@ -50,7 +51,9 @@ export default function Maps({latitude, longitude}) {
     }
   }
 
-  async function RecarregarVizualizacaoMapa() {
+  async function RecarregarVizualizacaoMapa(latitude, longitude) {
+
+
     if (mapReference.current && initialPosition) {
       await mapReference.current.fitToCoordinates(
         [
@@ -88,17 +91,21 @@ export default function Maps({latitude, longitude}) {
     //   })
     // })
 
-  }, [100000])
+  }, [1000])
 
   useEffect(() => {
     RecarregarVizualizacaoMapa()
-  }, [initialPosition])
+  }, [initialPosition, finalPosition])
+
+  useEffect(() => {
+    RecarregarVizualizacaoMapa()
+  }, [20000])
 
   return (
     <View style={styles.container}>
 
-      {
-        initialPosition != null
+      { 
+        initialPosition != null && finalPosition != null
           ? (
             <MapView
               ref={mapReference}

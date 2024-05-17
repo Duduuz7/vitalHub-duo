@@ -27,7 +27,7 @@ export const SelectCLinic = ({ navigation, route }) => {
 
 
   function handleContinue() {
-    navigation.navigate("SelectDoctor", {
+    navigation.replace("SelectDoctor", {
       agendamento: {
         ...route.params.agendamento,
 
